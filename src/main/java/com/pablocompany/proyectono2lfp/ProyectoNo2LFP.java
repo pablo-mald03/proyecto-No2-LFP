@@ -3,6 +3,7 @@
  */
 package com.pablocompany.proyectono2lfp;
 
+import com.pablocompany.proyectono2lfp.frontend.MenuPrincipal;
 import com.pablocompany.proyectono2lfp.jflexpackage.AnalizadorLexico;
 import java.io.IOException;
 import java.io.StringReader;
@@ -19,7 +20,13 @@ public class ProyectoNo2LFP {
 
         //generarLexer();
         //Metodo donde inicia la interfaz principal
-        AnalizadorLexico lexer;
+        
+        
+        MenuPrincipal menuPrincipal = new MenuPrincipal();
+        
+        menuPrincipal.setVisible(true);
+        
+        /*AnalizadorLexico lexer;
         Scanner entradar = new Scanner(System.in);
 
         while (true) {
@@ -35,7 +42,7 @@ public class ProyectoNo2LFP {
                 break;
             }
 
-        }
+        }*/
 
     }
 
