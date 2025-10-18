@@ -81,7 +81,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         this.btnRetrocederDep.setVisible(false);
         this.btnFinalizarDep.setVisible(false);
         this.btnReiniciarDep.setVisible(false);
-        this.lblDepuracion.setVisible(false);
+        this.lblSalidas.setVisible(false);
 
         this.scrollModoDepuracion.setVisible(false);
         this.txtLogDepuraciones.setText("");
@@ -154,10 +154,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         operarBusquedas();
 
-        this.btnDepuracion.setBackground(new Color(0x533F59));
-        this.btnReporteErrores.setBackground(new Color(0x533F59));
-        this.btnReporteTokens.setBackground(new Color(0x533F59));
-        this.btnBusquedaPatrones.setBackground(new Color(0x4D6E4C));
+        this.btnDepuracion.setBackground(new Color(0x3F5859));
+        this.btnReporteErrores.setBackground(new Color(0x3F5859));
+        this.btnReporteTokens.setBackground(new Color(0x3F5859));
+        this.btnBusquedaPatrones.setBackground(new Color(0x6E4C5F));
 
     }
 
@@ -172,10 +172,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         this.gestionVentanas = 2;
 
-        this.btnBusquedaPatrones.setBackground(new Color(0x533F59));
-        this.btnReporteErrores.setBackground(new Color(0x533F59));
-        this.btnReporteTokens.setBackground(new Color(0x533F59));
-        this.btnDepuracion.setBackground(new Color(0x4D6E4C));
+        this.btnBusquedaPatrones.setBackground(new Color(0x3F5859));
+        this.btnReporteErrores.setBackground(new Color(0x3F5859));
+        this.btnReporteTokens.setBackground(new Color(0x3F5859));
+        this.btnDepuracion.setBackground(new Color(0x6E4C5F));
         operarModoDepuracion();
 
     }
@@ -189,10 +189,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
         labelMedio.cambiarLabel(iconoMedio);
         this.lblEleccionesDadas.setText("Reporte de Errores");
 
-        this.btnBusquedaPatrones.setBackground(new Color(0x533F59));
-        this.btnDepuracion.setBackground(new Color(0x533F59));
-        this.btnReporteTokens.setBackground(new Color(0x533F59));
-        this.btnReporteErrores.setBackground(new Color(0x4D6E4C));
+        this.btnBusquedaPatrones.setBackground(new Color(0x3F5859));
+        this.btnDepuracion.setBackground(new Color(0x3F5859));
+        this.btnReporteTokens.setBackground(new Color(0x3F5859));
+        this.btnReporteErrores.setBackground(new Color(0x6E4C5F));
         operarReportesErrores();
 
     }
@@ -206,10 +206,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
         labelMedio.cambiarLabel(iconoMedio);
         this.lblEleccionesDadas.setText("Reporte Conteo Lexemas");
 
-        this.btnBusquedaPatrones.setBackground(new Color(0x533F59));
-        this.btnDepuracion.setBackground(new Color(0x533F59));
-        this.btnReporteTokens.setBackground(new Color(0x4D6E4C));
-        this.btnReporteErrores.setBackground(new Color(0x533F59));
+        this.btnBusquedaPatrones.setBackground(new Color(0x3F5859));
+        this.btnDepuracion.setBackground(new Color(0x3F5859));
+        this.btnReporteTokens.setBackground(new Color(0x6E4C5F));
+        this.btnReporteErrores.setBackground(new Color(0x3F5859));
 
         operarReportesTokens();
 
@@ -227,10 +227,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
         //Reinicia el permiso para accionar botones
         this.gestionVentanas = 0;
 
-        this.btnBusquedaPatrones.setBackground(new Color(0x533F59));
-        this.btnDepuracion.setBackground(new Color(0x533F59));
-        this.btnReporteTokens.setBackground(new Color(0x533F59));
-        this.btnReporteErrores.setBackground(new Color(0x533F59));
+        this.btnBusquedaPatrones.setBackground(new Color(0x3F5859));
+        this.btnDepuracion.setBackground(new Color(0x3F5859));
+        this.btnReporteTokens.setBackground(new Color(0x3F5859));
+        this.btnReporteErrores.setBackground(new Color(0x3F5859));
 
         reestablecerUI();
 
@@ -271,7 +271,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         this.btnRetrocederDep.setVisible(false);
         this.btnFinalizarDep.setVisible(false);
         this.btnReiniciarDep.setVisible(false);
-        this.lblDepuracion.setVisible(false);
+        this.lblSalidas.setVisible(false);
         this.btnGuardarArchivo.setVisible(true);
         this.lblAnalisis.setVisible(true);
         this.lblMostrarError.setVisible(true);
@@ -308,7 +308,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         this.btnRetrocederDep.setVisible(true);
         this.btnFinalizarDep.setVisible(true);
         this.btnReiniciarDep.setVisible(true);
-        this.lblDepuracion.setVisible(true);
+        this.lblSalidas.setVisible(true);
 
         //Scroll que permite mostrar el vaje entre estados
         this.scrollModoDepuracion.setVisible(true);
@@ -391,9 +391,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
         this.btnRetrocederDep.setVisible(false);
         this.btnFinalizarDep.setVisible(false);
         this.btnReiniciarDep.setVisible(false);
-        this.lblDepuracion.setVisible(false);
+        this.lblSalidas.setVisible(false);
         this.lblAnalisis.setVisible(true);
-        this.lblDepuracion.setVisible(false);
+        this.lblSalidas.setVisible(false);
         this.btnGuardarArchivo.setVisible(true);
 
         this.lblMostrarError.setVisible(true);
@@ -445,7 +445,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         scrollBusquedas = new javax.swing.JScrollPane();
         txtLogBusquedas = new javax.swing.JTextPane();
         btnFinalizarDep = new javax.swing.JButton();
-        lblDepuracion = new javax.swing.JLabel();
+        lblSalidas = new javax.swing.JLabel();
         btnReiniciarDep = new javax.swing.JButton();
         btnRetrocederDep = new javax.swing.JButton();
         btnAvanzarDep = new javax.swing.JButton();
@@ -469,12 +469,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         });
 
-        panelBarraPrincipal.setBackground(new java.awt.Color(45, 1, 61));
+        panelBarraPrincipal.setBackground(new java.awt.Color(1, 61, 12));
         panelBarraPrincipal.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(0, 0, 0)));
 
         lblAdmin.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
         lblAdmin.setForeground(new java.awt.Color(255, 255, 255));
-        lblAdmin.setText("Usuario");
+        lblAdmin.setText("Pablo");
 
         lblEleccionesDadas.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
         lblEleccionesDadas.setForeground(new java.awt.Color(255, 255, 255));
@@ -495,13 +495,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
             .addGroup(panelBarraPrincipalLayout.createSequentialGroup()
                 .addGap(18, 18, 18)
                 .addComponent(lblPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblAdmin)
-                .addGap(472, 472, 472)
+                .addGap(466, 466, 466)
                 .addComponent(lblEleccion, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblEleccionesDadas, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 408, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 431, Short.MAX_VALUE)
                 .addComponent(lblHome)
                 .addGap(17, 17, 17))
         );
@@ -526,7 +526,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         );
 
         labelOperaciones1.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
-        labelOperaciones1.setForeground(new java.awt.Color(83, 31, 11));
+        labelOperaciones1.setForeground(new java.awt.Color(61, 29, 97));
         labelOperaciones1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         labelOperaciones1.setText("Archivo de entrada:");
 
@@ -547,7 +547,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jPanel1.setOpaque(false);
 
         labelDatos.setFont(new java.awt.Font("Liberation Sans", 1, 28)); // NOI18N
-        labelDatos.setForeground(new java.awt.Color(83, 31, 11));
+        labelDatos.setForeground(new java.awt.Color(61, 29, 97));
         labelDatos.setText("Requisitos de carga de archivos:");
 
         btnSubirArchivo.setBackground(new java.awt.Color(48, 148, 92));
@@ -561,7 +561,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
 
         lblTitulo.setFont(new java.awt.Font("Liberation Sans", 1, 28)); // NOI18N
-        lblTitulo.setForeground(new java.awt.Color(42, 48, 60));
+        lblTitulo.setForeground(new java.awt.Color(44, 60, 42));
         lblTitulo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblTitulo.setText("Directorio Archivo:");
 
@@ -619,14 +619,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jPanel2.setLayout(null);
 
         lblMostrarError.setFont(new java.awt.Font("Liberation Sans", 1, 26)); // NOI18N
-        lblMostrarError.setForeground(new java.awt.Color(83, 31, 11));
+        lblMostrarError.setForeground(new java.awt.Color(61, 29, 97));
         lblMostrarError.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblMostrarError.setText("Transiciones del Automata:");
+        lblMostrarError.setText("Salida de Datos:");
         jPanel2.add(lblMostrarError);
         lblMostrarError.setBounds(10, 100, 700, 40);
 
-        btnGuardarArchivo.setBackground(new java.awt.Color(19, 115, 146));
+        btnGuardarArchivo.setBackground(new java.awt.Color(136, 46, 111));
         btnGuardarArchivo.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
+        btnGuardarArchivo.setForeground(new java.awt.Color(255, 255, 255));
         btnGuardarArchivo.setText("Guardar Texto");
         btnGuardarArchivo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -636,8 +637,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jPanel2.add(btnGuardarArchivo);
         btnGuardarArchivo.setBounds(490, 50, 203, 40);
 
-        btnAnalisis.setBackground(new java.awt.Color(46, 136, 80));
+        btnAnalisis.setBackground(new java.awt.Color(69, 46, 136));
         btnAnalisis.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
+        btnAnalisis.setForeground(new java.awt.Color(255, 255, 255));
         btnAnalisis.setText("Analizar Texto");
         btnAnalisis.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -654,7 +656,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         txtBusquedas.setBounds(40, 50, 410, 40);
 
         lblAnalisis.setFont(new java.awt.Font("Liberation Sans", 1, 26)); // NOI18N
-        lblAnalisis.setForeground(new java.awt.Color(83, 31, 11));
+        lblAnalisis.setForeground(new java.awt.Color(61, 29, 97));
         lblAnalisis.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblAnalisis.setText("Analizar Manualmente:");
         jPanel2.add(lblAnalisis);
@@ -671,7 +673,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         scrollTransiciones.setViewportView(txtLogTransiciones);
 
         jPanel2.add(scrollTransiciones);
-        scrollTransiciones.setBounds(10, 140, 690, 430);
+        scrollTransiciones.setBounds(10, 140, 700, 430);
 
         txtLogBusquedas.setBackground(new java.awt.Color(228, 228, 228));
         txtLogBusquedas.setFont(new java.awt.Font("Liberation Serif", 1, 20)); // NOI18N
@@ -684,7 +686,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         scrollBusquedas.setViewportView(txtLogBusquedas);
 
         jPanel2.add(scrollBusquedas);
-        scrollBusquedas.setBounds(10, 140, 690, 430);
+        scrollBusquedas.setBounds(10, 140, 700, 430);
 
         btnFinalizarDep.setBackground(new java.awt.Color(187, 41, 41));
         btnFinalizarDep.setFont(new java.awt.Font("Liberation Sans", 1, 22)); // NOI18N
@@ -698,12 +700,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jPanel2.add(btnFinalizarDep);
         btnFinalizarDep.setBounds(560, 50, 60, 50);
 
-        lblDepuracion.setFont(new java.awt.Font("Liberation Sans", 1, 26)); // NOI18N
-        lblDepuracion.setForeground(new java.awt.Color(83, 31, 11));
-        lblDepuracion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblDepuracion.setText("Modo Depuracion:");
-        jPanel2.add(lblDepuracion);
-        lblDepuracion.setBounds(20, 10, 690, 30);
+        lblSalidas.setFont(new java.awt.Font("Liberation Sans", 1, 26)); // NOI18N
+        lblSalidas.setForeground(new java.awt.Color(61, 29, 97));
+        lblSalidas.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblSalidas.setText("Salidas de codigo:");
+        jPanel2.add(lblSalidas);
+        lblSalidas.setBounds(20, 10, 690, 30);
 
         btnReiniciarDep.setBackground(new java.awt.Color(48, 148, 92));
         btnReiniciarDep.setFont(new java.awt.Font("Liberation Sans", 1, 22)); // NOI18N
@@ -754,11 +756,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jPanel2.add(scrollModoDepuracion);
         scrollModoDepuracion.setBounds(10, 140, 690, 430);
 
-        barraLateral.setBackground(new java.awt.Color(45, 1, 61));
+        barraLateral.setBackground(new java.awt.Color(1, 61, 12));
         barraLateral.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(0, 0, 0)));
         barraLateral.setForeground(new java.awt.Color(0, 0, 0));
 
-        btnBusquedaPatrones.setBackground(new java.awt.Color(83, 63, 89));
+        btnBusquedaPatrones.setBackground(new java.awt.Color(63, 88, 89));
         btnBusquedaPatrones.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
         btnBusquedaPatrones.setForeground(new java.awt.Color(255, 255, 255));
         btnBusquedaPatrones.setText("Busqueda de Patrones");
@@ -770,7 +772,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         });
 
-        btnReporteErrores.setBackground(new java.awt.Color(83, 63, 89));
+        btnReporteErrores.setBackground(new java.awt.Color(63, 88, 89));
         btnReporteErrores.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
         btnReporteErrores.setForeground(new java.awt.Color(255, 255, 255));
         btnReporteErrores.setText("Reportes Errores");
@@ -782,7 +784,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         });
 
-        btnDepuracion.setBackground(new java.awt.Color(83, 63, 89));
+        btnDepuracion.setBackground(new java.awt.Color(63, 88, 89));
         btnDepuracion.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
         btnDepuracion.setForeground(new java.awt.Color(255, 255, 255));
         btnDepuracion.setText("Iniciar Modo Depuracion");
@@ -794,7 +796,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         });
 
-        btnReporteTokens.setBackground(new java.awt.Color(83, 63, 89));
+        btnReporteTokens.setBackground(new java.awt.Color(63, 88, 89));
         btnReporteTokens.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
         btnReporteTokens.setForeground(new java.awt.Color(255, 255, 255));
         btnReporteTokens.setText("Reporte de Tokens");
@@ -837,7 +839,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         labelLayout.setText("Fila: 0 | Columna: 0");
 
         lblErroresEncontrados.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
-        lblErroresEncontrados.setForeground(new java.awt.Color(83, 31, 11));
+        lblErroresEncontrados.setForeground(new java.awt.Color(61, 29, 97));
         lblErroresEncontrados.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblErroresEncontrados.setText("Errores Encontrados");
 
@@ -1284,13 +1286,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel labelOperaciones1;
     private javax.swing.JLabel lblAdmin;
     private javax.swing.JLabel lblAnalisis;
-    private javax.swing.JLabel lblDepuracion;
     private javax.swing.JLabel lblEleccion;
     private javax.swing.JLabel lblEleccionesDadas;
     private javax.swing.JLabel lblErroresEncontrados;
     private javax.swing.JLabel lblHome;
     private javax.swing.JLabel lblMostrarError;
     private javax.swing.JLabel lblPerfil;
+    private javax.swing.JLabel lblSalidas;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JPanel panelBarraPrincipal;
     private javax.swing.JPanel panelPrincipal;
