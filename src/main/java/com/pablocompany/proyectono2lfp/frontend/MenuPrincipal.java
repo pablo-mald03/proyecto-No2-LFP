@@ -10,7 +10,6 @@ import com.pablocompany.proyectono2lfp.backendswing.ColocarFondos;
 import com.pablocompany.proyectono2lfp.backendswing.EditorTexto;
 import com.pablocompany.proyectono2lfp.backendswing.IlustrarLabels;
 import com.pablocompany.proyectono2lfp.excepciones.AnalizadorLexicoException;
-import com.pablocompany.proyectono2lfp.excepciones.ConfigException;
 import com.pablocompany.proyectono2lfp.excepciones.ErrorPuntualException;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -72,15 +71,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         this.txtAreaDirectorioArchivo.setEditable(false);
         this.textLogErrores.setEditable(false);
         this.textEdicionArchivo.setEditable(true);
-        this.txtLogTransiciones.setEditable(false);
+        this.txtLogSintactico.setEditable(false);
         this.txtLogDepuraciones.setEditable(false);
         this.textEdicionArchivo.setCaretColor(Color.BLACK);
 
         //Apartado de ocultacion de modo depuracion
-        this.btnAvanzarDep.setVisible(false);
-        this.btnRetrocederDep.setVisible(false);
-        this.btnFinalizarDep.setVisible(false);
-        this.btnReiniciarDep.setVisible(false);
         this.lblSalidas.setVisible(false);
 
         this.scrollModoDepuracion.setVisible(false);
@@ -154,7 +149,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         operarBusquedas();
 
-        this.btnDepuracion.setBackground(new Color(0x3F5859));
+        this.btnReporteSintactico.setBackground(new Color(0x3F5859));
         this.btnReporteErrores.setBackground(new Color(0x3F5859));
         this.btnReporteTokens.setBackground(new Color(0x3F5859));
         this.btnBusquedaPatrones.setBackground(new Color(0x6E4C5F));
@@ -162,21 +157,19 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }
 
     //Metodo que genera la interaccion entre modificar el archivo de configuracion
-    public void iniciarModoDepuracion() {
+    public void generarReportesSintacticos() {
 
         ImageIcon iconoMedio = new ImageIcon(getClass().getResource("/com/pablocompany/proyectono1/recursosapp/images/depurarIcon.png"));
 
         IlustrarLabels labelMedio = new IlustrarLabels(this.panelBarraPrincipal, 50, 50, "", this.lblEleccion);
         labelMedio.cambiarLabel(iconoMedio);
-        this.lblEleccionesDadas.setText("Modo Depuracion");
-
-        this.gestionVentanas = 2;
+        this.lblEleccionesDadas.setText("Reportes Sintacticos");
 
         this.btnBusquedaPatrones.setBackground(new Color(0x3F5859));
         this.btnReporteErrores.setBackground(new Color(0x3F5859));
         this.btnReporteTokens.setBackground(new Color(0x3F5859));
-        this.btnDepuracion.setBackground(new Color(0x6E4C5F));
-        operarModoDepuracion();
+        this.btnReporteSintactico.setBackground(new Color(0x6E4C5F));
+        operarReportesSintacticos();
 
     }
 
@@ -190,7 +183,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         this.lblEleccionesDadas.setText("Reporte de Errores");
 
         this.btnBusquedaPatrones.setBackground(new Color(0x3F5859));
-        this.btnDepuracion.setBackground(new Color(0x3F5859));
+        this.btnReporteSintactico.setBackground(new Color(0x3F5859));
         this.btnReporteTokens.setBackground(new Color(0x3F5859));
         this.btnReporteErrores.setBackground(new Color(0x6E4C5F));
         operarReportesErrores();
@@ -207,7 +200,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         this.lblEleccionesDadas.setText("Reporte Conteo Lexemas");
 
         this.btnBusquedaPatrones.setBackground(new Color(0x3F5859));
-        this.btnDepuracion.setBackground(new Color(0x3F5859));
+        this.btnReporteSintactico.setBackground(new Color(0x3F5859));
         this.btnReporteTokens.setBackground(new Color(0x6E4C5F));
         this.btnReporteErrores.setBackground(new Color(0x3F5859));
 
@@ -228,7 +221,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         this.gestionVentanas = 0;
 
         this.btnBusquedaPatrones.setBackground(new Color(0x3F5859));
-        this.btnDepuracion.setBackground(new Color(0x3F5859));
+        this.btnReporteSintactico.setBackground(new Color(0x3F5859));
         this.btnReporteTokens.setBackground(new Color(0x3F5859));
         this.btnReporteErrores.setBackground(new Color(0x3F5859));
 
@@ -257,7 +250,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         this.textEdicionArchivo.setEditable(false);
         this.btnAnalisis.setVisible(false);
         this.scrollBusquedas.setVisible(true);
-        this.scrollTransiciones.setVisible(false);
+        this.scrollSintactico.setVisible(false);
         this.txtBusquedas.setText("");
         this.txtLogBusquedas.setText("");
         this.lblMostrarError.setText("Resultados de busqueda:");
@@ -267,10 +260,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         this.btnGuardarArchivo.setText("Buscar Patron");
         this.btnQuitarArchivo.setEnabled(false);
         this.btnGuardarArchivo.setEnabled(true);
-        this.btnAvanzarDep.setVisible(false);
-        this.btnRetrocederDep.setVisible(false);
-        this.btnFinalizarDep.setVisible(false);
-        this.btnReiniciarDep.setVisible(false);
         this.lblSalidas.setVisible(false);
         this.btnGuardarArchivo.setVisible(true);
         this.lblAnalisis.setVisible(true);
@@ -284,54 +273,32 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     }
 
-    //Metodo que se utiliza para manejar todos los componentes y entrar en el modo depuracion del sistema
-    public void operarModoDepuracion() {
+    //Metodo que se ejecuta para mostrar los reportes del analizador sintactico
+    public void operarReportesSintacticos() {
 
-        this.textEdicionArchivo.setEditable(false);
-        this.btnAnalisis.setVisible(false);
-        this.scrollBusquedas.setVisible(false);
-        this.scrollTransiciones.setVisible(false);
-        this.txtBusquedas.setText("");
-        this.txtLogBusquedas.setText("");
+        //Se despliega la ventana emergente para La generacion de reportes
+        ReporteSintactico dialog = new ReporteSintactico(this, true, leerEntradas);
+        dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                
+                if (gestionVentanas == 0) {
+                    regresarInicio();
+                }
 
-        this.lblMostrarError.setVisible(false);
+                if (gestionVentanas == 1) {
+                    mostrarBusquedas();
+                }
 
-        this.lblAnalisis.setVisible(false);
-        this.txtBusquedas.setVisible(false);
-        this.btnSubirArchivo.setEnabled(false);
-
-        this.btnQuitarArchivo.setEnabled(false);
-
-        this.btnGuardarArchivo.setVisible(false);
-
-        this.btnAvanzarDep.setVisible(true);
-        this.btnRetrocederDep.setVisible(true);
-        this.btnFinalizarDep.setVisible(true);
-        this.btnReiniciarDep.setVisible(true);
-        this.lblSalidas.setVisible(true);
-
-        //Scroll que permite mostrar el vaje entre estados
-        this.scrollModoDepuracion.setVisible(true);
-        this.txtLogDepuraciones.setText("");
-
-       /* try {
-
-            this.leerEntradas.getLexerActual().obtenerModoDepuracion().reiniciarDepurador();
-
-            this.leerEntradas.getLexerActual().obtenerModoDepuracion().setPaneDepuracion(this.txtLogDepuraciones);
-
-        } catch (NullPointerException ex) {
-
-        } catch (ConfigException ex1) {
-            JOptionPane.showMessageDialog(this, ex1.getMessage(), "Texto Vacio", JOptionPane.ERROR_MESSAGE);
-        }*/
-
+            }
+        });
+        dialog.setVisible(true);
     }
 
-    //Metodo que se utiliza para manejar todos los componentes y funciones previas a la generacion de reportes de errores
+    //Metodo que se utiliza para consultar los errores lexicos
     public void operarReportesErrores() {
         //Se despliega la ventana emergente para La generacion de reportes
-        /*ReporteErrores dialog = new ReporteErrores(this, true, leerEntradas);
+        ReporteErrores dialog = new ReporteErrores(this, true, leerEntradas);
         dialog.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
@@ -346,14 +313,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
             }
         });
-        dialog.setVisible(true);*/
+        dialog.setVisible(true);
 
     }
 
     //Metodo que permite mostrar los reportes de lexemas/tokens
     public void operarReportesTokens() {
         //Se despliega la ventana emergente para La generacion de reportes
-       /* ReporteLexemas dialog = new ReporteLexemas(this, true, leerEntradas);
+        ReporteLexemas dialog = new ReporteLexemas(this, true, leerEntradas);
         dialog.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
@@ -368,7 +335,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
             }
         });
-        dialog.setVisible(true);*/
+        dialog.setVisible(true);
 
     }
 
@@ -379,7 +346,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         this.txtLogBusquedas.setText("");
         this.scrollErroresLog.setVisible(true);
         this.scrollBusquedas.setVisible(false);
-        this.scrollTransiciones.setVisible(true);
+        this.scrollSintactico.setVisible(true);
         this.txtBusquedas.setText("");
         this.lblAnalisis.setText("Analizar Manualmente:");
         this.lblMostrarError.setText("Transiciones del Automata:");
@@ -387,10 +354,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         this.btnSubirArchivo.setEnabled(true);
         this.btnGuardarArchivo.setText("Guardar Texto");
         this.btnQuitarArchivo.setEnabled(true);
-        this.btnAvanzarDep.setVisible(false);
-        this.btnRetrocederDep.setVisible(false);
-        this.btnFinalizarDep.setVisible(false);
-        this.btnReiniciarDep.setVisible(false);
         this.lblSalidas.setVisible(false);
         this.lblAnalisis.setVisible(true);
         this.lblSalidas.setVisible(false);
@@ -440,21 +403,17 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnAnalisis = new javax.swing.JButton();
         txtBusquedas = new javax.swing.JTextField();
         lblAnalisis = new javax.swing.JLabel();
-        scrollTransiciones = new javax.swing.JScrollPane();
-        txtLogTransiciones = new javax.swing.JTextPane();
+        scrollSintactico = new javax.swing.JScrollPane();
+        txtLogSintactico = new javax.swing.JTextPane();
         scrollBusquedas = new javax.swing.JScrollPane();
         txtLogBusquedas = new javax.swing.JTextPane();
-        btnFinalizarDep = new javax.swing.JButton();
         lblSalidas = new javax.swing.JLabel();
-        btnReiniciarDep = new javax.swing.JButton();
-        btnRetrocederDep = new javax.swing.JButton();
-        btnAvanzarDep = new javax.swing.JButton();
         scrollModoDepuracion = new javax.swing.JScrollPane();
         txtLogDepuraciones = new javax.swing.JTextPane();
         barraLateral = new javax.swing.JPanel();
         btnBusquedaPatrones = new javax.swing.JButton();
         btnReporteErrores = new javax.swing.JButton();
-        btnDepuracion = new javax.swing.JButton();
+        btnReporteSintactico = new javax.swing.JButton();
         btnReporteTokens = new javax.swing.JButton();
         labelLayout = new javax.swing.JLabel();
         lblErroresEncontrados = new javax.swing.JLabel();
@@ -662,18 +621,18 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jPanel2.add(lblAnalisis);
         lblAnalisis.setBounds(20, 10, 690, 30);
 
-        txtLogTransiciones.setBackground(new java.awt.Color(223, 221, 221));
-        txtLogTransiciones.setFont(new java.awt.Font("Liberation Serif", 1, 20)); // NOI18N
-        txtLogTransiciones.setForeground(new java.awt.Color(140, 1, 25));
-        txtLogTransiciones.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtLogSintactico.setBackground(new java.awt.Color(223, 221, 221));
+        txtLogSintactico.setFont(new java.awt.Font("Liberation Serif", 1, 20)); // NOI18N
+        txtLogSintactico.setForeground(new java.awt.Color(140, 1, 25));
+        txtLogSintactico.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtLogTransicionesKeyReleased(evt);
+                txtLogSintacticoKeyReleased(evt);
             }
         });
-        scrollTransiciones.setViewportView(txtLogTransiciones);
+        scrollSintactico.setViewportView(txtLogSintactico);
 
-        jPanel2.add(scrollTransiciones);
-        scrollTransiciones.setBounds(10, 140, 700, 430);
+        jPanel2.add(scrollSintactico);
+        scrollSintactico.setBounds(10, 140, 700, 430);
 
         txtLogBusquedas.setBackground(new java.awt.Color(228, 228, 228));
         txtLogBusquedas.setFont(new java.awt.Font("Liberation Serif", 1, 20)); // NOI18N
@@ -688,60 +647,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jPanel2.add(scrollBusquedas);
         scrollBusquedas.setBounds(10, 140, 700, 430);
 
-        btnFinalizarDep.setBackground(new java.awt.Color(187, 41, 41));
-        btnFinalizarDep.setFont(new java.awt.Font("Liberation Sans", 1, 22)); // NOI18N
-        btnFinalizarDep.setForeground(new java.awt.Color(255, 255, 255));
-        btnFinalizarDep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/pablocompany/proyectono1/recursosapp/images/avanzarFin.png"))); // NOI18N
-        btnFinalizarDep.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFinalizarDepActionPerformed(evt);
-            }
-        });
-        jPanel2.add(btnFinalizarDep);
-        btnFinalizarDep.setBounds(560, 50, 60, 50);
-
         lblSalidas.setFont(new java.awt.Font("Liberation Sans", 1, 26)); // NOI18N
         lblSalidas.setForeground(new java.awt.Color(61, 29, 97));
         lblSalidas.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblSalidas.setText("Salidas de codigo:");
         jPanel2.add(lblSalidas);
         lblSalidas.setBounds(20, 10, 690, 30);
-
-        btnReiniciarDep.setBackground(new java.awt.Color(48, 148, 92));
-        btnReiniciarDep.setFont(new java.awt.Font("Liberation Sans", 1, 22)); // NOI18N
-        btnReiniciarDep.setForeground(new java.awt.Color(255, 255, 255));
-        btnReiniciarDep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/pablocompany/proyectono1/recursosapp/images/resetIcon.png"))); // NOI18N
-        btnReiniciarDep.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnReiniciarDepActionPerformed(evt);
-            }
-        });
-        jPanel2.add(btnReiniciarDep);
-        btnReiniciarDep.setBounds(110, 50, 60, 50);
-
-        btnRetrocederDep.setBackground(new java.awt.Color(112, 10, 201));
-        btnRetrocederDep.setFont(new java.awt.Font("Liberation Sans", 1, 22)); // NOI18N
-        btnRetrocederDep.setForeground(new java.awt.Color(255, 255, 255));
-        btnRetrocederDep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/pablocompany/proyectono1/recursosapp/images/avanzarIzquiertaIcon.png"))); // NOI18N
-        btnRetrocederDep.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRetrocederDepActionPerformed(evt);
-            }
-        });
-        jPanel2.add(btnRetrocederDep);
-        btnRetrocederDep.setBounds(260, 50, 60, 50);
-
-        btnAvanzarDep.setBackground(new java.awt.Color(112, 10, 201));
-        btnAvanzarDep.setFont(new java.awt.Font("Liberation Sans", 1, 22)); // NOI18N
-        btnAvanzarDep.setForeground(new java.awt.Color(255, 255, 255));
-        btnAvanzarDep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/pablocompany/proyectono1/recursosapp/images/avanzarDerechaIcon.png"))); // NOI18N
-        btnAvanzarDep.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAvanzarDepActionPerformed(evt);
-            }
-        });
-        jPanel2.add(btnAvanzarDep);
-        btnAvanzarDep.setBounds(410, 50, 60, 50);
 
         txtLogDepuraciones.setBackground(new java.awt.Color(223, 221, 221));
         txtLogDepuraciones.setFont(new java.awt.Font("Liberation Serif", 1, 20)); // NOI18N
@@ -784,15 +695,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         });
 
-        btnDepuracion.setBackground(new java.awt.Color(63, 88, 89));
-        btnDepuracion.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
-        btnDepuracion.setForeground(new java.awt.Color(255, 255, 255));
-        btnDepuracion.setText("Iniciar Modo Depuracion");
-        btnDepuracion.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(255, 255, 255)));
-        btnDepuracion.setFocusable(false);
-        btnDepuracion.addActionListener(new java.awt.event.ActionListener() {
+        btnReporteSintactico.setBackground(new java.awt.Color(63, 88, 89));
+        btnReporteSintactico.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
+        btnReporteSintactico.setForeground(new java.awt.Color(255, 255, 255));
+        btnReporteSintactico.setText("Reportes Sintacticos");
+        btnReporteSintactico.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(255, 255, 255)));
+        btnReporteSintactico.setFocusable(false);
+        btnReporteSintactico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDepuracionActionPerformed(evt);
+                btnReporteSintacticoActionPerformed(evt);
             }
         });
 
@@ -816,7 +727,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addGap(143, 143, 143)
                 .addComponent(btnBusquedaPatrones, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnDepuracion, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnReporteSintactico, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnReporteErrores, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -829,7 +740,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addContainerGap(16, Short.MAX_VALUE)
                 .addGroup(barraLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnBusquedaPatrones, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnDepuracion, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnReporteSintactico, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnReporteErrores, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnReporteTokens, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
@@ -923,7 +834,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
             return;
         }
 
-       /* try {
+        /* try {
             //Detecta cada vez que se cambia una palabra
             String textoEntradaEdit = this.textEdicionArchivo.getText().replace("\t", "      ");
 
@@ -989,7 +900,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
                     this.manipuladorDirectorios.reiniciarPath();
                     this.textEdicionArchivo.setText("");
                     this.textLogErrores.setText("");
-                    this.txtLogTransiciones.setText("");
+                    this.txtLogSintactico.setText("");
                     this.yaCargado = false;
                     this.btnGuardarArchivo.setEnabled(true);
 
@@ -1044,7 +955,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         if (this.gestionVentanas == 1) {
 
-           /* if (this.txtBusquedas.getText().trim().isBlank()) {
+            /* if (this.txtBusquedas.getText().trim().isBlank()) {
                 JOptionPane.showMessageDialog(this, "No hay ninguna palabra escrita\nEscribe alguna palabra para poder buscarlo", "Texto de busqueda Vacio", JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
@@ -1068,7 +979,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
             } catch (ErrorPuntualException ex1) {
                 JOptionPane.showMessageDialog(this, ex1.getMessage(), "Patron no Encontrado", JOptionPane.INFORMATION_MESSAGE);
             }*/
-
         }
     }//GEN-LAST:event_btnGuardarArchivoActionPerformed
 
@@ -1078,7 +988,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
             return;
         }
 
-       /* try {
+        /* try {
             //Detecta cada vez que se cambia una palabra
             String textoEntradaEdit = this.textEdicionArchivo.getText().replace("\t", "      ");
 
@@ -1107,13 +1017,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private void btnReporteErroresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteErroresActionPerformed
         //Boton que permite generar los reportes
         generarReporteErrores();
-
     }//GEN-LAST:event_btnReporteErroresActionPerformed
 
-    private void btnDepuracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDepuracionActionPerformed
-        //Boton que despliega las opciones para iniciar la depurarion
-        iniciarModoDepuracion();
-    }//GEN-LAST:event_btnDepuracionActionPerformed
+    private void btnReporteSintacticoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteSintacticoActionPerformed
+        //Boton que despliega las opciones para consultar reportes del analizador sintactico
+        generarReportesSintacticos();
+    }//GEN-LAST:event_btnReporteSintacticoActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         //Codiciona que se debe de confirmar si se quiere cerrar la aplicacion
@@ -1132,9 +1041,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
         generarReporteTokens();
     }//GEN-LAST:event_btnReporteTokensActionPerformed
 
-    private void txtLogTransicionesKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLogTransicionesKeyReleased
+    private void txtLogSintacticoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLogSintacticoKeyReleased
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtLogTransicionesKeyReleased
+    }//GEN-LAST:event_txtLogSintacticoKeyReleased
 
     private void textEdicionArchivoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textEdicionArchivoKeyPressed
         //Permite invalidar la tabulacion normal para poner una personalizada
@@ -1154,111 +1063,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_textEdicionArchivoKeyPressed
 
-    private void btnFinalizarDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarDepActionPerformed
-        //Boton que permite avanzar directamente hasta el ultimo estado
-       /*   try {
-
-            if (this.leerEntradas == null) {
-                JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador\nEscribe algo para poderlo depurar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            if (this.leerEntradas.getLexerActual() == null) {
-                JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador para depurar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            
-            this.leerEntradas.getLexerActual().obtenerModoDepuracion().ejecutarFinal();
-
-        } catch (NullPointerException ex) {
-            JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador\nEscribe algo para poderlo depurar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
-
-        } catch (ConfigException ex1) {
-             JOptionPane.showMessageDialog(this, ex1.getMessage(), "Texto Vacio", JOptionPane.ERROR_MESSAGE);
-        }catch (DepuradorException ex2) {
-             JOptionPane.showMessageDialog(this, ex2.getMessage(), "Texto sin lexemas", JOptionPane.ERROR_MESSAGE);
-        }*/
-    }//GEN-LAST:event_btnFinalizarDepActionPerformed
-
-    private void btnReiniciarDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReiniciarDepActionPerformed
-        //Boton que permite reiniciar la depuracion en el lexema
-        /* try {
-
-            if (this.leerEntradas == null) {
-                JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador\nEscribe algo para poderlo depurar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            if (this.leerEntradas.getLexerActual() == null) {
-                JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador para depurar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            
-            this.leerEntradas.getLexerActual().obtenerModoDepuracion().reiniciarAnalisisDepurado();
-
-        } catch (NullPointerException ex) {
-            JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador\nEscribe algo para poderlo depurar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
-
-        } catch (ConfigException ex1) {
-             JOptionPane.showMessageDialog(this, ex1.getMessage(), "Texto Vacio", JOptionPane.ERROR_MESSAGE);
-        } catch (DepuradorException ex2) {
-             JOptionPane.showMessageDialog(this, ex2.getMessage(), "Texto sin lexemas", JOptionPane.ERROR_MESSAGE);
-        }*/
-    }//GEN-LAST:event_btnReiniciarDepActionPerformed
-
-    private void btnRetrocederDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetrocederDepActionPerformed
-        // Boton que permite dar un paso atras en el analisis
-        /* try {
-
-            if (this.leerEntradas == null) {
-                JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador\nEscribe algo para poderlo depurar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            if (this.leerEntradas.getLexerActual() == null) {
-                JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador para depurar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            
-            this.leerEntradas.getLexerActual().obtenerModoDepuracion().regresarPaso();
-
-        } catch (NullPointerException ex) {
-            JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador\nEscribe algo para poderlo depurar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
-
-        } catch (ConfigException ex1) {
-             JOptionPane.showMessageDialog(this, ex1.getMessage(), "Texto Vacio", JOptionPane.ERROR_MESSAGE);
-        }catch (DepuradorException ex2) {
-             JOptionPane.showMessageDialog(this, ex2.getMessage(), "Texto sin lexemas", JOptionPane.ERROR_MESSAGE);
-        }*/
-    }//GEN-LAST:event_btnRetrocederDepActionPerformed
-
-    private void btnAvanzarDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAvanzarDepActionPerformed
-        // Boton que permite avanzar un paso adelante en el analisis
-     /*   try {
-
-            if (this.leerEntradas == null) {
-                JOptionPane.showMessageDialog(this, "No hay texto registrado en el texto del analizador\nEscribe algo para poderlo depurar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            if (this.leerEntradas.getLexerActual() == null) {
-                JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador para depurar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            this.leerEntradas.getLexerActual().obtenerModoDepuracion().avanzarSiguientePaso();
-
-        } catch (NullPointerException ex) {
-            
-            JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador\nEscribe algo para poderlo depurar", "Documento Vacio", JOptionPane.ERROR_MESSAGE);
-
-        } catch (ConfigException ex1) {
-             JOptionPane.showMessageDialog(this, ex1.getMessage(), "Texto Vacio", JOptionPane.ERROR_MESSAGE);
-        }catch (DepuradorException ex2) {
-             JOptionPane.showMessageDialog(this, ex2.getMessage(), "Texto sin lexemas", JOptionPane.ERROR_MESSAGE);
-        }*/
-
-    }//GEN-LAST:event_btnAvanzarDepActionPerformed
-
     private void txtLogDepuracionesKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLogDepuracionesKeyReleased
         // TODO add your handling code here:
     }//GEN-LAST:event_txtLogDepuracionesKeyReleased
@@ -1267,16 +1071,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel barraLateral;
     private javax.swing.JButton btnAnalisis;
-    private javax.swing.JButton btnAvanzarDep;
     private javax.swing.JButton btnBusquedaPatrones;
-    private javax.swing.JButton btnDepuracion;
-    private javax.swing.JButton btnFinalizarDep;
     private javax.swing.JButton btnGuardarArchivo;
     private javax.swing.JButton btnQuitarArchivo;
-    private javax.swing.JButton btnReiniciarDep;
     private javax.swing.JButton btnReporteErrores;
+    private javax.swing.JButton btnReporteSintactico;
     private javax.swing.JButton btnReporteTokens;
-    private javax.swing.JButton btnRetrocederDep;
     private javax.swing.JButton btnSubirArchivo;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -1300,13 +1100,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JScrollPane scrollBusquedas;
     private javax.swing.JScrollPane scrollErroresLog;
     private javax.swing.JScrollPane scrollModoDepuracion;
-    private javax.swing.JScrollPane scrollTransiciones;
+    private javax.swing.JScrollPane scrollSintactico;
     private javax.swing.JTextPane textEdicionArchivo;
     private javax.swing.JTextPane textLogErrores;
     private javax.swing.JTextArea txtAreaDirectorioArchivo;
     private javax.swing.JTextField txtBusquedas;
     private javax.swing.JTextPane txtLogBusquedas;
     private javax.swing.JTextPane txtLogDepuraciones;
-    private javax.swing.JTextPane txtLogTransiciones;
+    private javax.swing.JTextPane txtLogSintactico;
     // End of variables declaration//GEN-END:variables
 }

@@ -14,7 +14,6 @@ package com.pablocompany.proyectono2lfp.jflexpackage;
 /*CODIGO JAVA*/
 %{
 
-
     // Código Java de apoyo
 
 
