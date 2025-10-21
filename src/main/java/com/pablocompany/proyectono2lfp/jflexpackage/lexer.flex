@@ -21,16 +21,15 @@ package com.pablocompany.proyectono2lfp.jflexpackage;
 
 /*EXPRESIONES REGULARES DEL AUTOMATA*/
 
+Espacio = " "
+Tab = \t
+
+Salto = (\r\n | \n | \r)
+
+
+
 Identificador = [:jletter:] [:jletterdigit:]*
 Numero = 0 | [1-9][0-9]*
-
-
-
-
-
-LineTerminator = \r|\n|\r\n
-WhiteSpace     = {LineTerminator} | [ \t\f]
-
 
 
 %%
@@ -38,9 +37,10 @@ WhiteSpace     = {LineTerminator} | [ \t\f]
 
 /*ACCIONES*/
 
+{Espacio}+          { System.out.println("sym.SALTO" + yytext()); }
+{Tab}+              { System.out.println("sym.SALTO" + yytext()); }
+{Salto}+            { System.out.println("sym.SALTO" + yytext()); }
 {Identificador}     { System.out.println("Token Identificador <" + yytext() + ">"); }
 {Numero}            { System.out.println("Token Numero <" + yytext() + ">"); }
-{LineTerminator}    { System.out.println("Terminacion de linea"); }
-{WhiteSpace}        { System.out.println("Espacio en blanco"); }
 
 (.)          { System.out.println("Caracter no registrado <" + yytext() + ">"); }

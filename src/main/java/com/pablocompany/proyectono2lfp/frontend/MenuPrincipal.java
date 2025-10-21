@@ -29,7 +29,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     //Variable que permite saber que menu de operaciones se despliegara
     private int gestionVentanas;
-
+    
     //instancia que permite subir archivos de texto
     private ManejadorArchivos manipuladorDirectorios;
     private LectorEntradas leerEntradas;
@@ -98,7 +98,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     //Metodo que permite evaluar las tabulaciones y no dejar solo las tabulaciones predeterminadas
     private void configurarTabReal() {
-        textEdicionArchivo.setFocusTraversalKeysEnabled(false); // permite capturar TAB
+        textEdicionArchivo.setFocusTraversalKeysEnabled(false);
 
         textEdicionArchivo.getInputMap().put(KeyStroke.getKeyStroke("TAB"), "insert-tab");
         textEdicionArchivo.getActionMap().put("insert-tab", new AbstractAction() {
@@ -107,11 +107,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 try {
                     textEdicionArchivo.getDocument().insertString(
                             textEdicionArchivo.getCaretPosition(),
-                            "\t", // inserta un tab real
+                            "\t",
                             null
                     );
                 } catch (BadLocationException ex) {
-                    System.out.println("No fuciona el metodo de tabs");
+                    System.err.println("Error insertando tabulación: " + ex.getMessage());
                 }
             }
         });
@@ -281,7 +281,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         dialog.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
-                
+
                 if (gestionVentanas == 0) {
                     regresarInicio();
                 }
@@ -825,28 +825,29 @@ public class MenuPrincipal extends javax.swing.JFrame {
         int code = evt.getKeyCode();
         if (code == KeyEvent.VK_CONTROL || code == KeyEvent.VK_SHIFT
                 || code == KeyEvent.VK_ALT
-                || code == KeyEvent.VK_LEFT || code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_UP || code == KeyEvent.VK_DOWN
-                || code == KeyEvent.VK_TAB || code == KeyEvent.VK_CAPS_LOCK) {
-            return; // ignorar estas teclas
+                || code == KeyEvent.VK_LEFT || code == KeyEvent.VK_RIGHT
+                || code == KeyEvent.VK_UP || code == KeyEvent.VK_DOWN
+                || code == KeyEvent.VK_CAPS_LOCK) {
+            return; // ignorar teclas de navegación
         }
 
-        if (this.textEdicionArchivo.getText().isBlank()) {
+        String textoOriginal = textEdicionArchivo.getText();
+        if (textoOriginal.isBlank()) {
             return;
         }
 
-        /* try {
-            //Detecta cada vez que se cambia una palabra
-            String textoEntradaEdit = this.textEdicionArchivo.getText().replace("\t", "      ");
+        // try {
+        //Detecta cada vez que se cambia una palabra
 
-            this.leerEntradas.transformarTexto(textoEntradaEdit, this.textEdicionArchivo);
+        // this.leerEntradas.transformarTexto(textoEntradaEdit, this.textEdicionArchivo);
+        // this.leerEntradas.analizarEntradas(this.textEdicionArchivo, this.textLogErrores, this.txtLogTransiciones);
 
-            this.leerEntradas.analizarEntradas(this.textEdicionArchivo, this.textLogErrores, this.txtLogTransiciones);
-
-        } catch (AnalizadorLexicoException ex) {
+        /*  catch (AnalizadorLexicoException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de Ejecucion", JOptionPane.ERROR_MESSAGE);
         } catch (ConfigException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de Carga", JOptionPane.ERROR_MESSAGE);
-        } catch (BadLocationException ex) {
+        } */
+ /* catch (BadLocationException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de pintado", JOptionPane.ERROR_MESSAGE);
         }*/
     }//GEN-LAST:event_textEdicionArchivoKeyReleased
