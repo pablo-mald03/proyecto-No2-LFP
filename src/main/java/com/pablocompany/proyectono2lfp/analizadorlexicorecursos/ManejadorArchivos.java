@@ -14,7 +14,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
@@ -80,7 +79,7 @@ public class ManejadorArchivos {
         }
     }
 
-    //Metodo que transforma el path de entrada a un arreglo
+    //Metodo que transforma el path de entrada en texto para el log de edicion
     public void convertirEntrada(JTextPane paneEdicion) throws AnalizadorLexicoException, ConfigException {
 
         if (this.pathEntrada == null || this.pathEntrada.isBlank()) {
@@ -125,7 +124,7 @@ public class ManejadorArchivos {
     }
 
     //Metodo que sirve para poder exportar lo que se escribe en el log
-    public void exportarArchivoCreado(String directorio, ArrayList<String> lineas, String nombreArchivo) throws AnalizadorLexicoException {
+    public void exportarArchivoCreado(String directorio, JTextPane paneEdicion, String nombreArchivo) throws AnalizadorLexicoException {
 
         if (directorio.isBlank()) {
             throw new AnalizadorLexicoException("No hay ningun archivo subido aun");
@@ -134,6 +133,10 @@ public class ManejadorArchivos {
         File comprobacion = new File(directorio);
         if (!comprobacion.exists()) {
             throw new AnalizadorLexicoException("Aun no se ha definido un path para almacenar el archivo");
+        }
+        
+        if(paneEdicion.getText().isBlank()){
+              throw new AnalizadorLexicoException("El texto del log de edicion esta Vacio");
         }
 
         //Se genera la hora de exportacion para evitar duplicados
@@ -144,10 +147,10 @@ public class ManejadorArchivos {
         File archivo = new File(directorio + File.separator + nombreArchivo + "_" + fechaHora + ".txt");
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo, false))) {
-            for (String linea : lineas) {
-                bw.write(linea);
-                bw.newLine();
-            }
+            String contenido = paneEdicion.getText();
+
+            bw.write(contenido);
+
         } catch (IOException e) {
             throw new AnalizadorLexicoException("No hay un path definido para reescribir el archivo");
         }

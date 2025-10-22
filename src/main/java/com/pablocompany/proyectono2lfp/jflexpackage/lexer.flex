@@ -2,8 +2,6 @@
 
 package com.pablocompany.proyectono2lfp.jflexpackage;
 
-import com.pablocompany.proyectono2lfp.backend.GestorLexer;
-
 %%
 
 /*CONFIGURACIONES*/
@@ -77,7 +75,7 @@ ErrorComentarioBloque = "/*"([^*]|\*+[^*/])*
 
 /*ACCIONES*/
 
-{Espacio}+          { System.out.println("Token espacio <" + yytext() + ">"); }
+{Espacio}+          { System.out.println("Token espacio <" + yytext() + " columna " + yycolumn+">"); }
 {LineaVacia}        {  String lexema = yytext();       
                         String[] lineas = lexema.split("\r\n|\r|\n", -1); 
                         int cantidadSaltos = lineas.length - 1;          
@@ -85,35 +83,35 @@ ErrorComentarioBloque = "/*"([^*]|\*+[^*/])*
                         System.out.println("Cantidad de saltos: " + cantidadSaltos);
                         System.out.println("Espacios iniciales: '" + (espacios.length()));}
 
-{Tab}+              { System.out.println("Token tab <" + yytext() + ">"); }
+{Tab}+              { System.out.println("Token tab <" + yytext() + " columna " + yycolumn+">"); }
 
 
 
-{ErrorComentarioBloque}      {System.out.println("Token ERROR COMENTAIO DE BLOQUE <" + yytext() + ">"); }
+{ErrorComentarioBloque}      {System.out.println("Token ERROR COMENTAIO DE BLOQUE <" + yytext() + " columna " + yycolumn+">"); }
 
-{PalabraReservada}      {System.out.println("Token palabra reservada <" + yytext() + ">");  }
-
-
-{Igual}                 { System.out.println("Token Igual <" + yytext() + ">"); }
+{PalabraReservada}      {System.out.println("Token palabra reservada <" + yytext() + " columna " + yycolumn+">");  }
 
 
-{Decimal}               { System.out.println("Token Decimal <" + yytext() + ">"); }
-{Numero}                { System.out.println("Token Numero <" + yytext() + ">"); }
-
-{Identificador}         { System.out.println("Token Identificador <" + yytext() + ">"); }
-
-{Puntuacion}            { System.out.println("Token Puntuacion <" + yytext() + ">"); }
-{OperadorAritmetico}    { System.out.println("Token operador aritmetico<" + yytext() + ">"); }
-
-{Agrupacion}            { System.out.println("Token agrupacion <" + yytext() + ">"); }
+{Igual}                 { System.out.println("Token Igual <" + yytext() + " columna " + yycolumn+">"); }
 
 
+{Decimal}               { System.out.println("Token Decimal <" + yytext() + " columna " + yycolumn+">"); }
+{Numero}                { System.out.println("Token Numero <" + yytext() + " columna " + yycolumn+">"); }
 
-{ComentarioLinea}       { System.out.println("Token COMENTARIO_LINEA <" + yytext() + ">"); }
+{Identificador}         { System.out.println("Token Identificador <" + yytext() + " columna " + yycolumn+">"); }
 
-{DocumentationComment}  {System.out.println("Token COMENTARIO DE BLOQUE <" + yytext() + ">"); }
+{Puntuacion}            { System.out.println("Token Puntuacion <" + yytext() + " columna " + yycolumn+">"); }
+{OperadorAritmetico}    { System.out.println("Token operador aritmetico<" + yytext() + " columna " + yycolumn+">"); }
 
-{ComentarioBloque}      {System.out.println("Token COMENTAIO DE BLOQUE <" + yytext() + ">"); }
+{Agrupacion}            { System.out.println("Token agrupacion <" + yytext() + " columna " + yycolumn+">"); }
 
 
-(.)          { System.out.println("Caracter no registrado <" + yytext() + ">"); }
+
+{ComentarioLinea}       { System.out.println("Token COMENTARIO_LINEA <" + yytext() + " columna " + yycolumn+">"); }
+
+{DocumentationComment}  {System.out.println("Token COMENTARIO DE BLOQUE <" + yytext() + " columna " + yycolumn+">"); }
+
+{ComentarioBloque}      {System.out.println("Token COMENTAIO DE BLOQUE <" + yytext() + " columna " + yycolumn+">"); }
+
+
+(.)          { System.out.println("Caracter no registrado <" + yytext() + " columna " + yycolumn+">"); }

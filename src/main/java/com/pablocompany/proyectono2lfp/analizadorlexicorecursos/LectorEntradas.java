@@ -8,7 +8,6 @@ import com.pablocompany.proyectono2lfp.backend.GestorLexer;
 import com.pablocompany.proyectono2lfp.excepciones.AnalizadorLexicoException;
 import com.pablocompany.proyectono2lfp.excepciones.ErrorPuntualException;
 import com.pablocompany.proyectono2lfp.jflexpackage.AnalizadorLexico;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
@@ -23,42 +22,23 @@ import javax.swing.text.StyledDocument;
  * @author pablo
  */
 public class LectorEntradas {
-    //Atributo que permite almacenar en una estructura dinamica todas las lineas de texto registradas
-    //Se le da un preset para evitar mucho consumo de memoria por clonacion
-
-    private ArrayList<String> listaTexto = new ArrayList<>(6000);
 
     //Clase que intercomunica al lexer actual para poderlo operar internamente en UI
     private GestorLexer lexerActual;
 
     //Atributo que permite conservar la referencia de los reportes
     // private GenerarReportes generacionReportes;
+    
     //------------------Subregion de gramatica extraidas del config.json----------------------------
+    
     // private AutomataDeterminista constantesConfig;
-    //private GenerarReportes generacionReportes;
     public LectorEntradas() {
-        // this.constantesConfig = new AutomataDeterminista();
         this.lexerActual = new GestorLexer();
         // this.generacionReportes = new GenerarReportes();
     }
 
     //------------------Fin de la Subregion de gramatica extraidas del config.json----------------------------
-    //Metodo que permite transformar todo el texto de entrada al arreglo 
-    public void transformarTexto(String texto, JTextPane paneLog) throws AnalizadorLexicoException {
 
-        if (!listaTexto.isEmpty()) {
-            listaTexto.clear();
-        }
-
-        try (BufferedReader bufer = new BufferedReader(new StringReader(texto))) {
-            String linea;
-            while ((linea = bufer.readLine()) != null) {
-                listaTexto.add(linea);
-            }
-        } catch (IOException ex) {
-            throw new AnalizadorLexicoException("No se ha podido procesar el texto de entrada");
-        }
-    }
 
     //Metodo mas importante para poder analizar el texto y procesarlo
     public void analizarEntradas(JTextPane paneLogEntrada, JTextPane logErrores, JTextPane logTransiciones) throws BadLocationException, AnalizadorLexicoException {
@@ -77,15 +57,7 @@ public class LectorEntradas {
         }
     }
 
-    //Metodo set que permite referenciar el arreglo extraido hacia el interno de la clase
-    public void setLista(ArrayList<String> listaParametro, JTextPane paneLog) {
-        this.listaTexto = listaParametro;
-    }
 
-    //Metodo que retorna el listado de textos almacenados en el componente
-    public ArrayList<String> getListado() {
-        return this.listaTexto;
-    }
 
     //Metodo que permite pasar por parametro un arraylist e imprimirlo en un JtextPane
     public void imprimirLog(ArrayList<String> listaExtraida, JTextPane textPane) throws BadLocationException {
@@ -100,10 +72,6 @@ public class LectorEntradas {
         return this.lexerActual.getLexer();
     }
 
-    //Metodo que retorna la referencia de config
-    /* public AutomataDeterminista getDatosConfig() {
-        return this.constantesConfig;
-    }*/
     
     //METODO UTILIZADO PARA EXPORTAR EL TEXTO ESCRITO EN EL LOG DE EDICION
     public String exportarArchivo() throws ErrorPuntualException {

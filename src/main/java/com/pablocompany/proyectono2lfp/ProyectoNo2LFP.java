@@ -4,7 +4,6 @@
 package com.pablocompany.proyectono2lfp;
 
 import com.pablocompany.proyectono2lfp.frontend.MenuPrincipal;
-import com.pablocompany.proyectono2lfp.jflexpackage.AnalizadorLexico;
 
 /**
  *

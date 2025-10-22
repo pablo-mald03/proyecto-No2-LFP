@@ -920,13 +920,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
                 if (path != null) {
 
-                    this.leerEntradas.transformarTexto(this.textEdicionArchivo.getText(), this.textEdicionArchivo);
-
-                    ArrayList<String> lista = this.leerEntradas.getListado();
-
                     String nombreArchivo = pedirNombre("Escriba el nombre del archivo a exportar\nNo deje el espacio vacio");
 
-                    this.manipuladorDirectorios.exportarArchivoCreado(path, lista, nombreArchivo);
+                    this.manipuladorDirectorios.exportarArchivoCreado(path, this.textEdicionArchivo, nombreArchivo);
 
                     JOptionPane.showMessageDialog(this, "Archivo exportado correctamente", "Archivo exportado", JOptionPane.INFORMATION_MESSAGE);
 

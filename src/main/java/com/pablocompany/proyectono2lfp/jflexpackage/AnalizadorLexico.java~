@@ -6,7 +6,6 @@
 
 package com.pablocompany.proyectono2lfp.jflexpackage;
 
-import com.pablocompany.proyectono2lfp.backend.GestorLexer;
 
 
 @SuppressWarnings("fallthrough")
@@ -1108,7 +1107,7 @@ public class AnalizadorLexico {
           // fall through
           case 29: break;
           case 14:
-            { System.out.println("Token Decimal <" + yytext() + ">");
+            { System.out.println("Token Decimal <" + yytext() + "columna "+yycolumn+ ">");
             }
           // fall through
           case 30: break;

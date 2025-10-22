@@ -6,8 +6,6 @@
 
 package com.pablocompany.proyectono2lfp.jflexpackage;
 
-import com.pablocompany.proyectono2lfp.backend.GestorLexer;
-
 
 @SuppressWarnings("fallthrough")
 public class AnalizadorLexico {
@@ -1038,12 +1036,12 @@ public class AnalizadorLexico {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
-            { System.out.println("Caracter no registrado <" + yytext() + ">");
+            { System.out.println("Caracter no registrado <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 17: break;
           case 2:
-            { System.out.println("Token tab <" + yytext() + ">");
+            { System.out.println("Token tab <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 18: break;
@@ -1058,67 +1056,67 @@ public class AnalizadorLexico {
           // fall through
           case 19: break;
           case 4:
-            { System.out.println("Token espacio <" + yytext() + ">");
+            { System.out.println("Token espacio <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 20: break;
           case 5:
-            { System.out.println("Token Identificador <" + yytext() + ">");
+            { System.out.println("Token Identificador <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 21: break;
           case 6:
-            { System.out.println("Token operador aritmetico<" + yytext() + ">");
+            { System.out.println("Token operador aritmetico<" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 22: break;
           case 7:
-            { System.out.println("Token agrupacion <" + yytext() + ">");
+            { System.out.println("Token agrupacion <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 23: break;
           case 8:
-            { System.out.println("Token Puntuacion <" + yytext() + ">");
+            { System.out.println("Token Puntuacion <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 24: break;
           case 9:
-            { System.out.println("Token Numero <" + yytext() + ">");
+            { System.out.println("Token Numero <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 25: break;
           case 10:
-            { System.out.println("Token Igual <" + yytext() + ">");
+            { System.out.println("Token Igual <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 26: break;
           case 11:
-            { System.out.println("Token ERROR COMENTAIO DE BLOQUE <" + yytext() + ">");
+            { System.out.println("Token ERROR COMENTAIO DE BLOQUE <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 27: break;
           case 12:
-            { System.out.println("Token COMENTARIO_LINEA <" + yytext() + ">");
+            { System.out.println("Token COMENTARIO_LINEA <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 28: break;
           case 13:
-            { System.out.println("Token palabra reservada <" + yytext() + ">");
+            { System.out.println("Token palabra reservada <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 29: break;
           case 14:
-            { System.out.println("Token Decimal <" + yytext() + ">");
+            { System.out.println("Token Decimal <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 30: break;
           case 15:
-            { System.out.println("Token COMENTAIO DE BLOQUE <" + yytext() + ">");
+            { System.out.println("Token COMENTAIO DE BLOQUE <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 31: break;
           case 16:
-            { System.out.println("Token COMENTARIO DE BLOQUE <" + yytext() + ">");
+            { System.out.println("Token COMENTARIO DE BLOQUE <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 32: break;
