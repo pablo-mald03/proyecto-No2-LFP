@@ -5,9 +5,6 @@ package com.pablocompany.proyectono2lfp;
 
 import com.pablocompany.proyectono2lfp.frontend.MenuPrincipal;
 import com.pablocompany.proyectono2lfp.jflexpackage.AnalizadorLexico;
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.Scanner;
 
 /**
  *
@@ -22,7 +19,6 @@ public class ProyectoNo2LFP {
         //Metodo donde inicia la interfaz principal
         MenuPrincipal menuPrincipal = new MenuPrincipal();
         menuPrincipal.setVisible(true);
-
     }
 
     public static void generarLexer() {

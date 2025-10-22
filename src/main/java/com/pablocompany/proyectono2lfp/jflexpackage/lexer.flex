@@ -25,12 +25,12 @@ import com.pablocompany.proyectono2lfp.backend.GestorLexer;
 
 /*EXPRESIONES REGULARES DEL AUTOMATA*/
 
-LineTerminator = \r|\n|\r\n
 Espacio = " "
-EspacioBlanco = {LineTerminator} | [ \t\f]
 Tab = \t
 
 Salto = (\r\n | \n | \r)
+
+LineaVacia = [ \t]* {Salto}+
 
 
 
@@ -77,10 +77,17 @@ ErrorComentarioBloque = "/*"([^*]|\*+[^*/])*
 
 /*ACCIONES*/
 
-{Espacio}+              { System.out.println("Token espacio" + yytext()); }
-{Tab}+                  { System.out.println("token tab" + yytext()); }
-{Salto}+                { System.out.println("token salto" + yytext()); }
-{EspacioBlanco}            { System.out.println("Token vacio" + yytext()); }
+{Espacio}+          { System.out.println("Token espacio <" + yytext() + ">"); }
+{LineaVacia}        {  String lexema = yytext();       
+                        String[] lineas = lexema.split("\r\n|\r|\n", -1); 
+                        int cantidadSaltos = lineas.length - 1;          
+                        String espacios = lineas[0];                       
+                        System.out.println("Cantidad de saltos: " + cantidadSaltos);
+                        System.out.println("Espacios iniciales: '" + (espacios.length()));}
+
+{Tab}+              { System.out.println("Token tab <" + yytext() + ">"); }
+
+
 
 {ErrorComentarioBloque}      {System.out.println("Token ERROR COMENTAIO DE BLOQUE <" + yytext() + ">"); }
 
