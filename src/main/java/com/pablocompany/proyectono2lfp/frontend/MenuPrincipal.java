@@ -29,7 +29,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     //Variable que permite saber que menu de operaciones se despliegara
     private int gestionVentanas;
-    
+
     //instancia que permite subir archivos de texto
     private ManejadorArchivos manipuladorDirectorios;
     private LectorEntradas leerEntradas;
@@ -836,20 +836,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
             return;
         }
 
-        // try {
-        //Detecta cada vez que se cambia una palabra
+        try {
+            //Detecta cada vez que se cambia una palabra
+            this.leerEntradas.analizarEntradas(this.textEdicionArchivo, this.textLogErrores, this.txtLogSintactico);
 
-        // this.leerEntradas.transformarTexto(textoEntradaEdit, this.textEdicionArchivo);
-        // this.leerEntradas.analizarEntradas(this.textEdicionArchivo, this.textLogErrores, this.txtLogTransiciones);
-
-        /*  catch (AnalizadorLexicoException ex) {
+        } catch (AnalizadorLexicoException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de Ejecucion", JOptionPane.ERROR_MESSAGE);
-        } catch (ConfigException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de Carga", JOptionPane.ERROR_MESSAGE);
-        } */
- /* catch (BadLocationException ex) {
+        } catch (BadLocationException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de pintado", JOptionPane.ERROR_MESSAGE);
-        }*/
+        }
     }//GEN-LAST:event_textEdicionArchivoKeyReleased
 
     private void btnSubirArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubirArchivoActionPerformed

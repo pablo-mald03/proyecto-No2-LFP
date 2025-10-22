@@ -4,8 +4,10 @@
  */
 package com.pablocompany.proyectono2lfp.analizadorlexicorecursos;
 
+import com.pablocompany.proyectono2lfp.backend.GestorLexer;
 import com.pablocompany.proyectono2lfp.excepciones.AnalizadorLexicoException;
 import com.pablocompany.proyectono2lfp.excepciones.ErrorPuntualException;
+import com.pablocompany.proyectono2lfp.jflexpackage.AnalizadorLexico;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -27,19 +29,17 @@ public class LectorEntradas {
     private ArrayList<String> listaTexto = new ArrayList<>(6000);
 
     //Clase que intercomunica al lexer actual para poderlo operar internamente en UI
-    //private GestorLexer lexerActual;
+    private GestorLexer lexerActual;
 
     //Atributo que permite conservar la referencia de los reportes
-   // private GenerarReportes generacionReportes;
-
+    // private GenerarReportes generacionReportes;
     //------------------Subregion de gramatica extraidas del config.json----------------------------
-   // private AutomataDeterminista constantesConfig;
-
+    // private AutomataDeterminista constantesConfig;
     //private GenerarReportes generacionReportes;
     public LectorEntradas() {
-       // this.constantesConfig = new AutomataDeterminista();
-       // this.lexerActual = new GestorLexer();
-       // this.generacionReportes = new GenerarReportes();
+        // this.constantesConfig = new AutomataDeterminista();
+        this.lexerActual = new GestorLexer();
+        // this.generacionReportes = new GenerarReportes();
     }
 
     //------------------Fin de la Subregion de gramatica extraidas del config.json----------------------------
@@ -61,25 +61,20 @@ public class LectorEntradas {
     }
 
     //Metodo mas importante para poder analizar el texto y procesarlo
-    public void analizarEntradas(JTextPane paneLog, JTextPane logErrores, JTextPane logTransiciones) throws BadLocationException {
+    public void analizarEntradas(JTextPane paneLogEntrada, JTextPane logErrores, JTextPane logTransiciones) throws BadLocationException, AnalizadorLexicoException {
 
-        //Valida si la lista viene vacia o si la principal cadena de entrada esta vacia
-        if (this.listaTexto.isEmpty()) {
+        //Valida si el texto de entrada viene vacio
+        if (paneLogEntrada.getText().isBlank()) {
             return;
         }
 
-        //Referencia a metodo foreach en streams para poder validar que no se procese algo totalmente vacio
-        boolean todoVacio = this.listaTexto.stream().allMatch(String::isBlank);
-
-        if (todoVacio) {
-            return;
+        AnalizadorLexico analizador = new AnalizadorLexico(new StringReader(paneLogEntrada.getText()));
+        try {
+            analizador.yylex();
+            this.lexerActual.setLexer(analizador);
+        } catch (IOException ex) {
+           throw new AnalizadorLexicoException("Se ha producido un error al interpretar el texto de entrada");
         }
-
-      //  AnalizadorLexico automata = new AnalizadorLexico(paneLog, this.listaTexto, logErrores, logTransiciones, this.constantesConfig);
-       // automata.descomponerLexemas(logErrores);
-
-       // this.lexerActual.setLexer(automata);
-
     }
 
     //Metodo set que permite referenciar el arreglo extraido hacia el interno de la clase
@@ -101,15 +96,15 @@ public class LectorEntradas {
     }
 
     //Metodo que permite retornar el analizador lexico instanciado en el momento
-   /* public AnalizadorLexico getLexerActual() {
+    public AnalizadorLexico getLexerActual() {
         return this.lexerActual.getLexer();
     }
 
     //Metodo que retorna la referencia de config
-    public AutomataDeterminista getDatosConfig() {
+    /* public AutomataDeterminista getDatosConfig() {
         return this.constantesConfig;
     }*/
-
+    
     //METODO UTILIZADO PARA EXPORTAR EL TEXTO ESCRITO EN EL LOG DE EDICION
     public String exportarArchivo() throws ErrorPuntualException {
 
@@ -139,7 +134,7 @@ public class LectorEntradas {
     }
 
     //Metodo utilizado para obtener la instancia y generar el reporte 
-   /* public GenerarReportes getGenerarReportes() {
+    /* public GenerarReportes getGenerarReportes() {
         return this.generacionReportes;
     }*/
 }

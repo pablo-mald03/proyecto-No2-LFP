@@ -2,6 +2,8 @@
 
 package com.pablocompany.proyectono2lfp.jflexpackage;
 
+import com.pablocompany.proyectono2lfp.backend.GestorLexer;
+
 %%
 
 /*CONFIGURACIONES*/
@@ -15,7 +17,7 @@ package com.pablocompany.proyectono2lfp.jflexpackage;
 /*CODIGO JAVA*/
 %{
     // Código Java de apoyo
-    StringBuilder buffer = new StringBuilder();
+    
 
 
 
@@ -23,7 +25,9 @@ package com.pablocompany.proyectono2lfp.jflexpackage;
 
 /*EXPRESIONES REGULARES DEL AUTOMATA*/
 
+LineTerminator = \r|\n|\r\n
 Espacio = " "
+EspacioBlanco = {LineTerminator} | [ \t\f]
 Tab = \t
 
 Salto = (\r\n | \n | \r)
@@ -76,7 +80,7 @@ ErrorComentarioBloque = "/*"([^*]|\*+[^*/])*
 {Espacio}+              { System.out.println("Token espacio" + yytext()); }
 {Tab}+                  { System.out.println("token tab" + yytext()); }
 {Salto}+                { System.out.println("token salto" + yytext()); }
-
+{EspacioBlanco}            { System.out.println("Token vacio" + yytext()); }
 
 {ErrorComentarioBloque}      {System.out.println("Token ERROR COMENTAIO DE BLOQUE <" + yytext() + ">"); }
 
