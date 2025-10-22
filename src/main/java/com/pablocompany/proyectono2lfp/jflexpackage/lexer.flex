@@ -67,13 +67,14 @@ import com.pablocompany.proyectono2lfp.analizadorlexicorecursos.TokenEnum;
             
             this.listaSentencias.add(new Sentencia(new ArrayList<>(5000), fila ));
             this.estaIniciando = false;
+            setHaySalto(false);
             return;
         }
 
         if(!getHaySalto()){
             return;
         }
-    
+        setHaySalto(false);
         this.listaSentencias.add(new Sentencia(new ArrayList<>(5000), fila));
     }
     
@@ -154,43 +155,83 @@ ErrorComentarioBloque = "/*"([^*]|\*+[^*/])*
 
 /*ACCIONES*/
 
-{Espacio}+          { System.out.println("Token espacio <" + yytext() + " columna " + yycolumn+">"); }
-{LineaVacia}        {  String lexema = yytext();       
+{Espacio}+          { setNuevaSentencia(yyline);
+                      setNuevoLexemaLexico(TokenEnum.ESPACIO, yytext(), yyline, yycolumn );
+                      System.out.println("Token espacio <" + yytext() + " columna " + yycolumn+">"); }
+
+{LineaVacia}        {   setHaySalto(true);
+                        setNuevaSentencia(yyline);
+                        setNuevoLexemaLexico(TokenEnum.VACIO, yytext(), yyline, yycolumn );
+
+                        String lexema = yytext();       
                         String[] lineas = lexema.split("\r\n|\r|\n", -1); 
                         int cantidadSaltos = lineas.length - 1;          
                         String espacios = lineas[0];                       
                         System.out.println("Cantidad de saltos: " + cantidadSaltos);
                         System.out.println("Espacios iniciales: '" + (espacios.length()));}
 
-{Tab}+              { System.out.println("Token tab <" + yytext() + " columna " + yycolumn+">"); }
+{Tab}+              {   setNuevaSentencia(yyline);
+                        setNuevoLexemaLexico(TokenEnum.TABULACION, yytext(), yyline, yycolumn );
+                        System.out.println("Token tab <" + yytext() + " columna " + yycolumn+">"); }
 
 
 
 {ErrorComentarioBloque}      {System.out.println("Token ERROR COMENTAIO DE BLOQUE <" + yytext() + " columna " + yycolumn+">"); }
 
-{PalabraReservada}      {System.out.println("Token palabra reservada <" + yytext() + " columna " + yycolumn+">");  }
 
+{Igual}                 { setNuevaSentencia(yyline);
+                          setNuevoLexemaSintactico(TokenEnum.OPERADOR, TokenEnum.IGUAL, yytext(), yyline, yycolumn );  
+                          System.out.println("Token Igual <" + yytext() + " columna " + yycolumn+">"); }
 
-{Igual}                 { System.out.println("Token Igual <" + yytext() + " columna " + yycolumn+">"); }
-
-
-{Decimal}               { System.out.println("Token Decimal <" + yytext() + " columna " + yycolumn+">"); }
-{Numero}                { System.out.println("Token Numero <" + yytext() + " columna " + yycolumn+">"); }
-
-{Identificador}         { System.out.println("Token Identificador <" + yytext() + " columna " + yycolumn+">"); }
-
-{Puntuacion}            { System.out.println("Token Puntuacion <" + yytext() + " columna " + yycolumn+">"); }
-{OperadorAritmetico}    { System.out.println("Token operador aritmetico<" + yytext() + " columna " + yycolumn+">"); }
-
-{Agrupacion}            { System.out.println("Token agrupacion <" + yytext() + " columna " + yycolumn+">"); }
+{PalabraReservada}      { setNuevaSentencia(yyline);
+                          setNuevoLexemaLexico(TokenEnum.PALABRA_RESERVADA, yytext(), yyline, yycolumn );  
+                          System.out.println("Token palabra reservada <" + yytext() + " columna " + yycolumn+">");  }
 
 
 
-{ComentarioLinea}       { System.out.println("Token COMENTARIO_LINEA <" + yytext() + " columna " + yycolumn+">"); }
-
-{DocumentationComment}  {System.out.println("Token COMENTARIO DE BLOQUE <" + yytext() + " columna " + yycolumn+">"); }
-
-{ComentarioBloque}      {System.out.println("Token COMENTAIO DE BLOQUE <" + yytext() + " columna " + yycolumn+">"); }
 
 
-(.)          { System.out.println("Caracter no registrado <" + yytext() + " columna " + yycolumn+">"); }
+{Decimal}               { setNuevaSentencia(yyline);
+                          setNuevoLexemaLexico(TokenEnum.DECIMAL, yytext(), yyline, yycolumn );  
+                          System.out.println("Token Decimal <" + yytext() + " columna " + yycolumn+">"); }
+
+
+{Numero}                { setNuevaSentencia(yyline);
+                          setNuevoLexemaLexico(TokenEnum.NUMERO, yytext(), yyline, yycolumn );  
+                          System.out.println("Token Numero <" + yytext() + " columna " + yycolumn+">"); }
+
+{Identificador}         { setNuevaSentencia(yyline);
+                          setNuevoLexemaLexico(TokenEnum.IDENTIFICADOR, yytext(), yyline, yycolumn ); 
+                          System.out.println("Token Identificador <" + yytext() + " columna " + yycolumn+">"); }
+
+{Puntuacion}            { setNuevaSentencia(yyline);
+                          setNuevoLexemaLexico(TokenEnum.PUNTUACION, yytext(), yyline, yycolumn ); 
+                          System.out.println("Token Puntuacion <" + yytext() + " columna " + yycolumn+">"); }
+
+
+{OperadorAritmetico}    { setNuevaSentencia(yyline);
+                          setNuevoLexemaLexico(TokenEnum.OPERADOR, yytext(), yyline, yycolumn ); 
+                          System.out.println("Token operador aritmetico<" + yytext() + " columna " + yycolumn+">"); }
+
+{Agrupacion}            { setNuevaSentencia(yyline);
+                          setNuevoLexemaLexico(TokenEnum.AGRUPACION, yytext(), yyline, yycolumn ); 
+                          System.out.println("Token agrupacion <" + yytext() + " columna " + yycolumn+">"); }
+
+
+
+{ComentarioLinea}       { setNuevaSentencia(yyline);
+                          setNuevoLexemaLexico(TokenEnum.COMENTARIO_LINEA, yytext(), yyline, yycolumn ); 
+                          System.out.println("Token COMENTARIO_LINEA <" + yytext() + " columna " + yycolumn+">"); }
+
+{DocumentationComment}  { setNuevaSentencia(yyline);
+                          setNuevoLexemaLexico(TokenEnum.COMENTARIO_BLOQUE, yytext(), yyline, yycolumn ); 
+                          System.out.println("Token COMENTARIO DE BLOQUE <" + yytext() + " columna " + yycolumn+">"); }
+
+{ComentarioBloque}      { setNuevaSentencia(yyline);
+                          setNuevoLexemaLexico(TokenEnum.COMENTARIO_BLOQUE, yytext(), yyline, yycolumn ); 
+                          System.out.println("Token COMENTAIO DE BLOQUE <" + yytext() + " columna " + yycolumn+">"); }
+
+
+(.)          {  setNuevaSentencia(yyline);
+                setNuevoLexemaLexico(TokenEnum.ERROR, yytext(), yyline, yycolumn ); 
+                System.out.println("Caracter no registrado <" + yytext() + " columna " + yycolumn+">"); }

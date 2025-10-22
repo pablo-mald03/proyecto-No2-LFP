@@ -14,7 +14,7 @@ public class ProyectoNo2LFP {
     //Se encarga de inicializar la aplicacion
     public static void main(String[] args) {
 
-       // generarLexer();
+        //generarLexer();
         //Metodo donde inicia la interfaz principal
         MenuPrincipal menuPrincipal = new MenuPrincipal();
         menuPrincipal.setVisible(true);

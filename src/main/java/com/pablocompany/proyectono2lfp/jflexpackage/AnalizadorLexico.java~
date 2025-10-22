@@ -632,7 +632,9 @@ public class AnalizadorLexico {
 
     //-----------Apartado de metodos que sirven para saber si la flag esta activada---------------
 
-   
+    public void setHaySalto(boolean flag){
+        this.haySalto = flag;
+    }
     
     //true simboliza si hay salto
     public boolean getHaySalto(){
@@ -672,6 +674,7 @@ public class AnalizadorLexico {
             return;
         }
 
+        
         if(!getHaySalto()){
             return;
         }

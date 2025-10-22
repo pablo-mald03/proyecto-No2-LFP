@@ -52,6 +52,8 @@ public class LectorEntradas {
             analizador.yylex();
             this.lexerActual = new GestorLexer(analizador, paneLogEntrada, logErrores);
             
+            this.lexerActual.pintarLogEdicion();
+            
         } catch (IOException ex) {
            throw new AnalizadorLexicoException("Se ha producido un error al interpretar el texto de entrada");
         }

@@ -671,13 +671,14 @@ public class AnalizadorLexico {
             
             this.listaSentencias.add(new Sentencia(new ArrayList<>(5000), fila ));
             this.estaIniciando = false;
+            setHaySalto(false);
             return;
         }
 
         if(!getHaySalto()){
             return;
         }
-    
+        setHaySalto(false);
         this.listaSentencias.add(new Sentencia(new ArrayList<>(5000), fila));
     }
     
@@ -699,6 +700,7 @@ public class AnalizadorLexico {
      
     //Metodo que sirve para obtener la lista de sentencias
     public ArrayList<Sentencia> getListaSentencias(){
+        System.out.println("tamanio: " + this.listaSentencias.size());
         return this.listaSentencias;
     }
 
@@ -1115,17 +1117,25 @@ public class AnalizadorLexico {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
-            { System.out.println("Caracter no registrado <" + yytext() + " columna " + yycolumn+">");
+            { setNuevaSentencia(yyline);
+                setNuevoLexemaLexico(TokenEnum.ERROR, yytext(), yyline, yycolumn ); 
+                System.out.println("Caracter no registrado <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 17: break;
           case 2:
-            { System.out.println("Token tab <" + yytext() + " columna " + yycolumn+">");
+            { setNuevaSentencia(yyline);
+                        setNuevoLexemaLexico(TokenEnum.TABULACION, yytext(), yyline, yycolumn );
+                        System.out.println("Token tab <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 18: break;
           case 3:
-            { String lexema = yytext();       
+            { setHaySalto(true);
+                        setNuevaSentencia(yyline);
+                        setNuevoLexemaLexico(TokenEnum.VACIO, yytext(), yyline, yycolumn );
+
+                        String lexema = yytext();       
                         String[] lineas = lexema.split("\r\n|\r|\n", -1); 
                         int cantidadSaltos = lineas.length - 1;          
                         String espacios = lineas[0];                       
@@ -1135,37 +1145,51 @@ public class AnalizadorLexico {
           // fall through
           case 19: break;
           case 4:
-            { System.out.println("Token espacio <" + yytext() + " columna " + yycolumn+">");
+            { setNuevaSentencia(yyline);
+                      setNuevoLexemaLexico(TokenEnum.ESPACIO, yytext(), yyline, yycolumn );
+                      System.out.println("Token espacio <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 20: break;
           case 5:
-            { System.out.println("Token Identificador <" + yytext() + " columna " + yycolumn+">");
+            { setNuevaSentencia(yyline);
+                          setNuevoLexemaLexico(TokenEnum.IDENTIFICADOR, yytext(), yyline, yycolumn ); 
+                          System.out.println("Token Identificador <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 21: break;
           case 6:
-            { System.out.println("Token operador aritmetico<" + yytext() + " columna " + yycolumn+">");
+            { setNuevaSentencia(yyline);
+                          setNuevoLexemaLexico(TokenEnum.OPERADOR, yytext(), yyline, yycolumn ); 
+                          System.out.println("Token operador aritmetico<" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 22: break;
           case 7:
-            { System.out.println("Token agrupacion <" + yytext() + " columna " + yycolumn+">");
+            { setNuevaSentencia(yyline);
+                          setNuevoLexemaLexico(TokenEnum.AGRUPACION, yytext(), yyline, yycolumn ); 
+                          System.out.println("Token agrupacion <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 23: break;
           case 8:
-            { System.out.println("Token Puntuacion <" + yytext() + " columna " + yycolumn+">");
+            { setNuevaSentencia(yyline);
+                          setNuevoLexemaLexico(TokenEnum.PUNTUACION, yytext(), yyline, yycolumn ); 
+                          System.out.println("Token Puntuacion <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 24: break;
           case 9:
-            { System.out.println("Token Numero <" + yytext() + " columna " + yycolumn+">");
+            { setNuevaSentencia(yyline);
+                          setNuevoLexemaLexico(TokenEnum.NUMERO, yytext(), yyline, yycolumn );  
+                          System.out.println("Token Numero <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 25: break;
           case 10:
-            { System.out.println("Token Igual <" + yytext() + " columna " + yycolumn+">");
+            { setNuevaSentencia(yyline);
+                          setNuevoLexemaSintactico(TokenEnum.OPERADOR, TokenEnum.IGUAL, yytext(), yyline, yycolumn );  
+                          System.out.println("Token Igual <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 26: break;
@@ -1175,27 +1199,37 @@ public class AnalizadorLexico {
           // fall through
           case 27: break;
           case 12:
-            { System.out.println("Token COMENTARIO_LINEA <" + yytext() + " columna " + yycolumn+">");
+            { setNuevaSentencia(yyline);
+                          setNuevoLexemaLexico(TokenEnum.COMENTARIO_LINEA, yytext(), yyline, yycolumn ); 
+                          System.out.println("Token COMENTARIO_LINEA <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 28: break;
           case 13:
-            { System.out.println("Token palabra reservada <" + yytext() + " columna " + yycolumn+">");
+            { setNuevaSentencia(yyline);
+                          setNuevoLexemaLexico(TokenEnum.PALABRA_RESERVADA, yytext(), yyline, yycolumn );  
+                          System.out.println("Token palabra reservada <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 29: break;
           case 14:
-            { System.out.println("Token Decimal <" + yytext() + " columna " + yycolumn+">");
+            { setNuevaSentencia(yyline);
+                          setNuevoLexemaLexico(TokenEnum.DECIMAL, yytext(), yyline, yycolumn );  
+                          System.out.println("Token Decimal <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 30: break;
           case 15:
-            { System.out.println("Token COMENTAIO DE BLOQUE <" + yytext() + " columna " + yycolumn+">");
+            { setNuevaSentencia(yyline);
+                          setNuevoLexemaLexico(TokenEnum.COMENTARIO_BLOQUE, yytext(), yyline, yycolumn ); 
+                          System.out.println("Token COMENTAIO DE BLOQUE <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 31: break;
           case 16:
-            { System.out.println("Token COMENTARIO DE BLOQUE <" + yytext() + " columna " + yycolumn+">");
+            { setNuevaSentencia(yyline);
+                          setNuevoLexemaLexico(TokenEnum.COMENTARIO_BLOQUE, yytext(), yyline, yycolumn ); 
+                          System.out.println("Token COMENTARIO DE BLOQUE <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 32: break;

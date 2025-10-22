@@ -15,7 +15,6 @@ import com.pablocompany.proyectono2lfp.excepciones.ErrorPuntualException;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -350,7 +349,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         this.scrollSintactico.setVisible(true);
         this.txtBusquedas.setText("");
         this.lblAnalisis.setText("Analizar Manualmente:");
-        this.lblMostrarError.setText("Transiciones del Automata:");
+        this.lblMostrarError.setText("Salida de Datos:");
         this.txtBusquedas.setVisible(false);
         this.btnSubirArchivo.setEnabled(true);
         this.btnGuardarArchivo.setText("Guardar Texto");
