@@ -4,6 +4,7 @@
  */
 package com.pablocompany.proyectono2lfp.backend;
 
+import com.pablocompany.proyectono2lfp.analizadorlexicorecursos.TokenEnum;
 import java.util.ArrayList;
 
 /**
@@ -25,6 +26,16 @@ public class Sentencia {
     //Metodo que retorna la linea en la que se encuentra la sentencia
     public int getFilaSentencia() {
         return this.filaSentencia;
+    }
+    
+    //Metodo que sirve para agregar mas lexemas
+    public void agregarLexemaLexico(String cadena, int fila, int columna, TokenEnum token){
+        this.listaLexemas.add(new Lexema(cadena, fila,columna,token));
+    }
+    
+    //Metodo que sirve para agregar mas lexemas sintacticos
+    public void agregarLexemaSintactico(String cadena, int fila, int columna, TokenEnum tokenLexico,TokenEnum tokenSintactico){
+        this.listaLexemas.add(new Lexema(cadena, fila,columna,tokenLexico, tokenSintactico));
     }
 
     //Metodo que permite acceder al lexema almacenado en la lista

@@ -40,16 +40,18 @@ public class Lexema {
     
     
     //Constructor que sirve para poder generar un token comun sin ningun contexto sintactico
-     public Lexema(String lexemaGenerado, int lineaCoordenada, TokenEnum tipoToken) {
+     public Lexema(String lexemaGenerado, int lineaCoordenada, int columnaCoordenada, TokenEnum tipoToken) {
         this.lexemaGenerado = lexemaGenerado;
         this.lineaCoordenada = lineaCoordenada;
+        this.columna = columnaCoordenada;
         this.tokenClasificado = tipoToken;
     }
      
     //Constructor que sirve para poder generar un token con un contexto sintactico
-     public Lexema(String lexemaGenerado, int lineaCoordenada, TokenEnum tipoToken, TokenEnum contextoSintactico) {
+     public Lexema(String lexemaGenerado, int lineaCoordenada, int columnaCoordenada, TokenEnum tipoToken, TokenEnum contextoSintactico) {
         this.lexemaGenerado = lexemaGenerado;
         this.lineaCoordenada = lineaCoordenada;
+        this.columna = columnaCoordenada;
         this.tokenClasificado = tipoToken;
         this.tokenSintactico = contextoSintactico;
     }

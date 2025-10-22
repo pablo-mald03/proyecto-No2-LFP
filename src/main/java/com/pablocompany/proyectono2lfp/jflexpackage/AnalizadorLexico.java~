@@ -5,7 +5,9 @@
 /*CABECERA*/
 
 package com.pablocompany.proyectono2lfp.jflexpackage;
-
+import java.util.ArrayList;
+import com.pablocompany.proyectono2lfp.backend.Sentencia;
+import com.pablocompany.proyectono2lfp.analizadorlexicorecursos.TokenEnum;
 
 
 @SuppressWarnings("fallthrough")
@@ -619,10 +621,84 @@ public class AnalizadorLexico {
   private boolean zzEOFDone;
 
   /* user code: */
-    // Código Java de apoyo
+    //Atributo utilizado para manejar el listado de sentencias
+    private ArrayList<Sentencia> listaSentencias = new ArrayList<>(5000); 
     
+    //Flag que permite saber si hay salto de linea
+    private boolean haySalto;
+    
+    //Flag que permite automatizar para que el analizador lexico sepa que ya inicio o no el analisis
+    private boolean estaIniciando = true;
+
+    //-----------Apartado de metodos que sirven para saber si la flag esta activada---------------
+
+   
+    
+    //true simboliza si hay salto
+    public boolean getHaySalto(){
+        return this.haySalto; 
+    }
+
+    //-----------Fin del Apartado de metodos que sirven para saber si la flag esta activada---------------
 
 
+
+    //-----------Apartado de metodos que sirven para generar los listados de lexemas y sentencias---------------
+
+    //Metodo que permite calcular el indice en el que va la lista de sentencias
+    private int getIndiceListado(){
+        
+        if(this.listaSentencias.isEmpty()){
+            return 0;
+        }
+
+        int indice = this.listaSentencias.size() - 1;
+
+        if(indice < 0 ){
+            return 0;
+        }else{
+            return indice;
+        }
+    }
+
+    
+    //Metodo que permite instanciar una nueva linea en la sentencia
+    private void setNuevaSentencia(int fila){
+
+        if(this.estaIniciando){
+            
+            this.listaSentencias.add(new Sentencia(new ArrayList<>(5000), fila ));
+            this.estaIniciando = false;
+            return;
+        }
+
+        if(!getHaySalto()){
+            return;
+        }
+    
+        this.listaSentencias.add(new Sentencia(new ArrayList<>(5000), fila));
+    }
+    
+    //Metodo utilizado para establecer un lexema sin significado sintactico
+    private void setNuevoLexemaLexico(TokenEnum tokenLexico, String cadena, int filaCoordenada, int columnaCoordenada ){
+        
+        int indice = getIndiceListado();
+        this.listaSentencias.get(indice).agregarLexemaLexico(cadena, filaCoordenada, columnaCoordenada, tokenLexico );
+    }
+
+    //Metodo utilizado para establecer un lexema que tiene un significado sintactico
+    private void setNuevoLexemaSintactico(TokenEnum tokenLexico, TokenEnum tokenSintactico, String cadena, int filaCoordenada, int columnaCoordenada ){
+    
+        int indice = getIndiceListado();
+        this.listaSentencias.get(indice).agregarLexemaSintactico(cadena, filaCoordenada, columnaCoordenada, tokenLexico, tokenSintactico);
+    }
+
+    //-----------Fin del Apartado de metodos que sirven para generar los listados de lexemas y sentencias---------------
+     
+    //Metodo que sirve para obtener la lista de sentencias
+    public ArrayList<Sentencia> getListaSentencias(){
+        return this.listaSentencias;
+    }
 
 
 
@@ -1037,12 +1113,12 @@ public class AnalizadorLexico {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
-            { System.out.println("Caracter no registrado <" + yytext() + ">");
+            { System.out.println("Caracter no registrado <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 17: break;
           case 2:
-            { System.out.println("Token tab <" + yytext() + ">");
+            { System.out.println("Token tab <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 18: break;
@@ -1057,67 +1133,67 @@ public class AnalizadorLexico {
           // fall through
           case 19: break;
           case 4:
-            { System.out.println("Token espacio <" + yytext() + ">");
+            { System.out.println("Token espacio <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 20: break;
           case 5:
-            { System.out.println("Token Identificador <" + yytext() + ">");
+            { System.out.println("Token Identificador <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 21: break;
           case 6:
-            { System.out.println("Token operador aritmetico<" + yytext() + ">");
+            { System.out.println("Token operador aritmetico<" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 22: break;
           case 7:
-            { System.out.println("Token agrupacion <" + yytext() + ">");
+            { System.out.println("Token agrupacion <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 23: break;
           case 8:
-            { System.out.println("Token Puntuacion <" + yytext() + ">");
+            { System.out.println("Token Puntuacion <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 24: break;
           case 9:
-            { System.out.println("Token Numero <" + yytext() + ">");
+            { System.out.println("Token Numero <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 25: break;
           case 10:
-            { System.out.println("Token Igual <" + yytext() + ">");
+            { System.out.println("Token Igual <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 26: break;
           case 11:
-            { System.out.println("Token ERROR COMENTAIO DE BLOQUE <" + yytext() + ">");
+            { System.out.println("Token ERROR COMENTAIO DE BLOQUE <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 27: break;
           case 12:
-            { System.out.println("Token COMENTARIO_LINEA <" + yytext() + ">");
+            { System.out.println("Token COMENTARIO_LINEA <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 28: break;
           case 13:
-            { System.out.println("Token palabra reservada <" + yytext() + ">");
+            { System.out.println("Token palabra reservada <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 29: break;
           case 14:
-            { System.out.println("Token Decimal <" + yytext() + "columna "+yycolumn+ ">");
+            { System.out.println("Token Decimal <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 30: break;
           case 15:
-            { System.out.println("Token COMENTAIO DE BLOQUE <" + yytext() + ">");
+            { System.out.println("Token COMENTAIO DE BLOQUE <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 31: break;
           case 16:
-            { System.out.println("Token COMENTARIO DE BLOQUE <" + yytext() + ">");
+            { System.out.println("Token COMENTARIO DE BLOQUE <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
           case 32: break;

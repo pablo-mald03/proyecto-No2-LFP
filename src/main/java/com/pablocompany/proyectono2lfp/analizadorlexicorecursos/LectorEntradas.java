@@ -33,7 +33,6 @@ public class LectorEntradas {
     
     // private AutomataDeterminista constantesConfig;
     public LectorEntradas() {
-        this.lexerActual = new GestorLexer();
         // this.generacionReportes = new GenerarReportes();
     }
 
@@ -51,7 +50,8 @@ public class LectorEntradas {
         AnalizadorLexico analizador = new AnalizadorLexico(new StringReader(paneLogEntrada.getText()));
         try {
             analizador.yylex();
-            this.lexerActual.setLexer(analizador);
+            this.lexerActual = new GestorLexer(analizador, paneLogEntrada, logErrores);
+            
         } catch (IOException ex) {
            throw new AnalizadorLexicoException("Se ha producido un error al interpretar el texto de entrada");
         }
