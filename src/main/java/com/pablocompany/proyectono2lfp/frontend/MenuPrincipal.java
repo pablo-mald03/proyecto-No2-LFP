@@ -10,6 +10,7 @@ import com.pablocompany.proyectono2lfp.backendswing.ColocarFondos;
 import com.pablocompany.proyectono2lfp.backendswing.EditorTexto;
 import com.pablocompany.proyectono2lfp.backendswing.IlustrarLabels;
 import com.pablocompany.proyectono2lfp.excepciones.AnalizadorLexicoException;
+import com.pablocompany.proyectono2lfp.excepciones.ConfigException;
 import com.pablocompany.proyectono2lfp.excepciones.ErrorPuntualException;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -849,31 +850,26 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void btnSubirArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubirArchivoActionPerformed
 
-        /*try {
+        try {
             //Ejecuta la accion para Elegir el archivo
 
             if (this.manipuladorDirectorios.elegirArchivoEntrada()) {
 
-                ArrayList<String> listaObtenida = this.manipuladorDirectorios.convertirEntrada();
-
-                this.leerEntradas.transformarTexto(this.textEdicionArchivo.getText(), this.textEdicionArchivo);
+                this.manipuladorDirectorios.convertirEntrada(this.textEdicionArchivo);
 
                 this.btnGuardarArchivo.setEnabled(false);
-
-                this.leerEntradas.setLista(listaObtenida, this.textEdicionArchivo);
 
                 this.txtAreaDirectorioArchivo.setText(this.manipuladorDirectorios.getPath());
                 this.yaCargado = true;
 
-                this.leerEntradas.analizarEntradas(this.textEdicionArchivo, this.textLogErrores, this.txtLogTransiciones);
-
+                this.leerEntradas.analizarEntradas(this.textEdicionArchivo, this.textLogErrores, this.txtLogSintactico);
             }
 
         } catch (BadLocationException | AnalizadorLexicoException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de Ejecucion", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de lectura en el texto de entrada", JOptionPane.ERROR_MESSAGE);
         } catch (ConfigException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de Carga", JOptionPane.ERROR_MESSAGE);
-        }*/
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de reescritura", JOptionPane.ERROR_MESSAGE);
+        } 
 
     }//GEN-LAST:event_btnSubirArchivoActionPerformed
 
@@ -884,13 +880,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
             if (tomarDecision("Deseas cerrar este archivo cargado\nSe guardaran todos los cambios hechos", "Confirmar cierre")) {
 
                 try {
+                    
                     String directorio = this.manipuladorDirectorios.getPath();
-
-                    this.leerEntradas.transformarTexto(this.textEdicionArchivo.getText(), this.textEdicionArchivo);
-
-                    ArrayList<String> lista = this.leerEntradas.getListado();
-
-                    this.manipuladorDirectorios.guardarArchivo(directorio, lista);
+                    this.manipuladorDirectorios.guardarArchivo(directorio, this.textEdicionArchivo);
 
                     this.txtAreaDirectorioArchivo.setText("");
                     this.manipuladorDirectorios.reiniciarPath();

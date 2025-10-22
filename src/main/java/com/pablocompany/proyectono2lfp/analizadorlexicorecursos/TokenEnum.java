@@ -47,8 +47,8 @@ public enum TokenEnum {
     //--------------------APARTADO DE TOKENS QUE PERMITEN IDENTIFICAR TODO TIPO DE ESPACIOS-----------------------------
     ESPACIO("ESPACIO", "el espacio", "Espcio"),
     TABULACION("TABULACION", "la tabulacion", "Tabulacion"),
-    SALTO_LINEA("SALTO_LINEA", "el salto de linea", "Salto de linea");
-
+    VACIO("VACIO", "espacio vaico", "Vacio");
+    
     
 
     //--------------------FIN DEL APARTADO DE TOKENS QUE PERMITEN IDENTIFICAR TODO TIPO DE ESPACIOS-----------------------------

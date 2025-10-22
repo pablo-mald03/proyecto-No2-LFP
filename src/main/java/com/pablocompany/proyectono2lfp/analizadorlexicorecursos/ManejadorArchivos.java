@@ -5,6 +5,7 @@
 package com.pablocompany.proyectono2lfp.analizadorlexicorecursos;
 
 import com.pablocompany.proyectono2lfp.excepciones.AnalizadorLexicoException;
+import com.pablocompany.proyectono2lfp.excepciones.ConfigException;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,15 +16,19 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
+import javax.swing.JTextPane;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyledDocument;
 
 /**
  *
  * @author pablo
  */
 public class ManejadorArchivos {
-      //Atributo que guarda el path para la lectura de archivos;
+    //Atributo que guarda el path para la lectura de archivos;
+
     private String pathEntrada;
-    
 
     //Metodo que permite elegir el archivo txt y cargarlo directamente a un buffer
     public boolean elegirArchivoEntrada() throws AnalizadorLexicoException {
@@ -49,7 +54,7 @@ public class ManejadorArchivos {
     }
 
     //Metodo que sirve para poder guardar el archivo en el destinatario dado
-    public void guardarArchivo(String directorio, ArrayList<String> lineas) throws AnalizadorLexicoException {
+    public void guardarArchivo(String directorio, JTextPane paneEdicion) throws AnalizadorLexicoException {
 
         if (directorio.isBlank()) {
             throw new AnalizadorLexicoException("No hay ningun archivo subido aun");
@@ -60,21 +65,23 @@ public class ManejadorArchivos {
         if (!archivo.exists()) {
             throw new AnalizadorLexicoException("Aun no se ha definido un path para almacenar el archivo");
         }
-
+        
+        if(paneEdicion.getText().isBlank()){
+              throw new AnalizadorLexicoException("El texto del log de edicion esta Vacio");
+        }
+        
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo, false))) {
-            for (String linea : lineas) {
-                bw.write(linea);
-                bw.newLine(); // salto de línea
-            }
+            String contenido = paneEdicion.getText();
+
+            bw.write(contenido);
+
         } catch (IOException e) {
             throw new AnalizadorLexicoException("No hay un path definido para reescribir el archivo");
         }
     }
 
     //Metodo que transforma el path de entrada a un arreglo
-    public ArrayList<String> convertirEntrada() throws AnalizadorLexicoException {
-
-        ArrayList<String> listaLectura = new ArrayList<>(6000);
+    public void convertirEntrada(JTextPane paneEdicion) throws AnalizadorLexicoException, ConfigException {
 
         if (this.pathEntrada == null || this.pathEntrada.isBlank()) {
             throw new AnalizadorLexicoException("No se ha definido aun un archivo para cargar");
@@ -87,24 +94,24 @@ public class ManejadorArchivos {
         }
 
         try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+
+            StyledDocument doc = paneEdicion.getStyledDocument();
+            SimpleAttributeSet estilo = new SimpleAttributeSet();
+            doc.remove(0, doc.getLength());
+
             String linea;
             while ((linea = br.readLine()) != null) {
-                //permite remasterizar todas las tabulaciones
-                linea = linea.replace("\t", "      "); 
-                listaLectura.add(linea); 
 
+                doc.insertString(doc.getLength(), linea, estilo);
+                doc.insertString(doc.getLength(), System.lineSeparator(), estilo);
             }
+
         } catch (IOException ex) {
             throw new AnalizadorLexicoException("No se ha podido procesar el archivo seleccionado");
+        } catch (BadLocationException ex) {
+            throw new ConfigException("Ha ocurrido un error al repintar el texto de entrada");
         }
 
-        if (listaLectura.isEmpty()) {
-            throw new AnalizadorLexicoException("El archivo seleccionado esta vacio");
-        }
-
-        System.out.println("Tamanio lista " + listaLectura.size());
-        //Retorna el arraylist en el mismo formato para procesarlo
-        return listaLectura;
     }
 
     //Metodo que retorna el path seleccionado
@@ -139,11 +146,11 @@ public class ManejadorArchivos {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo, false))) {
             for (String linea : lineas) {
                 bw.write(linea);
-                bw.newLine(); 
+                bw.newLine();
             }
         } catch (IOException e) {
             throw new AnalizadorLexicoException("No hay un path definido para reescribir el archivo");
         }
     }
-    
+
 }
