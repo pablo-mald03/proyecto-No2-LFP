@@ -40,9 +40,20 @@ public enum TokenEnum {
 
     ESCRIBIR("ESCRIBIR", "la funcion Escribir", "Escribir"),
     PARENTESIS_CIERRE("PARENTESIS DE CIERRE", "el parentesis de cierre ", "Parentesis de Cierre"),
-    PARENTESIS_APERTURA("PARENTESIS DE APERTURA", "el parentesis de apertura", "Parentesis de Apertura");
+    PARENTESIS_APERTURA("PARENTESIS DE APERTURA", "el parentesis de apertura", "Parentesis de Apertura"),
 
     //------------------------FIN DEL APARTADO DE TOKENS QUE TIENEN UN CONTEXTO DE ACCION---------------------------
+    
+    //--------------------APARTADO DE TOKENS QUE PERMITEN IDENTIFICAR TODO TIPO DE ESPACIOS-----------------------------
+    ESPACIO("ESPACIO", "el espacio", "Espcio"),
+    TABULACION("TABULACION", "la tabulacion", "Tabulacion"),
+    SALTO_LINEA("SALTO_LINEA", "el salto de linea", "Salto de linea");
+
+    
+
+    //--------------------FIN DEL APARTADO DE TOKENS QUE PERMITEN IDENTIFICAR TODO TIPO DE ESPACIOS-----------------------------
+    
+    
     //Representa el tipo de token
     private String tipo;
 
