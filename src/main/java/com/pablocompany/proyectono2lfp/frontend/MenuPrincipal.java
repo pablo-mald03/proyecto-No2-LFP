@@ -975,6 +975,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
             return;
         }
 
+        //Comunicacion para iniciar el analisis sintactico
+        this.leerEntradas.getGestorSintactico().iniciarAnalisis();
+        
         /* try {
             //Detecta cada vez que se cambia una palabra
             String textoEntradaEdit = this.textEdicionArchivo.getText().replace("\t", "      ");

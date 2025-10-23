@@ -6,6 +6,7 @@ package com.pablocompany.proyectono2lfp.analizadorlexicorecursos;
 
 import com.pablocompany.proyectono2lfp.backend.GenerarReportes;
 import com.pablocompany.proyectono2lfp.backend.GestorLexer;
+import com.pablocompany.proyectono2lfp.backend.GestorSintactico;
 import com.pablocompany.proyectono2lfp.excepciones.AnalizadorLexicoException;
 import com.pablocompany.proyectono2lfp.excepciones.ErrorPuntualException;
 import com.pablocompany.proyectono2lfp.jflexpackage.AnalizadorLexico;
@@ -26,6 +27,9 @@ public class LectorEntradas {
 
     //Clase que intercomunica al lexer actual para poderlo operar internamente en UI
     private GestorLexer lexerActual;
+    
+    //Clase delegada para poder acceder a la referencia del analizador sintactico
+    private GestorSintactico sintaxisActual;
 
     //Atributo que permite conservar la referencia de los reportes
     private GenerarReportes generacionReportes;
@@ -38,7 +42,7 @@ public class LectorEntradas {
 
     //------------------Fin de la Subregion de gramatica extraidas del config.json----------------------------
     //Metodo mas importante para poder analizar el texto y procesarlo
-    public void analizarEntradas(JTextPane paneLogEntrada, JTextPane logErrores, JTextPane logTransiciones) throws BadLocationException, AnalizadorLexicoException {
+    public void analizarEntradas(JTextPane paneLogEntrada, JTextPane logErrores, JTextPane logSintactico) throws BadLocationException, AnalizadorLexicoException {
 
         //Valida si el texto de entrada viene vacio
         if (paneLogEntrada.getText().isBlank()) {
@@ -51,6 +55,8 @@ public class LectorEntradas {
             this.lexerActual = new GestorLexer(analizador, paneLogEntrada, logErrores);
 
             this.lexerActual.pintarLogEdicion();
+            
+            this.sintaxisActual = new GestorSintactico(this.lexerActual,this.lexerActual.getLogErrores(), logSintactico);
 
         } catch (IOException ex) {
             throw new AnalizadorLexicoException("Se ha producido un error al interpretar el texto de entrada");
@@ -69,10 +75,15 @@ public class LectorEntradas {
     public AnalizadorLexico getLexerActual() {
         return this.lexerActual.getLexer();
     }
-    
+
     //Metodo que sirve para retornar la clase maestra delegada para manipular el lexer
-    public GestorLexer getGestorLexer(){
+    public GestorLexer getGestorLexer() {
         return this.lexerActual;
+    }
+    
+    //Metodo que permite obtener la clase que gestiona el apartado sintactico
+    public GestorSintactico getGestorSintactico(){
+        return this.sintaxisActual;
     }
 
     //METODO UTILIZADO PARA EXPORTAR EL TEXTO ESCRITO EN EL LOG DE EDICION

@@ -39,6 +39,7 @@ public class GestorLexer {
         this.lexer = lexerGenerado;
         this.paneEdicionArchivo = paneEdicionArchivo;
         this.logErrores = logErrores;
+
     }
 
     //Retorna la referencia de lexer
@@ -54,6 +55,16 @@ public class GestorLexer {
     //Metodo encargado de pintar el log de edicion de archivo
     public void pintarLogEdicion() throws BadLocationException {
         pintarLogSalida(this.paneEdicionArchivo, true);
+    }
+    
+    //Metodo que permite acceder facilmente al listado de sentencias
+    public ArrayList<Sentencia> getListadoSentencia(){
+        return this.lexer.getListaSentencias();
+    }
+    
+    //Metodo que sirve para retornar la referencia del log de errores
+    public JTextPane getLogErrores(){
+        return this.logErrores;
     }
 
     //=========================APARTADO DE METODOS UTILIZADOS PARA GENERAR LAS FUNCIONALIDADES DEL ANALIZADOR LEXICO=======================
@@ -298,7 +309,7 @@ public class GestorLexer {
                 Lexema lexemaActual = sentenciaBuscada.getListaLexema(j);
 
                 String textoLexema = lexemaActual.getLexemaGenerado();
-                
+
                 int index = textoLexema.indexOf(palabraBuscada);
                 while (index != -1) {
 
@@ -310,7 +321,6 @@ public class GestorLexer {
                     resaltar(paneBusqueda, fila, columnaMatchInicio, columnaMatchFin);
                     encontrado = true;
 
-                   
                     index = textoLexema.indexOf(palabraBuscada, index + palabraBuscada.length());
                 }
 
