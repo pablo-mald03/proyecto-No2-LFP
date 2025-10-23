@@ -8,6 +8,7 @@ import com.pablocompany.proyectono2lfp.analizadorlexicorecursos.LectorEntradas;
 import com.pablocompany.proyectono2lfp.backendswing.ColocarFondos;
 import com.pablocompany.proyectono2lfp.backendswing.CrearTableros;
 import com.pablocompany.proyectono2lfp.backendswing.ModificarTabla;
+import com.pablocompany.proyectono2lfp.excepciones.ErrorPuntualException;
 import java.awt.Color;
 import javax.swing.JOptionPane;
 import javax.swing.JViewport;
@@ -37,12 +38,11 @@ public class ReporteErrores extends javax.swing.JDialog {
 
         pintarPanel.pintarDialog("/com/pablocompany/proyectono1/recursosapp/images/overlay2.png");
 
-
         this.gestionLecturas = gestorLecturas;
 
         this.mdTablitaErrores = new ModificarTabla(this.tableroMuestraErrores);
         this.crearTableroErrores = new CrearTableros(this.tableroMuestraErrores);
-       // this.gestionLecturas.getGenerarReportes().reiniciarListas();
+        this.gestionLecturas.getGenerarReportes().reiniciarListas();
 
     }
 
@@ -193,6 +193,34 @@ public class ReporteErrores extends javax.swing.JDialog {
 
     }//GEN-LAST:event_tableroMuestraErroresMousePressed
 
+    private void btnGenerarErroresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarErroresActionPerformed
+
+        try {
+
+            if (this.gestionLecturas == null) {
+                JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador\nEscribe algo para poderlo analizar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (this.gestionLecturas.getGenerarReportes() == null) {
+                JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            try {
+                //Boton manual que permite generar el reporte de errores
+                this.gestionLecturas.getGenerarReportes().generarReporteErrores(this.gestionLecturas.getLexerActual().getListaSentencias(), this.mdTablitaErrores, this.crearTableroErrores);
+
+            } catch (ErrorPuntualException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de Analisis", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (NullPointerException ex) {
+            JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador\nEscribe algo para poderlo analizar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
+
+        }
+    }//GEN-LAST:event_btnGenerarErroresActionPerformed
+
     private void btnExportarErroesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportarErroesActionPerformed
 
         try {
@@ -201,7 +229,7 @@ public class ReporteErrores extends javax.swing.JDialog {
                 return;
             }
 
-           /* if (this.gestionLecturas.getGenerarReportes() == null) {
+            if (this.gestionLecturas.getGenerarReportes() == null) {
                 JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -212,42 +240,13 @@ public class ReporteErrores extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(this, "Reporte de Errores generado Correctamente\nCarpeta: /Reportes", "Reporte de Errores Generado", JOptionPane.INFORMATION_MESSAGE);
             } catch (ErrorPuntualException ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de Exportacion", JOptionPane.ERROR_MESSAGE);
-            }*/
+            }
 
         } catch (NullPointerException ex) {
             JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador\nEscribe algo para poderlo analizar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
 
         }
-
     }//GEN-LAST:event_btnExportarErroesActionPerformed
-
-    private void btnGenerarErroresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarErroresActionPerformed
-
-        try {
-
-            if (this.gestionLecturas == null) {
-                JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador\nEscribe algo para poderlo analizar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-           /* if (this.gestionLecturas.getGenerarReportes() == null) {
-                JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            try {
-                //Boton manual que permite generar el reporte de errores
-                this.gestionLecturas.getGenerarReportes().generarReporteErrores(this.gestionLecturas.getLexerActual().getListadoSentencias(), this.mdTablitaErrores, this.crearTableroErrores);
-
-            } catch (ErrorPuntualException ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de Analisis", JOptionPane.ERROR_MESSAGE);
-            }*/
-
-        } catch (NullPointerException ex) {
-            JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador\nEscribe algo para poderlo analizar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
-
-        }
-    }//GEN-LAST:event_btnGenerarErroresActionPerformed
 
     /**
      * @param args the command line arguments

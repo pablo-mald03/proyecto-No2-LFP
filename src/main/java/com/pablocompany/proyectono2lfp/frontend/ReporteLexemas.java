@@ -8,6 +8,7 @@ import com.pablocompany.proyectono2lfp.analizadorlexicorecursos.LectorEntradas;
 import com.pablocompany.proyectono2lfp.backendswing.ColocarFondos;
 import com.pablocompany.proyectono2lfp.backendswing.CrearTableros;
 import com.pablocompany.proyectono2lfp.backendswing.ModificarTabla;
+import com.pablocompany.proyectono2lfp.excepciones.ErrorPuntualException;
 import java.awt.Color;
 import javax.swing.JOptionPane;
 import javax.swing.JViewport;
@@ -32,9 +33,6 @@ public class ReporteLexemas extends javax.swing.JDialog {
     private ModificarTabla mdTablitaTokenizacion;
     private CrearTableros crearTableroTokenizacion;
 
-    //Atributo que permite pasar por parametro el lexema seleccionado para graficar sus transiciones
-//    private Lexema lexemaSeleccionado;
-
     public ReporteLexemas(java.awt.Frame parent, boolean modal, LectorEntradas gestorLecturas) {
         super(parent, modal);
         initComponents();
@@ -49,42 +47,14 @@ public class ReporteLexemas extends javax.swing.JDialog {
 
         this.gestionLecturas = gestorLecturas;
 
-        //this.lexemaSeleccionado = null;
-
         this.mdTablitaConteo = new ModificarTabla(this.tableroConteoLexermas);
         this.crearTableroConteo = new CrearTableros(this.tableroConteoLexermas);
 
         this.mdTablitaTokenizacion = new ModificarTabla(this.tableroConteoTokens);
         this.crearTableroTokenizacion = new CrearTableros(this.tableroConteoTokens);
 
+        this.gestionLecturas.getGenerarReportes().reiniciarListas();
 
-      //  this.gestionLecturas.getGenerarReportes().reiniciarListas();
-
-    }
-
-    //Metodo que sirve para mandar a llamar la graficacion de los estados del automata
-    public void ilustrarTransiciones() {
-        //Se despliega la ventana emergente para La generacion de reportes
-        /*DiagramaTransiciones dialog = new DiagramaTransiciones(this, true, lexemaSeleccionado);
-        dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent e) {
-
-            }
-        });
-        dialog.setVisible(true);*/
-
-    }
-
-    //Metodo que permite ilustrar el lexema encontrado
-    private void marcarSeleccionLexemas() {
-        /*if (this.lexemaSeleccionado == null) {
-            return;
-        }
-
-        this.textFieldCadena.setText(this.lexemaSeleccionado.getLexema());
-
-        this.textFieldToken.setText(this.lexemaSeleccionado.getEstadoAnalisis().getTipo());*/
     }
 
     /**
@@ -292,41 +262,6 @@ public class ReporteLexemas extends javax.swing.JDialog {
 
     private void tableroConteoLexermasMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableroConteoLexermasMousePressed
 
-        //Metodo que permite ubicar el lexema en el indice 
-        try {
-
-            int fila = this.tableroConteoLexermas.rowAtPoint(evt.getPoint());
-            int columna = this.tableroConteoLexermas.columnAtPoint(evt.getPoint());
-
-            if (fila > -1 && columna > -1) {
-
-                if (SwingUtilities.isLeftMouseButton(evt)) {
-
-                   /* if (this.gestionLecturas == null) {
-                        JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador\nEscribe algo para poderlo analizar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-
-                    if (this.gestionLecturas.getGenerarReportes().reporteLexemasGenerado()) {
-                        JOptionPane.showMessageDialog(this, "No se ha generado el reporte de lexemas\nPresione el boton en el \"Reporte Tokens Lexemas\"", "Reporte de lexemas no generado aun", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-
-                    if (this.gestionLecturas.getGenerarReportes().esVaciaListaLexemas()) {
-                        JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador\nEscribe algo para poderlo analizar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-
-                    this.lexemaSeleccionado = this.gestionLecturas.getGenerarReportes().getLexemaSeleccionado(fila);
-                    marcarSeleccionLexemas();*/
-
-                }
-            }
-
-        } catch (NullPointerException ex) {
-            JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador\nEscribe algo para poderlo analizar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
-
-        }
     }//GEN-LAST:event_tableroConteoLexermasMousePressed
 
     private void btnReporteConteoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteConteoActionPerformed
@@ -338,19 +273,18 @@ public class ReporteLexemas extends javax.swing.JDialog {
                 return;
             }
 
-           /* if (this.gestionLecturas.getGenerarReportes() == null) {
+            if (this.gestionLecturas.getGenerarReportes() == null) {
                 JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             try {
                 //Boton manual que permite generar el reporte de conteo de lexemas
-                this.gestionLecturas.getGenerarReportes().generarReporteConteoLexemas(this.gestionLecturas.getLexerActual().getListadoSentencias(), this.mdTablitaConteo, this.crearTableroConteo);
+                this.gestionLecturas.getGenerarReportes().generarReporteConteoLexemas(this.gestionLecturas.getLexerActual().getListaSentencias(), this.mdTablitaConteo, this.crearTableroConteo);
 
             } catch (ErrorPuntualException ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Inconveniente encontrado", JOptionPane.ERROR_MESSAGE);
-            }*/
-
+            }
         } catch (NullPointerException ex) {
             JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador\nEscribe algo para poderlo analizar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
 
@@ -370,19 +304,18 @@ public class ReporteLexemas extends javax.swing.JDialog {
                 return;
             }
 
-           /* if (this.gestionLecturas.getGenerarReportes() == null) {
+            if (this.gestionLecturas.getGenerarReportes() == null) {
                 JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             try {
                 //Boton manual que permite generar el reporte de conteo de lexemas
-                this.gestionLecturas.getGenerarReportes().generarReporteTokenizacionLexemas(this.gestionLecturas.getLexerActual().getListadoSentencias(), this.mdTablitaTokenizacion, this.crearTableroTokenizacion);
+                this.gestionLecturas.getGenerarReportes().generarReporteTokenizacionLexemas(this.gestionLecturas.getLexerActual().getListaSentencias(), this.mdTablitaTokenizacion, this.crearTableroTokenizacion);
 
             } catch (ErrorPuntualException ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Inconveniente encontrado", JOptionPane.ERROR_MESSAGE);
-            }*/
-
+            }
         } catch (NullPointerException ex) {
             JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador\nEscribe algo para poderlo analizar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
 

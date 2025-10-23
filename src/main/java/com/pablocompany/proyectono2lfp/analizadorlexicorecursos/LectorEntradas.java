@@ -4,6 +4,7 @@
  */
 package com.pablocompany.proyectono2lfp.analizadorlexicorecursos;
 
+import com.pablocompany.proyectono2lfp.backend.GenerarReportes;
 import com.pablocompany.proyectono2lfp.backend.GestorLexer;
 import com.pablocompany.proyectono2lfp.excepciones.AnalizadorLexicoException;
 import com.pablocompany.proyectono2lfp.excepciones.ErrorPuntualException;
@@ -27,18 +28,15 @@ public class LectorEntradas {
     private GestorLexer lexerActual;
 
     //Atributo que permite conservar la referencia de los reportes
-    // private GenerarReportes generacionReportes;
-    
+    private GenerarReportes generacionReportes;
+
     //------------------Subregion de gramatica extraidas del config.json----------------------------
-    
     // private AutomataDeterminista constantesConfig;
     public LectorEntradas() {
-        // this.generacionReportes = new GenerarReportes();
+        this.generacionReportes = new GenerarReportes();
     }
 
     //------------------Fin de la Subregion de gramatica extraidas del config.json----------------------------
-
-
     //Metodo mas importante para poder analizar el texto y procesarlo
     public void analizarEntradas(JTextPane paneLogEntrada, JTextPane logErrores, JTextPane logTransiciones) throws BadLocationException, AnalizadorLexicoException {
 
@@ -51,15 +49,13 @@ public class LectorEntradas {
         try {
             analizador.yylex();
             this.lexerActual = new GestorLexer(analizador, paneLogEntrada, logErrores);
-            
+
             this.lexerActual.pintarLogEdicion();
-            
+
         } catch (IOException ex) {
-           throw new AnalizadorLexicoException("Se ha producido un error al interpretar el texto de entrada");
+            throw new AnalizadorLexicoException("Se ha producido un error al interpretar el texto de entrada");
         }
     }
-
-
 
     //Metodo que permite pasar por parametro un arraylist e imprimirlo en un JtextPane
     public void imprimirLog(ArrayList<String> listaExtraida, JTextPane textPane) throws BadLocationException {
@@ -74,7 +70,6 @@ public class LectorEntradas {
         return this.lexerActual.getLexer();
     }
 
-    
     //METODO UTILIZADO PARA EXPORTAR EL TEXTO ESCRITO EN EL LOG DE EDICION
     public String exportarArchivo() throws ErrorPuntualException {
 
@@ -104,7 +99,7 @@ public class LectorEntradas {
     }
 
     //Metodo utilizado para obtener la instancia y generar el reporte 
-    /* public GenerarReportes getGenerarReportes() {
+    public GenerarReportes getGenerarReportes() {
         return this.generacionReportes;
-    }*/
+    }
 }
