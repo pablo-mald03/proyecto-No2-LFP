@@ -126,7 +126,7 @@ Puntuacion = [.,;:]
 OperadorAritmetico = [+\-*/%]
 Agrupacion = [\(\)\[\]\{\}]  
 
-CadenaTexto = \"([^\"\\n\\r\\\\]|\\\\.)*\"
+CadenaTexto = \"([^\"\n\r])*\" 
 
 /*Apartado de palabras reservadas */
 
@@ -154,6 +154,7 @@ CommentContent = ( [^*] | \*+ [^/*] )*
 /* Apartado de errores */
 
 ErrorComentarioBloque = "/*"([^*]|\*+[^*/])*
+CadenaError  =  \"([^\"\n\r])*(\n|\r|\r\n)
 
 
 
@@ -161,14 +162,6 @@ ErrorComentarioBloque = "/*"([^*]|\*+[^*/])*
 
 
 /*ACCIONES*/
-
-{CadenaTexto}       { setNuevaSentencia(yyline);
-                      setNuevoLexemaLexico(TokenEnum.CADENA, yytext(), yyline, yycolumn ); 
-                    }
-
-{Espacio}+          { setNuevaSentencia(yyline);
-                      setNuevoLexemaLexico(TokenEnum.ESPACIO, yytext(), yyline, yycolumn );
-                    }
 
 {LineaVacia}        {   setHaySalto(true);
                         setNuevaSentencia(yyline);
@@ -179,6 +172,22 @@ ErrorComentarioBloque = "/*"([^*]|\*+[^*/])*
                         setNuevoLexemaLexico(TokenEnum.TABULACION, yytext(), yyline, yycolumn );
                     }
 
+
+
+{CadenaError}       { setNuevaSentencia(yyline);
+                      setNuevoLexemaErroneo(TokenEnum.ERROR, yytext(), yyline, yycolumn, "Cadena de texto sin cierre");
+                    }
+
+
+{CadenaTexto}       { setNuevaSentencia(yyline);
+                      setNuevoLexemaLexico(TokenEnum.CADENA, yytext(), yyline, yycolumn ); 
+                    }
+
+
+
+{Espacio}+          { setNuevaSentencia(yyline);
+                      setNuevoLexemaLexico(TokenEnum.ESPACIO, yytext(), yyline, yycolumn );
+                    }
 
 
 {ErrorComentarioBloque}      {  setNuevaSentencia(yyline);
