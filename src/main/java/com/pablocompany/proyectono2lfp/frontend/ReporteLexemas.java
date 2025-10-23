@@ -8,6 +8,7 @@ import com.pablocompany.proyectono2lfp.analizadorlexicorecursos.LectorEntradas;
 import com.pablocompany.proyectono2lfp.backendswing.ColocarFondos;
 import com.pablocompany.proyectono2lfp.backendswing.CrearTableros;
 import com.pablocompany.proyectono2lfp.backendswing.ModificarTabla;
+import com.pablocompany.proyectono2lfp.excepciones.AnalizadorLexicoException;
 import com.pablocompany.proyectono2lfp.excepciones.ErrorPuntualException;
 import java.awt.Color;
 import javax.swing.JOptionPane;
@@ -284,6 +285,8 @@ public class ReporteLexemas extends javax.swing.JDialog {
 
             } catch (ErrorPuntualException ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Inconveniente encontrado", JOptionPane.ERROR_MESSAGE);
+            } catch (AnalizadorLexicoException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Lexema Vacio", JOptionPane.ERROR_MESSAGE);
             }
         } catch (NullPointerException ex) {
             JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador\nEscribe algo para poderlo analizar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);

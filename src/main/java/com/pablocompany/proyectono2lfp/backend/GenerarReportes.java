@@ -7,6 +7,7 @@ package com.pablocompany.proyectono2lfp.backend;
 import com.pablocompany.proyectono2lfp.analizadorlexicorecursos.TokenEnum;
 import com.pablocompany.proyectono2lfp.backendswing.CrearTableros;
 import com.pablocompany.proyectono2lfp.backendswing.ModificarTabla;
+import com.pablocompany.proyectono2lfp.excepciones.AnalizadorLexicoException;
 import com.pablocompany.proyectono2lfp.excepciones.ErrorPuntualException;
 import java.io.File;
 import java.io.FileWriter;
@@ -76,7 +77,7 @@ public class GenerarReportes {
     }
 
     //Metodo util para poder mostrar las tokenizaciones de lexemas tokens normales
-    public void generarReporteConteoLexemas(ArrayList<Sentencia> sentenciasListado, ModificarTabla modificarTabla, CrearTableros crearTablero) throws ErrorPuntualException {
+    public void generarReporteConteoLexemas(ArrayList<Sentencia> sentenciasListado, ModificarTabla modificarTabla, CrearTableros crearTablero) throws ErrorPuntualException, AnalizadorLexicoException {
 
         this.hayErrores = false;
         //Cuenta los errores para ver si hay 
@@ -116,16 +117,23 @@ public class GenerarReportes {
 
                 if (!lexemaEvaluado.getLexemaGenerado().isBlank()) {
 
-                    /*this.listadoLexemas.add(lexemaEvaluado.getlexema().getTipo());
-                    this.listadoLexemas.add(lexemaEvaluado.getLexema());
+                    this.listadoLexemas.add(lexemaEvaluado.getTokenClasificado().getTipo());
+                    this.listadoLexemas.add(lexemaEvaluado.getLexemaGenerado());
 
                     String coordenada = "\"F(";
 
-                    coordenada += String.valueOf(lexemaEvaluado.getFilaCoordenada()) + ") , C( ";
+                    coordenada += String.valueOf(lexemaEvaluado.getLineaCoordenada()) + ") , C( ";
 
-                    coordenada += String.valueOf(lexemaEvaluado.getValorNodo(0).getColumna()) + "-" + String.valueOf(lexemaEvaluado.getValorNodo(lexemaEvaluado.getLongitudNodo() - 1).getColumna()) + " )\"";
+                    if (lexemaEvaluado.getColumna() == lexemaEvaluado.getindiceFinal()) {
 
-                    this.listadoLexemas.add(coordenada);*/
+                        coordenada += String.valueOf(lexemaEvaluado.getColumna()) + " )\"";
+
+                    } else {
+                        coordenada += String.valueOf(lexemaEvaluado.getColumna()) + "-" + String.valueOf(lexemaEvaluado.getindiceFinal()) + " )\"";
+
+                    }
+
+                    this.listadoLexemas.add(coordenada);
                 }
 
             }
@@ -255,19 +263,19 @@ public class GenerarReportes {
 
                 Lexema lexemaEvaluado = sentencia.getListaLexema(i);
 
-                /*if (!lexemaEvaluado.getLexema().isBlank()) {
+                if (lexemaEvaluado.getTokenClasificado() != TokenEnum.VACIO && lexemaEvaluado.getTokenClasificado() != TokenEnum.ESPACIO  && lexemaEvaluado.getTokenClasificado() != TokenEnum.TABULACION) {
 
-                    if (!tokenYaExistente(lexemaEvaluado.getLexema(), lexemaEvaluado.getEstadoAnalisis().getTipo())) {
+                    if (!tokenYaExistente(lexemaEvaluado.getLexemaGenerado(), lexemaEvaluado.getTokenClasificado().getTipo())) {
 
-                        this.listadoTokens.add(lexemaEvaluado.getLexema());
-                        this.listadoTokens.add(lexemaEvaluado.getEstadoAnalisis().getTipo());
+                        this.listadoTokens.add(lexemaEvaluado.getLexemaGenerado());
+                        this.listadoTokens.add(lexemaEvaluado.getTokenClasificado().getTipo());
 
                         int cantidadVeces = contarLexemas(lexemaEvaluado, sentenciasListado);
 
                         this.listadoTokens.add(String.valueOf(cantidadVeces));
                     }
 
-                }*/
+                }
             }
 
         }
@@ -323,13 +331,13 @@ public class GenerarReportes {
 
                 Lexema lexemaComparado = sentencia.getListaLexema(i);
 
-                /* if (!lexemaComparado.getLexema().isBlank()) {
+                if (!lexemaComparado.getLexemaGenerado().isBlank() && lexemaComparado.getTokenClasificado() != TokenEnum.VACIO && lexemaComparado.getTokenClasificado() != TokenEnum.ESPACIO  && lexemaComparado.getTokenClasificado() != TokenEnum.TABULACION) {
 
-                    if (lexemaUbicado.getLexema().equals(lexemaComparado.getLexema()) && lexemaUbicado.getEstadoAnalisis() == lexemaComparado.getEstadoAnalisis()) {
+                    if (lexemaUbicado.getLexemaGenerado().equals(lexemaComparado.getLexemaGenerado()) && lexemaUbicado.getTokenClasificado()== lexemaComparado.getTokenClasificado()) {
                         contadorVeces++;
                     }
 
-                }*/
+                }
             }
 
         }
