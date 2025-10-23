@@ -357,13 +357,13 @@ public class AnalizadorLexico {
 
   private static final String ZZ_ACTION_PACKED_0 =
     "\1\0\1\1\1\2\1\3\1\4\1\1\1\5\1\6"+
-    "\1\7\1\10\1\6\2\11\1\12\11\5\2\0\2\13"+
-    "\1\14\1\15\1\16\1\0\6\5\1\17\4\5\1\15"+
-    "\1\0\2\16\2\20\12\5\1\0\1\15\1\0\1\21"+
-    "\11\5\1\21\1\22\2\0\17\5";
+    "\1\7\2\10\1\6\2\11\1\12\11\5\2\0\2\13"+
+    "\1\14\1\15\1\16\1\17\1\0\6\5\1\20\4\5"+
+    "\1\16\1\0\2\17\1\21\2\22\12\5\1\0\1\16"+
+    "\1\0\1\23\11\5\1\23\1\24\2\0\17\5";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[90];
+    int [] result = new int[93];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -389,20 +389,20 @@ public class AnalizadorLexico {
 
   private static final String ZZ_ROWMAP_PACKED_0 =
     "\0\0\0\56\0\134\0\212\0\270\0\346\0\u0114\0\56"+
-    "\0\56\0\56\0\u0142\0\u0170\0\u019e\0\56\0\u01cc\0\u01fa"+
+    "\0\56\0\56\0\u0142\0\u0170\0\u019e\0\u01cc\0\56\0\u01fa"+
     "\0\u0228\0\u0256\0\u0284\0\u02b2\0\u02e0\0\u030e\0\u033c\0\u036a"+
-    "\0\346\0\56\0\u0398\0\56\0\u03c6\0\u03f4\0\u0422\0\u0450"+
-    "\0\u047e\0\u04ac\0\u04da\0\u0508\0\u0536\0\u0114\0\u0564\0\u0592"+
-    "\0\u05c0\0\u05ee\0\u061c\0\u064a\0\56\0\u0678\0\56\0\u06a6"+
-    "\0\u06d4\0\u0702\0\u0730\0\u075e\0\u078c\0\u07ba\0\u07e8\0\u0816"+
-    "\0\u0844\0\u0872\0\u08a0\0\u08ce\0\u08fc\0\u092a\0\u0958\0\u0986"+
-    "\0\u09b4\0\u09e2\0\u0a10\0\u0a3e\0\u0a6c\0\u0a9a\0\u0ac8\0\56"+
-    "\0\56\0\u092a\0\u0af6\0\u0b24\0\u0b52\0\u0b80\0\u0bae\0\u0bdc"+
-    "\0\u0c0a\0\u0c38\0\u0c66\0\u0c94\0\u0cc2\0\u0cf0\0\u0d1e\0\u0d4c"+
-    "\0\u0d7a\0\u0da8";
+    "\0\u0398\0\346\0\56\0\u03c6\0\56\0\u0142\0\u03f4\0\u0422"+
+    "\0\u0450\0\u047e\0\u04ac\0\u04da\0\u0508\0\u0536\0\u0564\0\u0114"+
+    "\0\u0592\0\u05c0\0\u05ee\0\u061c\0\u064a\0\u0678\0\56\0\u06a6"+
+    "\0\56\0\56\0\u06d4\0\u0702\0\u0730\0\u075e\0\u078c\0\u07ba"+
+    "\0\u07e8\0\u0816\0\u0844\0\u0872\0\u08a0\0\u08ce\0\u08fc\0\u092a"+
+    "\0\u0958\0\u0986\0\u09b4\0\u09e2\0\u0a10\0\u0a3e\0\u0a6c\0\u0a9a"+
+    "\0\u0ac8\0\u0af6\0\56\0\56\0\u0958\0\u0b24\0\u0b52\0\u0b80"+
+    "\0\u0bae\0\u0bdc\0\u0c0a\0\u0c38\0\u0c66\0\u0c94\0\u0cc2\0\u0cf0"+
+    "\0\u0d1e\0\u0d4c\0\u0d7a\0\u0da8\0\u0dd6";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[90];
+    int [] result = new int[93];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -426,80 +426,80 @@ public class AnalizadorLexico {
 
   private static final String ZZ_TRANS_PACKED_0 =
     "\1\2\1\3\1\4\1\0\1\4\1\2\1\5\1\6"+
-    "\1\7\1\10\1\11\1\10\2\12\1\13\1\14\1\15"+
-    "\1\16\2\7\1\17\1\20\1\21\3\7\1\22\2\7"+
-    "\1\23\4\7\1\24\1\7\1\25\2\7\1\26\2\7"+
-    "\1\27\2\7\60\0\1\3\1\4\1\0\1\4\1\0"+
-    "\1\30\51\0\1\4\1\0\1\4\52\0\1\30\1\4"+
-    "\1\0\1\4\1\0\1\5\47\0\2\31\1\32\1\31"+
-    "\1\33\2\31\1\34\46\31\1\7\7\0\1\7\6\0"+
-    "\2\7\1\0\34\7\13\0\1\35\2\0\1\36\54\0"+
-    "\1\37\55\0\1\37\1\0\2\15\35\0\1\7\7\0"+
-    "\1\7\6\0\2\7\1\0\1\40\10\7\1\41\23\7"+
-    "\7\0\1\7\6\0\2\7\1\0\4\7\1\42\30\7"+
-    "\7\0\1\7\6\0\2\7\1\0\10\7\1\43\2\7"+
-    "\1\44\21\7\7\0\1\7\6\0\2\7\1\0\15\7"+
-    "\1\45\17\7\7\0\1\7\6\0\2\7\1\0\6\7"+
-    "\1\46\26\7\7\0\1\7\6\0\2\7\1\0\16\7"+
-    "\1\47\16\7\7\0\1\7\6\0\2\7\1\0\25\7"+
-    "\1\50\2\7\1\51\4\7\7\0\1\7\6\0\2\7"+
-    "\1\0\32\7\1\52\2\7\7\0\1\7\6\0\2\7"+
-    "\1\0\23\7\1\46\10\7\1\0\1\30\1\4\1\0"+
-    "\1\4\1\0\1\30\51\0\1\32\53\0\13\53\1\54"+
-    "\42\53\2\36\1\55\1\36\1\56\51\36\17\0\1\57"+
-    "\1\60\35\0\1\7\7\0\1\7\6\0\2\7\1\0"+
-    "\3\7\1\61\31\7\7\0\1\7\6\0\2\7\1\0"+
-    "\7\7\1\62\25\7\7\0\1\7\6\0\2\7\1\0"+
-    "\5\7\1\63\27\7\7\0\1\7\6\0\2\7\1\0"+
-    "\14\7\1\64\20\7\7\0\1\7\6\0\2\7\1\0"+
-    "\2\7\1\65\32\7\7\0\1\7\6\0\2\7\1\0"+
-    "\7\7\1\66\25\7\7\0\1\7\6\0\2\7\1\0"+
-    "\21\7\1\67\13\7\7\0\1\7\6\0\2\7\1\0"+
-    "\31\7\1\70\3\7\7\0\1\7\6\0\2\7\1\0"+
-    "\20\7\1\71\14\7\7\0\1\7\6\0\2\7\1\0"+
-    "\24\7\1\72\7\7\13\53\1\73\42\53\13\74\1\75"+
-    "\2\74\1\76\37\74\2\0\1\55\72\0\2\60\35\0"+
-    "\1\7\7\0\1\7\6\0\2\7\1\0\4\7\1\77"+
-    "\30\7\7\0\1\7\6\0\2\7\1\0\11\7\1\46"+
-    "\23\7\7\0\1\7\6\0\2\7\1\0\6\7\1\100"+
-    "\26\7\7\0\1\7\6\0\2\7\1\0\4\7\1\101"+
-    "\4\7\1\102\23\7\7\0\1\7\6\0\2\7\1\0"+
-    "\12\7\1\103\22\7\7\0\1\7\6\0\2\7\1\0"+
-    "\4\7\1\101\30\7\7\0\1\7\6\0\2\7\1\0"+
-    "\22\7\1\104\12\7\7\0\1\7\6\0\2\7\1\0"+
-    "\22\7\1\105\3\7\1\106\6\7\7\0\1\7\6\0"+
-    "\2\7\1\0\27\7\1\107\5\7\7\0\1\7\6\0"+
-    "\2\7\1\0\22\7\1\105\11\7\13\53\1\73\2\53"+
-    "\1\110\37\53\13\74\1\75\55\74\1\75\2\74\1\111"+
-    "\37\74\13\112\1\113\42\112\1\7\7\0\1\7\6\0"+
-    "\2\7\1\0\10\7\1\114\24\7\7\0\1\7\6\0"+
-    "\2\7\1\0\10\7\1\115\24\7\7\0\1\7\6\0"+
-    "\2\7\1\0\12\7\1\62\22\7\7\0\1\7\6\0"+
-    "\2\7\1\0\10\7\1\116\24\7\7\0\1\7\6\0"+
-    "\2\7\1\0\6\7\1\117\26\7\7\0\1\7\6\0"+
-    "\2\7\1\0\25\7\1\120\7\7\7\0\1\7\6\0"+
-    "\2\7\1\0\27\7\1\121\5\7\7\0\1\7\6\0"+
-    "\2\7\1\0\25\7\1\122\7\7\7\0\1\7\6\0"+
-    "\2\7\1\0\23\7\1\123\10\7\13\112\1\113\2\112"+
-    "\1\111\37\112\1\7\7\0\1\7\6\0\2\7\1\0"+
-    "\1\46\34\7\7\0\1\7\6\0\2\7\1\0\6\7"+
-    "\1\124\26\7\7\0\1\7\6\0\2\7\1\0\2\7"+
-    "\1\125\32\7\7\0\1\7\6\0\2\7\1\0\1\7"+
-    "\1\115\33\7\7\0\1\7\6\0\2\7\1\0\16\7"+
-    "\1\46\16\7\7\0\1\7\6\0\2\7\1\0\26\7"+
-    "\1\46\6\7\7\0\1\7\6\0\2\7\1\0\20\7"+
-    "\1\126\14\7\7\0\1\7\6\0\2\7\1\0\17\7"+
-    "\1\127\15\7\7\0\1\7\6\0\2\7\1\0\12\7"+
-    "\1\46\22\7\7\0\1\7\6\0\2\7\1\0\4\7"+
-    "\1\130\30\7\7\0\1\7\6\0\2\7\1\0\22\7"+
-    "\1\131\12\7\7\0\1\7\6\0\2\7\1\0\23\7"+
-    "\1\132\11\7\7\0\1\7\6\0\2\7\1\0\13\7"+
-    "\1\46\21\7\7\0\1\7\6\0\2\7\1\0\30\7"+
-    "\1\46\4\7\7\0\1\7\6\0\2\7\1\0\27\7"+
-    "\1\46\4\7";
+    "\1\7\1\10\1\11\1\10\1\12\1\13\1\14\1\15"+
+    "\1\16\1\17\2\7\1\20\1\21\1\22\3\7\1\23"+
+    "\2\7\1\24\4\7\1\25\1\7\1\26\2\7\1\27"+
+    "\2\7\1\30\2\7\60\0\1\3\1\4\1\0\1\4"+
+    "\1\0\1\31\51\0\1\4\1\0\1\4\52\0\1\31"+
+    "\1\4\1\0\1\4\1\0\1\5\47\0\2\32\1\33"+
+    "\1\32\1\34\2\32\1\35\46\32\1\7\7\0\1\7"+
+    "\6\0\2\7\1\0\34\7\17\0\2\36\50\0\1\37"+
+    "\2\0\1\40\54\0\1\41\55\0\1\41\1\0\2\16"+
+    "\35\0\1\7\7\0\1\7\6\0\2\7\1\0\1\42"+
+    "\10\7\1\43\23\7\7\0\1\7\6\0\2\7\1\0"+
+    "\4\7\1\44\30\7\7\0\1\7\6\0\2\7\1\0"+
+    "\10\7\1\45\2\7\1\46\21\7\7\0\1\7\6\0"+
+    "\2\7\1\0\15\7\1\47\17\7\7\0\1\7\6\0"+
+    "\2\7\1\0\6\7\1\50\26\7\7\0\1\7\6\0"+
+    "\2\7\1\0\16\7\1\51\16\7\7\0\1\7\6\0"+
+    "\2\7\1\0\25\7\1\52\2\7\1\53\4\7\7\0"+
+    "\1\7\6\0\2\7\1\0\32\7\1\54\2\7\7\0"+
+    "\1\7\6\0\2\7\1\0\23\7\1\50\10\7\1\0"+
+    "\1\31\1\4\1\0\1\4\1\0\1\31\51\0\1\33"+
+    "\53\0\13\55\1\56\42\55\2\40\1\57\1\40\1\60"+
+    "\51\40\15\0\1\61\1\0\1\62\1\63\35\0\1\7"+
+    "\7\0\1\7\6\0\2\7\1\0\3\7\1\64\31\7"+
+    "\7\0\1\7\6\0\2\7\1\0\7\7\1\65\25\7"+
+    "\7\0\1\7\6\0\2\7\1\0\5\7\1\66\27\7"+
+    "\7\0\1\7\6\0\2\7\1\0\14\7\1\67\20\7"+
+    "\7\0\1\7\6\0\2\7\1\0\2\7\1\70\32\7"+
+    "\7\0\1\7\6\0\2\7\1\0\7\7\1\71\25\7"+
+    "\7\0\1\7\6\0\2\7\1\0\21\7\1\72\13\7"+
+    "\7\0\1\7\6\0\2\7\1\0\31\7\1\73\3\7"+
+    "\7\0\1\7\6\0\2\7\1\0\20\7\1\74\14\7"+
+    "\7\0\1\7\6\0\2\7\1\0\24\7\1\75\7\7"+
+    "\13\55\1\76\42\55\13\77\1\100\2\77\1\101\37\77"+
+    "\2\0\1\57\72\0\2\63\35\0\1\7\7\0\1\7"+
+    "\6\0\2\7\1\0\4\7\1\102\30\7\7\0\1\7"+
+    "\6\0\2\7\1\0\11\7\1\50\23\7\7\0\1\7"+
+    "\6\0\2\7\1\0\6\7\1\103\26\7\7\0\1\7"+
+    "\6\0\2\7\1\0\4\7\1\104\4\7\1\105\23\7"+
+    "\7\0\1\7\6\0\2\7\1\0\12\7\1\106\22\7"+
+    "\7\0\1\7\6\0\2\7\1\0\4\7\1\104\30\7"+
+    "\7\0\1\7\6\0\2\7\1\0\22\7\1\107\12\7"+
+    "\7\0\1\7\6\0\2\7\1\0\22\7\1\110\3\7"+
+    "\1\111\6\7\7\0\1\7\6\0\2\7\1\0\27\7"+
+    "\1\112\5\7\7\0\1\7\6\0\2\7\1\0\22\7"+
+    "\1\110\11\7\13\55\1\76\2\55\1\113\37\55\13\77"+
+    "\1\100\55\77\1\100\2\77\1\114\37\77\13\115\1\116"+
+    "\42\115\1\7\7\0\1\7\6\0\2\7\1\0\10\7"+
+    "\1\117\24\7\7\0\1\7\6\0\2\7\1\0\10\7"+
+    "\1\120\24\7\7\0\1\7\6\0\2\7\1\0\12\7"+
+    "\1\65\22\7\7\0\1\7\6\0\2\7\1\0\10\7"+
+    "\1\121\24\7\7\0\1\7\6\0\2\7\1\0\6\7"+
+    "\1\122\26\7\7\0\1\7\6\0\2\7\1\0\25\7"+
+    "\1\123\7\7\7\0\1\7\6\0\2\7\1\0\27\7"+
+    "\1\124\5\7\7\0\1\7\6\0\2\7\1\0\25\7"+
+    "\1\125\7\7\7\0\1\7\6\0\2\7\1\0\23\7"+
+    "\1\126\10\7\13\115\1\116\2\115\1\114\37\115\1\7"+
+    "\7\0\1\7\6\0\2\7\1\0\1\50\34\7\7\0"+
+    "\1\7\6\0\2\7\1\0\6\7\1\127\26\7\7\0"+
+    "\1\7\6\0\2\7\1\0\2\7\1\130\32\7\7\0"+
+    "\1\7\6\0\2\7\1\0\1\7\1\120\33\7\7\0"+
+    "\1\7\6\0\2\7\1\0\16\7\1\50\16\7\7\0"+
+    "\1\7\6\0\2\7\1\0\26\7\1\50\6\7\7\0"+
+    "\1\7\6\0\2\7\1\0\20\7\1\131\14\7\7\0"+
+    "\1\7\6\0\2\7\1\0\17\7\1\132\15\7\7\0"+
+    "\1\7\6\0\2\7\1\0\12\7\1\50\22\7\7\0"+
+    "\1\7\6\0\2\7\1\0\4\7\1\133\30\7\7\0"+
+    "\1\7\6\0\2\7\1\0\22\7\1\134\12\7\7\0"+
+    "\1\7\6\0\2\7\1\0\23\7\1\135\11\7\7\0"+
+    "\1\7\6\0\2\7\1\0\13\7\1\50\21\7\7\0"+
+    "\1\7\6\0\2\7\1\0\30\7\1\50\4\7\7\0"+
+    "\1\7\6\0\2\7\1\0\27\7\1\50\4\7";
 
   private static int [] zzUnpacktrans() {
-    int [] result = new int[3542];
+    int [] result = new int[3588];
     int offset = 0;
     offset = zzUnpacktrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -542,13 +542,13 @@ public class AnalizadorLexico {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\1\0\1\11\5\1\3\11\3\1\1\11\11\1\2\0"+
-    "\1\11\1\1\1\11\2\1\1\0\14\1\1\0\1\11"+
-    "\1\1\1\11\13\1\1\0\1\1\1\0\12\1\2\11"+
+    "\1\0\1\11\5\1\3\11\4\1\1\11\11\1\2\0"+
+    "\1\11\1\1\1\11\3\1\1\0\14\1\1\0\1\11"+
+    "\1\1\2\11\13\1\1\0\1\1\1\0\12\1\2\11"+
     "\2\0\17\1";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[90];
+    int [] result = new int[93];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -702,9 +702,9 @@ public class AnalizadorLexico {
     }
 
     //Metodo utilizado para declarar un lexema con error
-    private void setNuevoLexemaErroneo(TokenEnum tokenLexico, String cadena, int filaCoordenada, int columnaCoordenada, String mensajeError ){
+    private void setNuevoLexemaErroneo(TokenEnum tokenLexico, String cadena, int filaCoordenada, int columnaCoordenada, String mensajeError, String cadenaEsperada ){
         int indice = getIndiceListado();
-        this.listaSentencias.get(indice).agregarLexemaErroneo(cadena, filaCoordenada, columnaCoordenada, tokenLexico, mensajeError);
+        this.listaSentencias.get(indice).agregarLexemaErroneo(cadena, filaCoordenada, columnaCoordenada, tokenLexico, mensajeError, cadenaEsperada);
     }
 
     //-----------Fin del Apartado de metodos que sirven para generar los listados de lexemas y sentencias---------------
@@ -1128,116 +1128,126 @@ public class AnalizadorLexico {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
             { setNuevaSentencia(yyline);
-                setNuevoLexemaErroneo(TokenEnum.ERROR, yytext(), yyline, yycolumn, "Caracter no registrado en la gramatica");
+                setNuevoLexemaErroneo(TokenEnum.ERROR, yytext(), yyline, yycolumn, "Caracter no registrado en la gramatica", "Se esperaba un caracter registrado en la gramatica");
             }
           // fall through
-          case 19: break;
+          case 21: break;
           case 2:
             { setNuevaSentencia(yyline);
                         setNuevoLexemaLexico(TokenEnum.TABULACION, yytext(), yyline, yycolumn );
             }
           // fall through
-          case 20: break;
+          case 22: break;
           case 3:
             { setHaySalto(true);
                         setNuevaSentencia(yyline);
                         setNuevoLexemaLexico(TokenEnum.VACIO, yytext(), yyline, yycolumn );
             }
           // fall through
-          case 21: break;
+          case 23: break;
           case 4:
             { setNuevaSentencia(yyline);
                       setNuevoLexemaLexico(TokenEnum.ESPACIO, yytext(), yyline, yycolumn );
             }
           // fall through
-          case 22: break;
+          case 24: break;
           case 5:
             { setNuevaSentencia(yyline);
                           setNuevoLexemaLexico(TokenEnum.IDENTIFICADOR, yytext(), yyline, yycolumn );
             }
           // fall through
-          case 23: break;
+          case 25: break;
           case 6:
             { setNuevaSentencia(yyline);
                           setNuevoLexemaLexico(TokenEnum.OPERADOR, yytext(), yyline, yycolumn );
             }
           // fall through
-          case 24: break;
+          case 26: break;
           case 7:
             { setNuevaSentencia(yyline);
                           setNuevoLexemaLexico(TokenEnum.AGRUPACION, yytext(), yyline, yycolumn );
             }
           // fall through
-          case 25: break;
+          case 27: break;
           case 8:
             { setNuevaSentencia(yyline);
                           setNuevoLexemaLexico(TokenEnum.PUNTUACION, yytext(), yyline, yycolumn );
             }
           // fall through
-          case 26: break;
+          case 28: break;
           case 9:
             { setNuevaSentencia(yyline);
                           setNuevoLexemaLexico(TokenEnum.NUMERO, yytext(), yyline, yycolumn );
             }
           // fall through
-          case 27: break;
+          case 29: break;
           case 10:
             { setNuevaSentencia(yyline);
-                          setNuevoLexemaSintactico(TokenEnum.OPERADOR, TokenEnum.IGUAL, yytext(), yyline, yycolumn );  
-                          System.out.println("Token Igual <" + yytext() + " columna " + yycolumn+">");
+                          setNuevoLexemaSintactico(TokenEnum.OPERADOR, TokenEnum.IGUAL, yytext(), yyline, yycolumn );
             }
           // fall through
-          case 28: break;
+          case 30: break;
           case 11:
             { setNuevaSentencia(yyline);
-                      setNuevoLexemaErroneo(TokenEnum.ERROR, yytext(), yyline, yycolumn, "Cadena de texto sin cierre");
+                      setNuevoLexemaErroneo(TokenEnum.ERROR, yytext(), yyline, yycolumn, "Cadena de texto sin cierre", "Se esperaba un " + TokenEnum.CADENA.getNombreToken() );
             }
           // fall through
-          case 29: break;
+          case 31: break;
           case 12:
             { setNuevaSentencia(yyline);
                       setNuevoLexemaLexico(TokenEnum.CADENA, yytext(), yyline, yycolumn );
             }
           // fall through
-          case 30: break;
+          case 32: break;
           case 13:
             { setNuevaSentencia(yyline);
-                                setNuevoLexemaErroneo(TokenEnum.ERROR, yytext(), yyline, yycolumn, "Comentario de bloque sin cierre");
+                          setNuevoLexemaErroneo(TokenEnum.ERROR, yytext(), yyline, yycolumn, "Punto decimal sin numero inicial", "Se esperaba un " + TokenEnum.COMENTARIO_BLOQUE.getNombreToken());
             }
           // fall through
-          case 31: break;
+          case 33: break;
           case 14:
+            { setNuevaSentencia(yyline);
+                                setNuevoLexemaErroneo(TokenEnum.ERROR, yytext(), yyline, yycolumn, "Comentario de bloque sin cierre", "Se esperaba un " + TokenEnum.COMENTARIO_BLOQUE.getNombreToken());
+            }
+          // fall through
+          case 34: break;
+          case 15:
             { setNuevaSentencia(yyline);
                           setNuevoLexemaLexico(TokenEnum.COMENTARIO_LINEA, yytext(), yyline, yycolumn );
             }
           // fall through
-          case 32: break;
-          case 15:
+          case 35: break;
+          case 16:
             { setNuevaSentencia(yyline);
-                          setNuevoLexemaLexico(TokenEnum.PALABRA_RESERVADA, yytext(), yyline, yycolumn );  
-                          System.out.println("Token palabra reservada <" + yytext() + " columna " + yycolumn+">");
+                          setNuevoLexemaLexico(TokenEnum.PALABRA_RESERVADA, yytext(), yyline, yycolumn );
             }
           // fall through
-          case 33: break;
-          case 16:
+          case 36: break;
+          case 17:
+            { setNuevaSentencia(yyline);
+                          setNuevoLexemaErroneo(TokenEnum.ERROR, yytext(), yyline, yycolumn, "Doble punto decimal", "Se esperaba un " + TokenEnum.COMENTARIO_BLOQUE.getNombreToken());
+            }
+          // fall through
+          case 37: break;
+          case 18:
             { setNuevaSentencia(yyline);
                           setNuevoLexemaLexico(TokenEnum.DECIMAL, yytext(), yyline, yycolumn );
             }
           // fall through
-          case 34: break;
-          case 17:
+          case 38: break;
+          case 19:
             { setNuevaSentencia(yyline);
                           setNuevoLexemaLexico(TokenEnum.COMENTARIO_BLOQUE, yytext(), yyline, yycolumn );
             }
           // fall through
-          case 35: break;
-          case 18:
+          case 39: break;
+          case 20:
             { setNuevaSentencia(yyline);
                           setNuevoLexemaLexico(TokenEnum.COMENTARIO_BLOQUE, yytext(), yyline, yycolumn ); 
                           System.out.println("Token COMENTARIO DE BLOQUE <" + yytext() + " columna " + yycolumn+">");
             }
           // fall through
-          case 36: break;
+          case 40: break;
           default:
             zzScanError(ZZ_NO_MATCH);
         }

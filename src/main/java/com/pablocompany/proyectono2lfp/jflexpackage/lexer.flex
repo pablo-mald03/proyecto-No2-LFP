@@ -93,9 +93,9 @@ import com.pablocompany.proyectono2lfp.analizadorlexicorecursos.TokenEnum;
     }
 
     //Metodo utilizado para declarar un lexema con error
-    private void setNuevoLexemaErroneo(TokenEnum tokenLexico, String cadena, int filaCoordenada, int columnaCoordenada, String mensajeError ){
+    private void setNuevoLexemaErroneo(TokenEnum tokenLexico, String cadena, int filaCoordenada, int columnaCoordenada, String mensajeError, String cadenaEsperada ){
         int indice = getIndiceListado();
-        this.listaSentencias.get(indice).agregarLexemaErroneo(cadena, filaCoordenada, columnaCoordenada, tokenLexico, mensajeError);
+        this.listaSentencias.get(indice).agregarLexemaErroneo(cadena, filaCoordenada, columnaCoordenada, tokenLexico, mensajeError, cadenaEsperada);
     }
 
     //-----------Fin del Apartado de metodos que sirven para generar los listados de lexemas y sentencias---------------
@@ -155,7 +155,9 @@ CommentContent = ( [^*] | \*+ [^/*] )*
 
 ErrorComentarioBloque = "/*"([^*]|\*+[^*/])*
 CadenaError  =  \"([^\"\n\r])*(\n|\r|\r\n)
+ErrorDecimal = {Numero}".."
 
+ErrorInicioDecimal = "\."[0-9]+
 
 
 %%
@@ -175,7 +177,7 @@ CadenaError  =  \"([^\"\n\r])*(\n|\r|\r\n)
 
 
 {CadenaError}       { setNuevaSentencia(yyline);
-                      setNuevoLexemaErroneo(TokenEnum.ERROR, yytext(), yyline, yycolumn, "Cadena de texto sin cierre");
+                      setNuevoLexemaErroneo(TokenEnum.ERROR, yytext(), yyline, yycolumn, "Cadena de texto sin cierre", "Se esperaba un " + TokenEnum.CADENA.getNombreToken() );
                     }
 
 
@@ -191,29 +193,36 @@ CadenaError  =  \"([^\"\n\r])*(\n|\r|\r\n)
 
 
 {ErrorComentarioBloque}      {  setNuevaSentencia(yyline);
-                                setNuevoLexemaErroneo(TokenEnum.ERROR, yytext(), yyline, yycolumn, "Comentario de bloque sin cierre");
+                                setNuevoLexemaErroneo(TokenEnum.ERROR, yytext(), yyline, yycolumn, "Comentario de bloque sin cierre", "Se esperaba un " + TokenEnum.COMENTARIO_BLOQUE.getNombreToken());
                              }
 
 
 {Igual}                 { setNuevaSentencia(yyline);
                           setNuevoLexemaSintactico(TokenEnum.OPERADOR, TokenEnum.IGUAL, yytext(), yyline, yycolumn );  
-                          System.out.println("Token Igual <" + yytext() + " columna " + yycolumn+">"); }
+                        }
 
 {PalabraReservada}      { setNuevaSentencia(yyline);
                           setNuevoLexemaLexico(TokenEnum.PALABRA_RESERVADA, yytext(), yyline, yycolumn );  
-                          System.out.println("Token palabra reservada <" + yytext() + " columna " + yycolumn+">");  }
+                        }
 
 
+{ErrorDecimal}          { setNuevaSentencia(yyline);
+                          setNuevoLexemaErroneo(TokenEnum.ERROR, yytext(), yyline, yycolumn, "Doble punto decimal", "Se esperaba un " + TokenEnum.COMENTARIO_BLOQUE.getNombreToken());
+                        }
 
-
-{Decimal}               { setNuevaSentencia(yyline);
-                          setNuevoLexemaLexico(TokenEnum.DECIMAL, yytext(), yyline, yycolumn );  
+{ErrorInicioDecimal}    { setNuevaSentencia(yyline);
+                          setNuevoLexemaErroneo(TokenEnum.ERROR, yytext(), yyline, yycolumn, "Punto decimal sin numero inicial", "Se esperaba un " + TokenEnum.COMENTARIO_BLOQUE.getNombreToken());
                         }
 
 
 {Numero}                { setNuevaSentencia(yyline);
                           setNuevoLexemaLexico(TokenEnum.NUMERO, yytext(), yyline, yycolumn );  
                         }
+
+{Decimal}               { setNuevaSentencia(yyline);
+                          setNuevoLexemaLexico(TokenEnum.DECIMAL, yytext(), yyline, yycolumn );  
+                        }
+
 
 {Identificador}         { setNuevaSentencia(yyline);
                           setNuevoLexemaLexico(TokenEnum.IDENTIFICADOR, yytext(), yyline, yycolumn ); 
@@ -248,5 +257,5 @@ CadenaError  =  \"([^\"\n\r])*(\n|\r|\r\n)
 
 
 (.)          {  setNuevaSentencia(yyline);
-                setNuevoLexemaErroneo(TokenEnum.ERROR, yytext(), yyline, yycolumn, "Caracter no registrado en la gramatica");
+                setNuevoLexemaErroneo(TokenEnum.ERROR, yytext(), yyline, yycolumn, "Caracter no registrado en la gramatica", "Se esperaba un caracter registrado en la gramatica");
              }

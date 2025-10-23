@@ -39,8 +39,8 @@ public class Sentencia {
     }
     
     //Metodo que sirve para agregar lexemas con un error
-    public void agregarLexemaErroneo(String cadena, int fila, int columna, TokenEnum tokenLexico, String mensajeError){
-        this.listaLexemas.add(new Lexema(cadena, fila,columna,tokenLexico, mensajeError));
+    public void agregarLexemaErroneo(String cadena, int fila, int columna, TokenEnum tokenLexico, String mensajeError, String cadenaEsperada){
+        this.listaLexemas.add(new Lexema(cadena, fila,columna,tokenLexico, mensajeError, cadenaEsperada));
     }
 
     //Metodo que permite acceder al lexema almacenado en la lista
@@ -54,6 +54,15 @@ public class Sentencia {
     }
     
     //Metodo que sirve para obtener el indice actual en el que va el listado de lexemas
+    public int getIndiceActual(){
+        int indiceActual = limiteLexemas() -1;
+        
+        if(indiceActual < 0){
+            indiceActual = 0;
+        }
+        
+        return indiceActual; 
+    }
     
 
     public ArrayList<Lexema> obtenerListadoLexemas() {

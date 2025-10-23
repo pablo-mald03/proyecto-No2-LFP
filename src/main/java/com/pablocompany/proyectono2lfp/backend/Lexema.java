@@ -57,12 +57,13 @@ public class Lexema {
     }
 
     //Constructor que permite declarar lexemas que tienen un error
-    public Lexema(String lexemaGenerado, int lineaCoordenada, int columnaCoordenada, TokenEnum tipoToken, String mensajeErroneo) {
+    public Lexema(String lexemaGenerado, int lineaCoordenada, int columnaCoordenada, TokenEnum tipoToken, String mensajeErroneo, String tokenEsperado) {
         this.lexemaGenerado = lexemaGenerado;
         this.lineaCoordenada = lineaCoordenada;
         this.columna = columnaCoordenada;
         this.tokenClasificado = tipoToken;
         this.mensajeError = mensajeErroneo;
+        this.cadenaEsperada = tokenEsperado;
     }
 
     //Apartado de getters que sirven para saber informacion sobre el lexema

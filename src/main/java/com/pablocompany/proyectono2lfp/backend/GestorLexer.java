@@ -196,7 +196,7 @@ public class GestorLexer {
             for (int j = 0; j < sentenciaActiva.limiteLexemas(); j++) {
 
                 Lexema lexemaUbicado = sentenciaActiva.getListaLexema(j);
-                
+
                 String lexemaPrimitivo = lexemaUbicado.getLexemaGenerado().replace("\r", "").replace("\n", "");
 
                 if (lexemaUbicado.getTokenClasificado() == TokenEnum.ERROR) {
@@ -207,11 +207,11 @@ public class GestorLexer {
 
                         Lexema lexemaPosterior = sentenciaActiva.getListaLexema(indice);
 
-                        String lexemaPosteriorProcesado = lexemaPosterior.getLexemaGenerado().replace("\r", "").replace("\n", "");
-
                         if (lexemaPosterior.getTokenClasificado() != TokenEnum.ERROR) {
 
-                            insertarToken(lexemaPrimitivo + lexemaPosteriorProcesado + " <- Error, en " + lexemaPrimitivo + " - " + lexemaUbicado.getMensajeError(), Color.RED, this.logErrores);
+                            String trasecendencia = hallarTrascendencia(lexemaPrimitivo, sentenciaActiva, indice);
+
+                            insertarToken(trasecendencia + " <- Error, en " + lexemaPrimitivo + " - " + lexemaUbicado.getMensajeError(), Color.RED, this.logErrores);
 
                         } else {
                             insertarToken(lexemaPrimitivo + " <- Error, en " + lexemaPrimitivo + " - " + lexemaUbicado.getMensajeError(), Color.RED, this.logErrores);
@@ -229,6 +229,28 @@ public class GestorLexer {
             }
 
         }
+    }
+
+    //Metodo auxiliar que sirve para hallar la cadena tope de lexema de error
+    private String hallarTrascendencia(String cadenaPrimitiva, Sentencia sentenciaActiva, int inicio) {
+
+        StringBuilder cadenaTrascendencia = new StringBuilder();
+
+        cadenaTrascendencia.append(cadenaPrimitiva);
+
+        for (int i = inicio; i < sentenciaActiva.limiteLexemas(); i++) {
+
+            Lexema lexemaUbicado = sentenciaActiva.getListaLexema(i);
+
+            if (lexemaUbicado.getTokenClasificado() == TokenEnum.VACIO || lexemaUbicado.getTokenClasificado() == TokenEnum.ESPACIO || lexemaUbicado.getTokenClasificado() == TokenEnum.TABULACION) {
+                break;
+            }
+
+            cadenaTrascendencia.append(lexemaUbicado.getLexemaGenerado());
+
+        }
+
+        return cadenaTrascendencia.toString();
     }
 
     //=========================FIN DEL APARTADO DE METODOS UTILIZADOS PARA GENERAR LAS FUNCIONALIDADES DEL ANALIZADOR LEXICO=======================
