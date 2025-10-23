@@ -92,6 +92,12 @@ import com.pablocompany.proyectono2lfp.analizadorlexicorecursos.TokenEnum;
         this.listaSentencias.get(indice).agregarLexemaSintactico(cadena, filaCoordenada, columnaCoordenada, tokenLexico, tokenSintactico);
     }
 
+    //Metodo utilizado para declarar un lexema con error
+    private void setNuevoLexemaErroneo(TokenEnum tokenLexico, String cadena, int filaCoordenada, int columnaCoordenada, String mensajeError ){
+        int indice = getIndiceListado();
+        this.listaSentencias.get(indice).agregarLexemaErroneo(cadena, filaCoordenada, columnaCoordenada, tokenLexico, mensajeError);
+    }
+
     //-----------Fin del Apartado de metodos que sirven para generar los listados de lexemas y sentencias---------------
      
     //Metodo que sirve para obtener la lista de sentencias
@@ -112,14 +118,15 @@ LineaVacia = [ \t]* {Salto}+
 
 
 
-/* Apartado de tokens normales */
-
+/* Apartado de tokens normales */    
 Identificador = [:jletter:] [:jletterdigit:]*
 Numero = 0 | [1-9][0-9]*
 Decimal = {Numero}"."{Numero}
 Puntuacion = [.,;:]     
 OperadorAritmetico = [+\-*/%]
-Agrupacion = [\(\)\[\]\{\}]      
+Agrupacion = [\(\)\[\]\{\}]  
+
+CadenaTexto = \"([^\"\\n\\r\\\\]|\\\\.)*\"
 
 /*Apartado de palabras reservadas */
 
@@ -155,28 +162,28 @@ ErrorComentarioBloque = "/*"([^*]|\*+[^*/])*
 
 /*ACCIONES*/
 
+{CadenaTexto}       { setNuevaSentencia(yyline);
+                      setNuevoLexemaLexico(TokenEnum.CADENA, yytext(), yyline, yycolumn ); 
+                    }
+
 {Espacio}+          { setNuevaSentencia(yyline);
                       setNuevoLexemaLexico(TokenEnum.ESPACIO, yytext(), yyline, yycolumn );
-                      System.out.println("Token espacio <" + yytext() + " columna " + yycolumn+">"); }
+                    }
 
 {LineaVacia}        {   setHaySalto(true);
                         setNuevaSentencia(yyline);
                         setNuevoLexemaLexico(TokenEnum.VACIO, yytext(), yyline, yycolumn );
-
-                        String lexema = yytext();       
-                        String[] lineas = lexema.split("\r\n|\r|\n", -1); 
-                        int cantidadSaltos = lineas.length - 1;          
-                        String espacios = lineas[0];                       
-                        System.out.println("Cantidad de saltos: " + cantidadSaltos);
-                        System.out.println("Espacios iniciales: '" + (espacios.length()));}
+                    }
 
 {Tab}+              {   setNuevaSentencia(yyline);
                         setNuevoLexemaLexico(TokenEnum.TABULACION, yytext(), yyline, yycolumn );
-                        System.out.println("Token tab <" + yytext() + " columna " + yycolumn+">"); }
+                    }
 
 
 
-{ErrorComentarioBloque}      {System.out.println("Token ERROR COMENTAIO DE BLOQUE <" + yytext() + " columna " + yycolumn+">"); }
+{ErrorComentarioBloque}      {  setNuevaSentencia(yyline);
+                                setNuevoLexemaErroneo(TokenEnum.ERROR, yytext(), yyline, yycolumn, "Comentario de bloque sin cierre");
+                             }
 
 
 {Igual}                 { setNuevaSentencia(yyline);
@@ -190,38 +197,37 @@ ErrorComentarioBloque = "/*"([^*]|\*+[^*/])*
 
 
 
-
 {Decimal}               { setNuevaSentencia(yyline);
                           setNuevoLexemaLexico(TokenEnum.DECIMAL, yytext(), yyline, yycolumn );  
-                          System.out.println("Token Decimal <" + yytext() + " columna " + yycolumn+">"); }
+                        }
 
 
 {Numero}                { setNuevaSentencia(yyline);
                           setNuevoLexemaLexico(TokenEnum.NUMERO, yytext(), yyline, yycolumn );  
-                          System.out.println("Token Numero <" + yytext() + " columna " + yycolumn+">"); }
+                        }
 
 {Identificador}         { setNuevaSentencia(yyline);
                           setNuevoLexemaLexico(TokenEnum.IDENTIFICADOR, yytext(), yyline, yycolumn ); 
-                          System.out.println("Token Identificador <" + yytext() + " columna " + yycolumn+">"); }
+                        }
 
 {Puntuacion}            { setNuevaSentencia(yyline);
                           setNuevoLexemaLexico(TokenEnum.PUNTUACION, yytext(), yyline, yycolumn ); 
-                          System.out.println("Token Puntuacion <" + yytext() + " columna " + yycolumn+">"); }
+                        }
 
 
 {OperadorAritmetico}    { setNuevaSentencia(yyline);
                           setNuevoLexemaLexico(TokenEnum.OPERADOR, yytext(), yyline, yycolumn ); 
-                          System.out.println("Token operador aritmetico<" + yytext() + " columna " + yycolumn+">"); }
+                        }
 
 {Agrupacion}            { setNuevaSentencia(yyline);
                           setNuevoLexemaLexico(TokenEnum.AGRUPACION, yytext(), yyline, yycolumn ); 
-                          System.out.println("Token agrupacion <" + yytext() + " columna " + yycolumn+">"); }
+                        }
 
 
 
 {ComentarioLinea}       { setNuevaSentencia(yyline);
                           setNuevoLexemaLexico(TokenEnum.COMENTARIO_LINEA, yytext(), yyline, yycolumn ); 
-                          System.out.println("Token COMENTARIO_LINEA <" + yytext() + " columna " + yycolumn+">"); }
+                        }
 
 {DocumentationComment}  { setNuevaSentencia(yyline);
                           setNuevoLexemaLexico(TokenEnum.COMENTARIO_BLOQUE, yytext(), yyline, yycolumn ); 
@@ -229,9 +235,9 @@ ErrorComentarioBloque = "/*"([^*]|\*+[^*/])*
 
 {ComentarioBloque}      { setNuevaSentencia(yyline);
                           setNuevoLexemaLexico(TokenEnum.COMENTARIO_BLOQUE, yytext(), yyline, yycolumn ); 
-                          System.out.println("Token COMENTAIO DE BLOQUE <" + yytext() + " columna " + yycolumn+">"); }
+                        }
 
 
 (.)          {  setNuevaSentencia(yyline);
                 setNuevoLexemaLexico(TokenEnum.ERROR, yytext(), yyline, yycolumn ); 
-                System.out.println("Caracter no registrado <" + yytext() + " columna " + yycolumn+">"); }
+             }

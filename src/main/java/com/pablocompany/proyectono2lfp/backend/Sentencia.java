@@ -37,6 +37,11 @@ public class Sentencia {
     public void agregarLexemaSintactico(String cadena, int fila, int columna, TokenEnum tokenLexico,TokenEnum tokenSintactico){
         this.listaLexemas.add(new Lexema(cadena, fila,columna,tokenLexico, tokenSintactico));
     }
+    
+    //Metodo que sirve para agregar lexemas con un error
+    public void agregarLexemaErroneo(String cadena, int fila, int columna, TokenEnum tokenLexico, String mensajeError){
+        this.listaLexemas.add(new Lexema(cadena, fila,columna,tokenLexico, mensajeError));
+    }
 
     //Metodo que permite acceder al lexema almacenado en la lista
     public Lexema getListaLexema(int indice) {
@@ -47,6 +52,9 @@ public class Sentencia {
     public int limiteLexemas() {
         return this.listaLexemas.size();
     }
+    
+    //Metodo que sirve para obtener el indice actual en el que va el listado de lexemas
+    
 
     public ArrayList<Lexema> obtenerListadoLexemas() {
         return this.listaLexemas;

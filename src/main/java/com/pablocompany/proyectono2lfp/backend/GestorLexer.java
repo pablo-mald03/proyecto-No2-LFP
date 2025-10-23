@@ -47,10 +47,10 @@ public class GestorLexer {
     }
 
     //Metodo encargado de pintar el log de edicion de archivo
-    public void pintarLogEdicion() throws BadLocationException{
+    public void pintarLogEdicion() throws BadLocationException {
         pintarLogSalida(this.paneEdicionArchivo, true);
     }
-    
+
     //=========================APARTADO DE METODOS UTILIZADOS PARA GENERAR LAS FUNCIONALIDADES DEL ANALIZADOR LEXICO=======================
     //Metodo utilizado para ilustrar el log de edicion
     //METODO UNICO QUE SIRVE PARA COLOREAR LOS LOG A CARGO DEL ANALIZADOR LEXICO
@@ -77,14 +77,38 @@ public class GestorLexer {
 
                 Color colorTexto = obtenerColorPorToken(lexemaDado.getTokenClasificado());
 
-                insertarToken(lexemaDado.getLexemaGenerado(), colorTexto, paneAnalisis);
-                
-                if(lexemaDado.getTokenClasificado() == TokenEnum.VACIO){
-                    insertarToken("\n", Color.BLACK, paneAnalisis);
-                }
-            }
+                switch (lexemaDado.getTokenClasificado()) {
 
-            
+                    case TokenEnum.VACIO:
+                        String lexemaObtenido = lexemaDado.getLexemaGenerado();
+
+                        String[] lineas = lexemaObtenido.split("\r\n|\r|\n", -1);
+                        int cantidadSaltos = lineas.length - 1;
+                        String espacios = lineas[0];
+
+                        for (int k = 0; k < espacios.length(); k++) {
+                            insertarToken(" ", Color.BLACK, paneAnalisis);
+                        }
+
+                        for (int j = 0; j < cantidadSaltos; j++) {
+                            insertarToken("\n", Color.BLACK, paneAnalisis);
+                        }
+
+                        break;
+
+                    case TokenEnum.TABULACION:
+
+                        insertarToken("     ", Color.BLACK, paneAnalisis);
+
+                        break;
+
+                    default:
+                        insertarToken(lexemaDado.getLexemaGenerado(), colorTexto, paneAnalisis);
+                        
+
+                }
+
+            }
 
         }
 
@@ -179,7 +203,6 @@ public class GestorLexer {
             }
 
         }*/
-
     }
 
     //=========================FIN DEL APARTADO DE METODOS UTILIZADOS PARA GENERAR LAS FUNCIONALIDADES DEL ANALIZADOR LEXICO=======================
