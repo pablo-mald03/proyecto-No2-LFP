@@ -5,12 +5,17 @@
 package com.pablocompany.proyectono2lfp.backend;
 
 import com.pablocompany.proyectono2lfp.analizadorlexicorecursos.TokenEnum;
+import com.pablocompany.proyectono2lfp.excepciones.AnalizadorLexicoException;
+import com.pablocompany.proyectono2lfp.excepciones.ErrorEncontradoException;
+import com.pablocompany.proyectono2lfp.excepciones.ErrorPuntualException;
 import com.pablocompany.proyectono2lfp.jflexpackage.AnalizadorLexico;
 import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Element;
+import javax.swing.text.Highlighter;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
@@ -251,6 +256,88 @@ public class GestorLexer {
         }
 
         return cadenaTrascendencia.toString();
+    }
+
+    //Metodo que sirve para operar la busqueda de patrones
+    public void busquedaPatrones(JTextPane paneBusqueda, String palabraBuscada) throws BadLocationException, ErrorEncontradoException, ErrorPuntualException, AnalizadorLexicoException {
+
+        pintarLogSalida(paneBusqueda, false);
+
+        if (this.lexer.getListaSentencias().isEmpty()) {
+            throw new ErrorEncontradoException("El texto esta vacio");
+        }
+
+        Highlighter highlighter = paneBusqueda.getHighlighter();
+        highlighter.removeAllHighlights();
+
+        //Variable importante para saber si minimo hay una coincidencia
+        boolean hayCoincidencia = false;
+
+        hayCoincidencia = busquedaSofisticada(palabraBuscada, paneBusqueda);
+
+        //busqueda sofisticada para encontrar cualquier palabra
+        if (hayCoincidencia) {
+            return;
+        }
+
+        //busqueda sofisticada para encontrar cualquier palabra
+        if (!hayCoincidencia) {
+            throw new ErrorPuntualException("No existen patrones relacionados");
+        }
+
+    }
+
+    //Metodo encargado de llevar a cabo la busqueda sofisticada de patrones
+    private boolean busquedaSofisticada(String palabraBuscada, JTextPane paneBusqueda) throws BadLocationException, AnalizadorLexicoException {
+        boolean encontrado = false;
+        for (int i = 0; i < this.lexer.getListaSentencias().size(); i++) {
+            Sentencia sentenciaBuscada = this.lexer.getListaSentencias().get(i);
+
+            for (int j = 0; j < sentenciaBuscada.limiteLexemas(); j++) {
+
+                Lexema lexemaActual = sentenciaBuscada.getListaLexema(j);
+
+                String textoLexema = lexemaActual.getLexemaGenerado();
+                
+                int index = textoLexema.indexOf(palabraBuscada);
+                while (index != -1) {
+
+                    int fila = Math.max(0, lexemaActual.getLineaCoordenada());
+                    int columnaInicioLexema = Math.max(0, lexemaActual.getColumna());
+                    int columnaMatchInicio = columnaInicioLexema + index;
+                    int columnaMatchFin = columnaMatchInicio + palabraBuscada.length() - 1;
+
+                    resaltar(paneBusqueda, fila, columnaMatchInicio, columnaMatchFin);
+                    encontrado = true;
+
+                   
+                    index = textoLexema.indexOf(palabraBuscada, index + palabraBuscada.length());
+                }
+
+            }
+        }
+
+        return encontrado;
+
+    }
+
+    //Metodo que se encarga de resaltar la palabra que se busca
+    public void resaltar(JTextPane textPane, int linea, int startColumna, int endColumna) throws BadLocationException {
+        Highlighter highlighter = textPane.getHighlighter();
+        Highlighter.HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
+
+        int startOffset = getLineaInicioFin(textPane, linea, startColumna);
+        int endOffset = getLineaInicioFin(textPane, linea, endColumna) + 1;
+
+        highlighter.addHighlight(startOffset, endOffset, painter);
+    }
+
+    //Metodo que permite ubicar la coordenada para resaltar
+    private int getLineaInicioFin(JTextPane textPane, int linea, int columna) throws BadLocationException {
+        Element root = textPane.getDocument().getDefaultRootElement();
+        Element lineElem = root.getElement(linea);
+        int start = lineElem.getStartOffset();
+        return start + columna;
     }
 
     //=========================FIN DEL APARTADO DE METODOS UTILIZADOS PARA GENERAR LAS FUNCIONALIDADES DEL ANALIZADOR LEXICO=======================

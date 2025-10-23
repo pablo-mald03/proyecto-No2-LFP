@@ -6,11 +6,13 @@ package com.pablocompany.proyectono2lfp.frontend;
 
 import com.pablocompany.proyectono2lfp.analizadorlexicorecursos.LectorEntradas;
 import com.pablocompany.proyectono2lfp.analizadorlexicorecursos.ManejadorArchivos;
+import com.pablocompany.proyectono2lfp.backend.GestorLexer;
 import com.pablocompany.proyectono2lfp.backendswing.ColocarFondos;
 import com.pablocompany.proyectono2lfp.backendswing.EditorTexto;
 import com.pablocompany.proyectono2lfp.backendswing.IlustrarLabels;
 import com.pablocompany.proyectono2lfp.excepciones.AnalizadorLexicoException;
 import com.pablocompany.proyectono2lfp.excepciones.ConfigException;
+import com.pablocompany.proyectono2lfp.excepciones.ErrorEncontradoException;
 import com.pablocompany.proyectono2lfp.excepciones.ErrorPuntualException;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -599,14 +601,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnAnalisis.setBackground(new java.awt.Color(69, 46, 136));
         btnAnalisis.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
         btnAnalisis.setForeground(new java.awt.Color(255, 255, 255));
-        btnAnalisis.setText("Analizar Texto");
+        btnAnalisis.setText("Analisis Sintactico");
         btnAnalisis.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAnalisisActionPerformed(evt);
             }
         });
         jPanel2.add(btnAnalisis);
-        btnAnalisis.setBounds(40, 50, 203, 40);
+        btnAnalisis.setBounds(40, 50, 260, 40);
 
         txtBusquedas.setBackground(new java.awt.Color(228, 228, 228));
         txtBusquedas.setFont(new java.awt.Font("Liberation Serif", 0, 24)); // NOI18N
@@ -938,20 +940,20 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         if (this.gestionVentanas == 1) {
 
-            /* if (this.txtBusquedas.getText().trim().isBlank()) {
+             if (this.txtBusquedas.getText().trim().isBlank()) {
                 JOptionPane.showMessageDialog(this, "No hay ninguna palabra escrita\nEscribe alguna palabra para poder buscarlo", "Texto de busqueda Vacio", JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
 
-            AnalizadorLexico lexer = this.leerEntradas.getLexerActual();
+            GestorLexer getorLexer = this.leerEntradas.getGestorLexer();
 
-            if (lexer == null) {
+            if (getorLexer == null) {
                 JOptionPane.showMessageDialog(this, "No hay texto procesado\nPrimero escriba patrones para poder buscarlos", "Texto de busqueda Vacio", JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
 
             try {
-                lexer.busquedaPatrones(this.txtLogBusquedas, this.txtBusquedas.getText().trim().split(" "));
+                getorLexer.busquedaPatrones(this.txtLogBusquedas, this.txtBusquedas.getText().trim());
 
             } catch (BadLocationException ex) {
                 JOptionPane.showMessageDialog(this, "No se ha podido imprimir el texto de busqueda", "Error de pintado", JOptionPane.INFORMATION_MESSAGE);
@@ -961,7 +963,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
             } catch (ErrorPuntualException ex1) {
                 JOptionPane.showMessageDialog(this, ex1.getMessage(), "Patron no Encontrado", JOptionPane.INFORMATION_MESSAGE);
-            }*/
+            } catch (AnalizadorLexicoException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "No se ha localizado el indice de un lexema", JOptionPane.INFORMATION_MESSAGE);
+            }
         }
     }//GEN-LAST:event_btnGuardarArchivoActionPerformed
 

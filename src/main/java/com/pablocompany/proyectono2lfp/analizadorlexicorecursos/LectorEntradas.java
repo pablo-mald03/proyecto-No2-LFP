@@ -69,6 +69,11 @@ public class LectorEntradas {
     public AnalizadorLexico getLexerActual() {
         return this.lexerActual.getLexer();
     }
+    
+    //Metodo que sirve para retornar la clase maestra delegada para manipular el lexer
+    public GestorLexer getGestorLexer(){
+        return this.lexerActual;
+    }
 
     //METODO UTILIZADO PARA EXPORTAR EL TEXTO ESCRITO EN EL LOG DE EDICION
     public String exportarArchivo() throws ErrorPuntualException {
