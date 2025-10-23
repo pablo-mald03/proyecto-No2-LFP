@@ -104,7 +104,6 @@ public class GestorLexer {
 
                     default:
                         insertarToken(lexemaDado.getLexemaGenerado(), colorTexto, paneAnalisis);
-                        
 
                 }
 
@@ -180,29 +179,56 @@ public class GestorLexer {
     //Metodo encargado de imprimir los errores en el log de errores
     //True refresca todo el log con el lexer
     //False no hace nada porque esta en busquedas
-    private void mostrarErrores(boolean enAnalisis) {
+    private void mostrarErrores(boolean enAnalisis) throws BadLocationException {
 
         if (!enAnalisis) {
             return;
         }
 
-        /*for (int i = 0; i < this.listaSentencias.size(); i++) {
+        limpiarArea(this.logErrores);
 
-            Sentencia sentenciaActiva = this.listaSentencias.get(i);
+        ArrayList<Sentencia> listaSentencias = this.lexer.getListaSentencias();
 
-            for (Lexema lexemaDado : sentenciaActiva.obtenerListadoLexemas()) {
+        for (int i = 0; i < listaSentencias.size(); i++) {
 
-                if (lexemaDado.getLexema().isBlank()) {
-                    continue;
-                }
+            Sentencia sentenciaActiva = listaSentencias.get(i);
 
-                if (!lexemaDado.getCadenaError().isBlank()) {
-                    this.logErrores.setText(this.logErrores.getText() + lexemaDado.getLexema() + " <- Error, en " + lexemaDado.getCadenaError() + "\n");
+            for (int j = 0; j < sentenciaActiva.limiteLexemas(); j++) {
+
+                Lexema lexemaUbicado = sentenciaActiva.getListaLexema(j);
+                
+                String lexemaPrimitivo = lexemaUbicado.getLexemaGenerado().replace("\r", "").replace("\n", "");
+
+                if (lexemaUbicado.getTokenClasificado() == TokenEnum.ERROR) {
+
+                    int indice = j + 1;
+
+                    if (indice < sentenciaActiva.limiteLexemas()) {
+
+                        Lexema lexemaPosterior = sentenciaActiva.getListaLexema(indice);
+
+                        String lexemaPosteriorProcesado = lexemaPosterior.getLexemaGenerado().replace("\r", "").replace("\n", "");
+
+                        if (lexemaPosterior.getTokenClasificado() != TokenEnum.ERROR) {
+
+                            insertarToken(lexemaPrimitivo + lexemaPosteriorProcesado + " <- Error, en " + lexemaPrimitivo + " - " + lexemaUbicado.getMensajeError(), Color.RED, this.logErrores);
+
+                        } else {
+                            insertarToken(lexemaPrimitivo + " <- Error, en " + lexemaPrimitivo + " - " + lexemaUbicado.getMensajeError(), Color.RED, this.logErrores);
+                        }
+
+                    } else {
+
+                        insertarToken(lexemaPrimitivo + " <- Error, en " + lexemaPrimitivo + " - " + lexemaUbicado.getMensajeError(), Color.RED, this.logErrores);
+                    }
+
+                    insertarToken("\n", Color.BLACK, this.logErrores);
+
                 }
 
             }
 
-        }*/
+        }
     }
 
     //=========================FIN DEL APARTADO DE METODOS UTILIZADOS PARA GENERAR LAS FUNCIONALIDADES DEL ANALIZADOR LEXICO=======================

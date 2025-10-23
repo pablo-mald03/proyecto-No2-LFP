@@ -1128,7 +1128,7 @@ public class AnalizadorLexico {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
             { setNuevaSentencia(yyline);
-                setNuevoLexemaLexico(TokenEnum.ERROR, yytext(), yyline, yycolumn );
+                setNuevoLexemaErroneo(TokenEnum.ERROR, yytext(), yyline, yycolumn, "Caracter no registrado en la gramatica");
             }
           // fall through
           case 19: break;

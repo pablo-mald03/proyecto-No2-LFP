@@ -248,5 +248,5 @@ CadenaError  =  \"([^\"\n\r])*(\n|\r|\r\n)
 
 
 (.)          {  setNuevaSentencia(yyline);
-                setNuevoLexemaLexico(TokenEnum.ERROR, yytext(), yyline, yycolumn ); 
+                setNuevoLexemaErroneo(TokenEnum.ERROR, yytext(), yyline, yycolumn, "Caracter no registrado en la gramatica");
              }
