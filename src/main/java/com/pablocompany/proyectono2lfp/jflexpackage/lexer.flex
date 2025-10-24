@@ -134,9 +134,20 @@ PalabraReservada = "SI" | "si" |"ENTONCES" | "entonces" |"ENTERO" | "entero" |"N
 
 
 
-/*Apartado de palabras con un significado sintactico */
+/* Apartado de palabras con un significado sintáctico */
 
-Igual = [=]
+Igual              = "="
+Como               = "COMO"
+Definir            = "DEFINIR"
+PuntoComa          = ";"
+
+Entero             = "entero"
+Cadena             = "cadena"
+NumeroEspecial     = "numero"
+
+Escribir           = "ESCRIBIR"
+ParentesisCierre   = ")"
+ParentesisApertura = "("
 
 
 
@@ -200,6 +211,48 @@ ErrorInicioDecimal = "\."[0-9]+
 {Igual}                 { setNuevaSentencia(yyline);
                           setNuevoLexemaSintactico(TokenEnum.OPERADOR, TokenEnum.IGUAL, yytext(), yyline, yycolumn );  
                         }
+
+
+{Como}                 { setNuevaSentencia(yyline);
+                          setNuevoLexemaSintactico(TokenEnum.PALABRA_RESERVADA, TokenEnum.COMO, yytext(), yyline, yycolumn );  
+                       }
+
+
+{Definir}              { setNuevaSentencia(yyline);
+                          setNuevoLexemaSintactico(TokenEnum.PALABRA_RESERVADA, TokenEnum.DEFINIR, yytext(), yyline, yycolumn );  
+                       }
+
+
+{PuntoComa}            { setNuevaSentencia(yyline);
+                          setNuevoLexemaSintactico(TokenEnum.PUNTUACION, TokenEnum.PUNTO_COMA, yytext(), yyline, yycolumn );  
+                       }
+
+
+{Entero}               { setNuevaSentencia(yyline);
+                          setNuevoLexemaSintactico(TokenEnum.PALABRA_RESERVADA, TokenEnum.TIPO_ENTERO, yytext(), yyline, yycolumn );  
+                       }
+
+{Cadena}               { setNuevaSentencia(yyline);
+                          setNuevoLexemaSintactico(TokenEnum.PALABRA_RESERVADA, TokenEnum.TIPO_CADENA, yytext(), yyline, yycolumn );  
+                       }
+
+{NumeroEspecial}       { setNuevaSentencia(yyline);
+                          setNuevoLexemaSintactico(TokenEnum.PALABRA_RESERVADA, TokenEnum.TIPO_NUMERO, yytext(), yyline, yycolumn );  
+                       }
+
+
+{Escribir}             { setNuevaSentencia(yyline);
+                          setNuevoLexemaSintactico(TokenEnum.PALABRA_RESERVADA, TokenEnum.ESCRIBIR, yytext(), yyline, yycolumn );  
+                       }
+
+{ParentesisCierre}     { setNuevaSentencia(yyline);
+                          setNuevoLexemaSintactico(TokenEnum.AGRUPACION, TokenEnum.PARENTESIS_CIERRE, yytext(), yyline, yycolumn );  
+                       }
+
+{ParentesisApertura}   { setNuevaSentencia(yyline);
+                          setNuevoLexemaSintactico(TokenEnum.AGRUPACION, TokenEnum.PARENTESIS_APERTURA, yytext(), yyline, yycolumn );  
+                       }
+
 
 {PalabraReservada}      { setNuevaSentencia(yyline);
                           setNuevoLexemaLexico(TokenEnum.PALABRA_RESERVADA, yytext(), yyline, yycolumn );  

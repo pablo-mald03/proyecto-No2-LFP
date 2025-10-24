@@ -870,7 +870,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de lectura en el texto de entrada", JOptionPane.ERROR_MESSAGE);
         } catch (ConfigException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de reescritura", JOptionPane.ERROR_MESSAGE);
-        } 
+        }
 
     }//GEN-LAST:event_btnSubirArchivoActionPerformed
 
@@ -881,7 +881,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
             if (tomarDecision("Deseas cerrar este archivo cargado\nSe guardaran todos los cambios hechos", "Confirmar cierre")) {
 
                 try {
-                    
+
                     String directorio = this.manipuladorDirectorios.getPath();
                     this.manipuladorDirectorios.guardarArchivo(directorio, this.textEdicionArchivo);
 
@@ -940,7 +940,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         if (this.gestionVentanas == 1) {
 
-             if (this.txtBusquedas.getText().trim().isBlank()) {
+            if (this.txtBusquedas.getText().trim().isBlank()) {
                 JOptionPane.showMessageDialog(this, "No hay ninguna palabra escrita\nEscribe alguna palabra para poder buscarlo", "Texto de busqueda Vacio", JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
@@ -974,25 +974,25 @@ public class MenuPrincipal extends javax.swing.JFrame {
         if (this.textEdicionArchivo.getText().isBlank()) {
             return;
         }
-
-        //Comunicacion para iniciar el analisis sintactico
-        this.leerEntradas.getGestorSintactico().iniciarAnalisis();
         
-        /* try {
-            //Detecta cada vez que se cambia una palabra
-            String textoEntradaEdit = this.textEdicionArchivo.getText().replace("\t", "      ");
+        try {
+            //Comunicacion para iniciar el analisis sintactico
+            try {
+                //Detecta cada vez que se cambia una palabra
+                this.leerEntradas.getGestorSintactico().iniciarAnalisis();
 
-            this.leerEntradas.transformarTexto(textoEntradaEdit, this.textEdicionArchivo);
+            } catch (AnalizadorLexicoException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de Ejecucion", JOptionPane.ERROR_MESSAGE);
+            } catch (ConfigException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de Carga", JOptionPane.ERROR_MESSAGE);
+            } catch (BadLocationException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de pintado", JOptionPane.ERROR_MESSAGE);
+            }
 
-            this.leerEntradas.analizarEntradas(this.textEdicionArchivo, this.textLogErrores, this.txtLogTransiciones);
+        } catch (NullPointerException ex) {
+            JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador\nEscribe algo para poderlo analizar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
 
-        } catch (AnalizadorLexicoException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de Ejecucion", JOptionPane.ERROR_MESSAGE);
-        } catch (ConfigException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de Carga", JOptionPane.ERROR_MESSAGE);
-        } catch (BadLocationException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de pintado", JOptionPane.ERROR_MESSAGE);
-        }*/
+        }
     }//GEN-LAST:event_btnAnalisisActionPerformed
 
     private void txtLogBusquedasKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLogBusquedasKeyReleased

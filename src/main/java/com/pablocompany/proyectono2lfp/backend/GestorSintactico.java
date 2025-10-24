@@ -4,6 +4,9 @@
  */
 package com.pablocompany.proyectono2lfp.backend;
 
+import com.pablocompany.proyectono2lfp.analizadorlexicorecursos.TokenEnum;
+import com.pablocompany.proyectono2lfp.excepciones.AnalizadorLexicoException;
+import com.pablocompany.proyectono2lfp.excepciones.ConfigException;
 import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.JTextPane;
@@ -35,9 +38,42 @@ public class GestorSintactico {
     }
 
     //Metodo que permite iniciar el analisis sitactico
-    public void iniciarAnalisis() {
+    public void iniciarAnalisis() throws AnalizadorLexicoException, ConfigException, BadLocationException{
+        
+        //Vallida si hay errores registrados
+        if(hayErrores()){
+            throw new AnalizadorLexicoException("No puedes ejecutar el analisis sintactico\nHay errores registrados");
+        }
+        
+        
+        
+        
+        
 
     }
+    
+    //Metodo que ayuda a saber si hay errores
+    private boolean hayErrores(){
+        
+        //Cuenta los errores para ver si hay 
+        for (Sentencia sentencia : getListadoSentencias()) {
+
+            for (int i = 0; i < sentencia.limiteLexemas(); i++) {
+
+                Lexema lexemaEvaluado = sentencia.getListaLexema(i);
+                if (lexemaEvaluado.getTokenClasificado() == TokenEnum.ERROR) {
+                    return true;
+                }
+
+            }
+
+        }
+        
+        return false;
+        
+        
+    }
+    
 
     //Metodo que trabaja en conjunto para poder ir pintando letra a letra
     private void limpiarArea(JTextPane paneAnalisis) throws BadLocationException {
