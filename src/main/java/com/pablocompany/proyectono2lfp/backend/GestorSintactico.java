@@ -5,6 +5,11 @@
 package com.pablocompany.proyectono2lfp.backend;
 
 import com.pablocompany.proyectono2lfp.analizadorlexicorecursos.TokenEnum;
+import static com.pablocompany.proyectono2lfp.analizadorlexicorecursos.TokenEnum.COMO;
+import static com.pablocompany.proyectono2lfp.analizadorlexicorecursos.TokenEnum.DEFINIR;
+import static com.pablocompany.proyectono2lfp.analizadorlexicorecursos.TokenEnum.IDENTIFICADOR;
+import static com.pablocompany.proyectono2lfp.analizadorlexicorecursos.TokenEnum.INDEFINIDO;
+import static com.pablocompany.proyectono2lfp.analizadorlexicorecursos.TokenEnum.PUNTO_COMA;
 import com.pablocompany.proyectono2lfp.excepciones.AnalizadorLexicoException;
 import com.pablocompany.proyectono2lfp.excepciones.ConfigException;
 import com.pablocompany.proyectono2lfp.excepciones.ErrorSintacticoException;
@@ -43,22 +48,6 @@ public class GestorSintactico {
     //Metodo encargado para poder 
     private ArrayList<Sentencia> getListadoSentencias() {
         return this.gestionLexer.getListadoSentencia();
-    }
-
-    //Metodo que permite calcular el indice en el que va la lista de sentencias
-    private int getIndiceListado() {
-
-        if (this.listadoParser.isEmpty()) {
-            return 0;
-        }
-
-        int indice = this.listadoParser.size() - 1;
-
-        if (indice < 0) {
-            return 0;
-        } else {
-            return indice;
-        }
     }
 
     //Metodo que permite iniciar el analisis sitactico
@@ -108,7 +97,7 @@ public class GestorSintactico {
                     }
 
                     j = hallarDefinicion(j, sentenciaUbicada.obtenerListadoLexemas(), lexemaUbicado);
-                    
+
                     j--;
 
                     if (j < sentenciaUbicada.obtenerListadoLexemas().size()) {
@@ -117,11 +106,6 @@ public class GestorSintactico {
                             hayContenido = true;
                         }
                     }
-                    
-                    
-
-                    System.out.println("Indice nuevo " + j);
-                    System.out.println("Indice de tope " + sentenciaUbicada.obtenerListadoLexemas().size());
 
                 } else {
 
@@ -164,6 +148,9 @@ public class GestorSintactico {
 
         String tipoUbicado = "";
 
+        //True indica cuando se detecta el indice de que la cadena esta incompleta
+        boolean estaIncompleta = false;
+
         int indiceRetorno = 0;
 
         for (int i = indiceRecorrido; i < listadoLexemasSintacticos.size(); i++) {
@@ -171,6 +158,19 @@ public class GestorSintactico {
             indiceRetorno = i;
 
             Lexema lexemaUbicado = listadoLexemasSintacticos.get(i);
+
+            if (i == listadoLexemasSintacticos.size() - 1
+                    && !estructura.isEmpty()
+                    && estaIncompleta) {
+
+                //Se ejecuta solo cuando se termina la sentencia entera y se marca como error PENDIENTE 
+                lexemaUbicado.setErrorSintactico(true);
+                String errorEsperado = hallarErrorDefinicion(estructura, tipoUbicado);
+                listadoAuxiliar.add(lexemaUbicado);
+                this.listadoParser.add(new Sintaxis(listadoAuxiliar, true, errorEsperado, TipoOperacionEnum.DEFINICION_VARIABLE));
+                return listadoLexemasSintacticos.size();
+
+            }
 
             if (estructura.isEmpty() && hayContenido) {
                 //Significa que la pila ya no tiene nada y por ende es valido
@@ -186,7 +186,7 @@ public class GestorSintactico {
 
                 if (!estructura.contains(TokenEnum.DEFINIR)) {
 
-                    int indice = i - 1;
+                    int indice = listadoAuxiliar.size() - 1;
 
                     if (indice < 0) {
                         indice = 0;
@@ -209,13 +209,14 @@ public class GestorSintactico {
 
                 if (!estructura.contains(TokenEnum.IDENTIFICADOR)) {
 
-                    int indice = i - 1;
+                    int indice = listadoAuxiliar.size() - 1;
 
                     if (indice < 0) {
                         indice = 0;
                     }
 
                     listadoAuxiliar.get(indice).setErrorSintactico(true);
+
                     String errorEsperado = hallarErrorDefinicion(estructura, tipoUbicado);
                     this.listadoParser.add(new Sintaxis(listadoAuxiliar, true, errorEsperado, TipoOperacionEnum.DEFINICION_VARIABLE));
                     return i;
@@ -232,7 +233,7 @@ public class GestorSintactico {
 
                 if (!estructura.contains(TokenEnum.COMO)) {
 
-                    int indice = i - 1;
+                    int indice = listadoAuxiliar.size() - 1;
 
                     if (indice < 0) {
                         indice = 0;
@@ -257,7 +258,7 @@ public class GestorSintactico {
 
                 if (!estructura.contains(TokenEnum.INDEFINIDO)) {
 
-                    int indice = i - 1;
+                    int indice = listadoAuxiliar.size() - 1;
 
                     if (indice < 0) {
                         indice = 0;
@@ -281,7 +282,7 @@ public class GestorSintactico {
 
                 if (!estructura.contains(TokenEnum.PUNTO_COMA)) {
 
-                    int indice = i - 1;
+                    int indice = listadoAuxiliar.size() - 1;
 
                     if (indice < 0) {
                         indice = 0;
@@ -305,8 +306,7 @@ public class GestorSintactico {
                 if (!estructura.isEmpty()) {
                     //Cuando no es vacia significa que la sintaxis no es valida por ende hay error
 
-                    System.out.println("Entra en empty al guardar");
-                    int indice = i - 1;
+                    int indice = listadoAuxiliar.size() - 1;
 
                     if (indice < 0) {
                         indice = 0;
@@ -318,28 +318,55 @@ public class GestorSintactico {
                     this.listadoParser.add(new Sintaxis(listadoAuxiliar, true, errorEsperado, TipoOperacionEnum.DEFINICION_VARIABLE));
                 } else {
 
-                    System.out.println("Entra en guardar todo");
                     listadoAuxiliar.add(lexemaUbicado);
                     this.listadoParser.add(new Sintaxis(listadoAuxiliar, false, "", TipoOperacionEnum.DEFINICION_VARIABLE));
-                    return i + 1;
+                    return i;
                 }
 
+            } else {
+
+                //Se ejecuta cuanso se detecta un indice de que la cadena esta incompleta 
+                estaIncompleta = true;
+
+                int indice = listadoAuxiliar.size() - 1;
+
+                if (indice < 0) {
+                    indice = 0;
+                }
+
+                lexemaUbicado.setErrorSintactico(true);
+                listadoAuxiliar.add(lexemaUbicado);
+
             }
+
         }
 
         if (estructura.isEmpty() && hayContenido) {
             //Significa que la pila ya no tiene nada y por ende es valido
             this.listadoParser.add(new Sintaxis(listadoAuxiliar, false, "", TipoOperacionEnum.DEFINICION_VARIABLE));
-            System.out.println("Indice retorno " + listadoLexemasSintacticos.size());
-            return indiceRetorno;
-        }
 
-        System.out.println("Sale hasta el final");
-        return indiceRetorno;
+            return indiceRetorno + 1;
+        } else {
+
+            //Retorna cuando hay errores registrados busca el indice de error
+            int indice = listadoAuxiliar.size() - 1;
+
+            if (indice < 0) {
+                indice = 0;
+            }
+
+            listadoAuxiliar.get(indice).setErrorSintactico(true);
+            String errorEsperado = hallarErrorDefinicion(estructura, tipoUbicado);
+
+            this.listadoParser.add(new Sintaxis(listadoAuxiliar, true, errorEsperado, TipoOperacionEnum.DEFINICION_VARIABLE));
+            return indiceRetorno + 1;
+
+        }
 
     }
 
     //=============METODO SOLAMENTE UTIL PARA HALLAR EL ERROR SINTACTICO DE DEFINICION DE VARIABLES================
+    //Metodo encargado de ejecutarse cuando se ponen dos instrucciones de declaracion en el flujo normal de una declaracion
     private String hallarErrorDefinicion(ArrayList<TokenEnum> estructuraActual, String tipoUbicado) {
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -351,7 +378,9 @@ public class GestorSintactico {
         estructuraSintactica.add(TokenEnum.INDEFINIDO);
         estructuraSintactica.add(TokenEnum.PUNTO_COMA);
 
-        for (TokenEnum token : estructuraActual) {
+        for (int i = 0; i < estructuraActual.size(); i++) {
+
+            TokenEnum token = estructuraActual.get(i);
 
             switch (token) {
                 case DEFINIR:
@@ -367,7 +396,11 @@ public class GestorSintactico {
                 case IDENTIFICADOR:
 
                     stringBuilder.append(", cerca de ");
-                    int indice = estructuraSintactica.indexOf(TokenEnum.IDENTIFICADOR);
+                    int indice = estructuraSintactica.indexOf(TokenEnum.IDENTIFICADOR) - 1;
+
+                    if (indice < 0) {
+                        indice = 0;
+                    }
                     stringBuilder.append(estructuraSintactica.get(indice).getTipo());
 
                     stringBuilder.append(": se esperaba ");
@@ -378,7 +411,11 @@ public class GestorSintactico {
                 case COMO:
 
                     stringBuilder.append(", cerca de ");
-                    int indiceComo = estructuraSintactica.indexOf(TokenEnum.COMO);
+                    int indiceComo = estructuraSintactica.indexOf(TokenEnum.COMO) - 1;
+
+                    if (indiceComo < 0) {
+                        indiceComo = 0;
+                    }
                     stringBuilder.append(estructuraSintactica.get(indiceComo).getTipo());
 
                     stringBuilder.append(": se esperaba la palabra reservada ");
@@ -389,7 +426,12 @@ public class GestorSintactico {
                 case INDEFINIDO:
 
                     stringBuilder.append(", cerca de ");
-                    int indiceDefinicion = estructuraSintactica.indexOf(TokenEnum.INDEFINIDO);
+                    int indiceDefinicion = estructuraSintactica.indexOf(TokenEnum.INDEFINIDO) - 1;
+
+                    if (indiceDefinicion < 0) {
+                        indiceDefinicion = 0;
+                    }
+
                     stringBuilder.append(estructuraSintactica.get(indiceDefinicion).getTipo());
 
                     stringBuilder.append(": se esperaba un tipo de dato");
@@ -544,7 +586,7 @@ public class GestorSintactico {
             }
 
             insertarTexto("Error en la linea " + sintaxisActiva.getLineaInicio()
-                    + " columna " + sintaxisActiva.getColumnaError() + ", " + sintaxisActiva.getMensajeError(), Color.RED, this.logErroresSintacticos);
+                    + " columna " + sintaxisActiva.getColumnaError() + " " + sintaxisActiva.getMensajeError(), Color.RED, this.logErroresSintacticos);
 
         }
     }

@@ -98,6 +98,7 @@ public class Sintaxis {
         return this.listadoLexemas.get(0).getLineaCoordenada();
     }
 
+    //Metodo que indica dond esta el error sintactico
     public int getColumnaError() throws ErrorSintacticoException {
 
         if (this.listadoLexemas.isEmpty()) {
