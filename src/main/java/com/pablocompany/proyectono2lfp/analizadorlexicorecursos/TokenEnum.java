@@ -31,7 +31,7 @@ public enum TokenEnum {
     //APARTADO DE DEFINICION DE VARIABLES
     DEFINIR("DEFINIR", "el declarador Definir", "Definir"),
     COMO("COMO", "el declarador Como", "Como"),
-    PUNTO_COMA("PUNTO Y COMA", "el declarador Punto y Coma", "Punto y Coma"),
+    PUNTO_COMA("PUNTOYCOMA", "el declarador Punto y Coma", "Punto y Coma"),
     TIPO_ENTERO("TIPO ENTERO", "el tipo de dato Entero", "Entero"),
     TIPO_CADENA("TIPO CADENA", "el tipo de dato cadena", "Cadena"),
     TIPO_NUMERO("TIPO NUMERO", "el tipo de dato Numero", "Numero"),

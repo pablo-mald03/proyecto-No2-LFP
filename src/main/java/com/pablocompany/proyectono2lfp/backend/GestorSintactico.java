@@ -11,6 +11,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Element;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
@@ -64,7 +65,11 @@ public class GestorSintactico {
             throw new AnalizadorLexicoException("No puedes ejecutar el analisis sintactico\nHay errores registrados");
         }
 
+        //Metodo delegado para separar todo lo que tiene significado sintactico
         separarSintaxis();
+        
+        
+        
 
     }
 
@@ -92,9 +97,10 @@ public class GestorSintactico {
                         listadoLexemas = new ArrayList<>(1000);
                     }
 
-                    j = hallarDefinicion(i, sentenciaUbicada.obtenerListadoLexemas());
+                    j = hallarDefinicion(j, sentenciaUbicada.obtenerListadoLexemas(), lexemaUbicado);
 
                 } else {
+
                     listadoLexemas.add(lexemaUbicado);
                 }
 
@@ -105,28 +111,311 @@ public class GestorSintactico {
     }
 
     //Metodo que llama a una serie de metodos para moverse 
-    private int hallarDefinicion(int indiceRecorrido, ArrayList<Lexema> listadoLexemasSintacticos) {
+    private int hallarDefinicion(int indiceRecorrido, ArrayList<Lexema> listadoLexemasSintacticos, Lexema lexemaInicial) {
+
+        if (lexemaInicial.getTokenSintactico() != TokenEnum.DEFINIR) {
+            return indiceRecorrido;
+        }
+
+        ArrayList<TokenEnum> estructura = new ArrayList<>();
+        estructura.add(TokenEnum.DEFINIR);
+        estructura.add(TokenEnum.IDENTIFICADOR);
+        estructura.add(TokenEnum.COMO);
+        estructura.add(TokenEnum.INDEFINIDO);
+        estructura.add(TokenEnum.PUNTO_COMA);
 
         ArrayList<Lexema> listadoAuxiliar = new ArrayList<>(1000);
+
+        String tipoUbicado = "";
 
         for (int i = indiceRecorrido; i < listadoLexemasSintacticos.size(); i++) {
 
             Lexema lexemaUbicado = listadoLexemasSintacticos.get(i);
-            
-            if(lexemaUbicado.getTokenClasificado() == TokenEnum.ESPACIO ||lexemaUbicado.getTokenClasificado() == TokenEnum.TABULACION ){
-                
-                listadoAuxiliar.add(lexemaUbicado);
-            }
-            
-            
-            //PENDIENTE TERMINAR ESTA MADRE CUANDO NO TENGA SUENIO LPTM
 
+            if (estructura.isEmpty()) {
+                //Significa que la pila ya no tiene nada y por ende es valido
+                this.listadoParser.add(new Sintaxis(listadoAuxiliar, false, "", TipoOperacionEnum.DEFINICION_VARIABLE));
+                return i;
+            }
+
+            if (lexemaUbicado.getTokenClasificado() == TokenEnum.ESPACIO || lexemaUbicado.getTokenClasificado() == TokenEnum.TABULACION) {
+
+                listadoAuxiliar.add(lexemaUbicado);
+
+            } else if (lexemaUbicado.getTokenSintactico() == TokenEnum.DEFINIR && lexemaUbicado.getTokenClasificado() == TokenEnum.PALABRA_RESERVADA) {
+
+                if (!estructura.contains(TokenEnum.DEFINIR)) {
+
+                    String errorEsperado = hallarErrorDefinicion(estructura, tipoUbicado);
+                    this.listadoParser.add(new Sintaxis(listadoAuxiliar, true, errorEsperado, TipoOperacionEnum.DEFINICION_VARIABLE));
+                    return i;
+                }
+
+                listadoAuxiliar.add(lexemaUbicado);
+                estructura.remove(TokenEnum.DEFINIR);
+
+            } else if (lexemaUbicado.getTokenClasificado() == TokenEnum.IDENTIFICADOR) {
+
+                if (!estructura.contains(TokenEnum.IDENTIFICADOR)) {
+
+                    String errorEsperado = hallarErrorDefinicion(estructura, tipoUbicado);
+                    this.listadoParser.add(new Sintaxis(listadoAuxiliar, true, errorEsperado, TipoOperacionEnum.DEFINICION_VARIABLE));
+                    return i;
+                }
+
+                listadoAuxiliar.add(lexemaUbicado);
+                estructura.remove(TokenEnum.IDENTIFICADOR);
+
+            } else if (lexemaUbicado.getTokenSintactico() == TokenEnum.COMO && lexemaUbicado.getTokenClasificado() == TokenEnum.PALABRA_RESERVADA) {
+
+                if (!estructura.contains(TokenEnum.COMO)) {
+
+                    String errorEsperado = hallarErrorDefinicion(estructura, tipoUbicado);
+                    this.listadoParser.add(new Sintaxis(listadoAuxiliar, true, errorEsperado, TipoOperacionEnum.DEFINICION_VARIABLE));
+                    return i;
+                }
+
+                listadoAuxiliar.add(lexemaUbicado);
+                estructura.remove(TokenEnum.COMO);
+
+            } else if (lexemaUbicado.getTokenSintactico() == TokenEnum.TIPO_ENTERO
+                    && lexemaUbicado.getTokenSintactico() == TokenEnum.TIPO_CADENA
+                    && lexemaUbicado.getTokenSintactico() == TokenEnum.TIPO_NUMERO) {
+
+                if (!estructura.contains(TokenEnum.INDEFINIDO)) {
+
+                    String errorEsperado = hallarErrorDefinicion(estructura, tipoUbicado);
+                    this.listadoParser.add(new Sintaxis(listadoAuxiliar, true, errorEsperado, TipoOperacionEnum.DEFINICION_VARIABLE));
+                    return i;
+                }
+
+                tipoUbicado = lexemaUbicado.getTokenSintactico().getNombreToken();
+                listadoAuxiliar.add(lexemaUbicado);
+                estructura.remove(TokenEnum.INDEFINIDO);
+            } else if (lexemaUbicado.getTokenSintactico() == TokenEnum.PUNTO_COMA && lexemaUbicado.getTokenClasificado() == TokenEnum.PUNTUACION) {
+
+                if (!estructura.contains(TokenEnum.PUNTO_COMA)) {
+
+                    String errorEsperado = hallarErrorDefinicion(estructura, tipoUbicado);
+                    this.listadoParser.add(new Sintaxis(listadoAuxiliar, true, errorEsperado, TipoOperacionEnum.DEFINICION_VARIABLE));
+                    return i;
+                }
+
+                listadoAuxiliar.add(lexemaUbicado);
+                estructura.remove(TokenEnum.PUNTO_COMA);
+
+            } else if (lexemaUbicado.getTokenClasificado() == TokenEnum.VACIO) {
+
+                if (!estructura.isEmpty()) {
+                    //Cuando no es vacia significa que la sintaxis no es valida por ende hay error
+                    String errorEsperado = hallarErrorDefinicion(estructura, tipoUbicado);
+                    this.listadoParser.add(new Sintaxis(listadoAuxiliar, true, errorEsperado, TipoOperacionEnum.DEFINICION_VARIABLE));
+                } else {
+
+                    this.listadoParser.add(new Sintaxis(listadoAuxiliar, false, "", TipoOperacionEnum.DEFINICION_VARIABLE));
+                    return i + 1;
+                }
+
+            }
         }
 
         return listadoLexemasSintacticos.size();
 
     }
 
+    //=============METODO SOLAMENTE UTIL PARA HALLAR EL ERROR SINTACTICO DE DEFINICION DE VARIABLES================
+    private String hallarErrorDefinicion(ArrayList<TokenEnum> estructuraActual, String tipoUbicado) {
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        ArrayList<TokenEnum> estructuraSintactica = new ArrayList<>();
+        estructuraSintactica.add(TokenEnum.DEFINIR);
+        estructuraSintactica.add(TokenEnum.IDENTIFICADOR);
+        estructuraSintactica.add(TokenEnum.COMO);
+        estructuraSintactica.add(TokenEnum.INDEFINIDO);
+        estructuraSintactica.add(TokenEnum.PUNTO_COMA);
+
+        for (TokenEnum token : estructuraActual) {
+
+            switch (token) {
+                case DEFINIR:
+
+                    stringBuilder.append(", cerca de ");
+                    stringBuilder.append(TokenEnum.DEFINIR.getNombreToken());
+
+                    stringBuilder.append(": se esperaba la palabra reservada ");
+                    stringBuilder.append(TokenEnum.DEFINIR.getNombreToken());
+
+                    return stringBuilder.toString();
+
+                case IDENTIFICADOR:
+
+                    stringBuilder.append(", cerca de ");
+                    int indice = estructuraSintactica.indexOf(TokenEnum.IDENTIFICADOR);
+                    stringBuilder.append(estructuraSintactica.get(indice).getTipo());
+
+                    stringBuilder.append(": se esperaba ");
+                    stringBuilder.append(TokenEnum.IDENTIFICADOR.getNombreToken());
+
+                    return stringBuilder.toString();
+
+                case COMO:
+
+                    stringBuilder.append(", cerca de ");
+                    int indiceComo = estructuraSintactica.indexOf(TokenEnum.COMO);
+                    stringBuilder.append(estructuraSintactica.get(indiceComo).getTipo());
+
+                    stringBuilder.append(": se esperaba la palabra reservada ");
+                    stringBuilder.append(TokenEnum.COMO.getNombreToken());
+
+                    return stringBuilder.toString();
+
+                case INDEFINIDO:
+
+                    stringBuilder.append(", cerca de ");
+                    int indiceDefinicion = estructuraSintactica.indexOf(TokenEnum.INDEFINIDO);
+                    stringBuilder.append(estructuraSintactica.get(indiceDefinicion).getTipo());
+
+                    stringBuilder.append(": se esperaba un tipo de dato");
+
+                    return stringBuilder.toString();
+
+                case PUNTO_COMA:
+
+                    stringBuilder.append(", cerca de ");
+
+                    if (!tipoUbicado.isBlank()) {
+                        stringBuilder.append(tipoUbicado);
+                    } else {
+                        stringBuilder.append("el tipo de dato");
+                    }
+
+                    stringBuilder.append(": se esperaba ;");
+
+                    return stringBuilder.toString();
+
+                default:
+                    return "";
+            }
+
+        }
+
+        return "";
+
+    }
+
+    
+    
+    
+    //=============FIN DEL METODO SOLAMENTE UTIL PARA HALLAR EL ERROR SINTACTICO DE DEFINICION DE VARIABLES================
+    
+    
+     //Metodo utilizado para ilustrar el log de edicion
+    //METODO UNICO QUE SIRVE PARA COLOREAR LOS LOG A CARGO DEL ANALIZADOR LEXICO
+    public void pintarLogSalida(JTextPane paneAnalisis, boolean enAnalisis) throws BadLocationException {
+
+        int caretOffset = paneAnalisis.getCaretPosition();
+        StyledDocument doc = paneAnalisis.getStyledDocument();
+
+        // Línea y columna reales antes de limpiar
+        int lineaCaret = doc.getDefaultRootElement().getElementIndex(caretOffset);
+        int columnaCaret = caretOffset - doc.getDefaultRootElement()
+                .getElement(lineaCaret)
+                .getStartOffset();
+
+        limpiarArea(paneAnalisis);
+
+       
+
+        for (int i = 0; i < this.listadoParser.size(); i++) {
+
+            Sintaxis sintaxisActiva = this.listadoParser.get(i);
+
+           /* for (Sintaxis sintaxis : sentenciaActiva.obtenerListadoLexemas()) {
+
+                Color colorTexto = obtenerColorPorToken(lexemaDado.getTokenClasificado());
+
+                switch (lexemaDado.getTokenClasificado()) {
+
+                    case TokenEnum.VACIO:
+                        String lexemaObtenido = lexemaDado.getLexemaGenerado();
+
+                        String[] lineas = lexemaObtenido.split("\r\n|\r|\n", -1);
+                        int cantidadSaltos = lineas.length - 1;
+                        String espacios = lineas[0];
+
+                        for (int k = 0; k < espacios.length(); k++) {
+                            insertarTexto(" ", Color.BLACK, paneAnalisis);
+                        }
+
+                        for (int j = 0; j < cantidadSaltos; j++) {
+                            insertarTexto("\n", Color.BLACK, paneAnalisis);
+                        }
+
+                        break;
+
+                    case TokenEnum.TABULACION:
+
+                        insertarTexto("     ", Color.BLACK, paneAnalisis);
+
+                        break;
+
+                    default:
+                        insertarTexto(lexemaDado.getLexemaGenerado(), colorTexto, paneAnalisis);
+
+                }
+
+            }*/
+
+        }
+
+        //Se restaura la posicion del caret
+        StyledDocument newDoc = paneAnalisis.getStyledDocument();
+        Element root = newDoc.getDefaultRootElement();
+        if (lineaCaret < root.getElementCount()) {
+            Element lineElem = root.getElement(lineaCaret);
+            int start = lineElem.getStartOffset();
+            int end = lineElem.getEndOffset();
+            int nuevaPos = start + Math.min(columnaCaret, end - start - 1);
+            paneAnalisis.setCaretPosition(nuevaPos);
+        } else {
+            paneAnalisis.setCaretPosition(newDoc.getLength());
+        }
+
+        mostrarErrores(enAnalisis);
+
+    }
+
+    // Método que mapea el token a su color
+    private Color obtenerColorPorToken(TokenEnum tipo) {
+        switch (tipo) {
+            case PALABRA_RESERVADA:
+                return Color.BLUE;
+            case IDENTIFICADOR:
+                return new Color(0x6B4627);
+            case NUMERO:
+                return new Color(0x1FC23B);
+            case DECIMAL:
+                return Color.BLACK;
+            case CADENA:
+                return new Color(0xF0760E);
+            case COMENTARIO_LINEA:
+            case COMENTARIO_BLOQUE:
+                return new Color(0x1B6615);
+            case OPERADOR:
+                return new Color(0xB5AB2D);
+            case AGRUPACION:
+                return new Color(0x991CB8);
+            case PUNTUACION:
+                return new Color(0x329481);
+            case ERROR:
+                return Color.RED;
+            default:
+                return new Color(0x9E7A7A);
+        }
+    }
+    
+    
     //Metodo que ayuda a saber si hay errores
     private boolean hayErrores() {
 
