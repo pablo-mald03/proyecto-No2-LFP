@@ -52,6 +52,9 @@ public class GestorSintactico {
 
     }
     
+    //Metodo encargado de ir listando todas las variables
+    
+    
     //Metodo que ayuda a saber si hay errores
     private boolean hayErrores(){
         

@@ -20,6 +20,7 @@ public class ProyectoNo2LFP {
         menuPrincipal.setVisible(true);
     }
 
+    //Metodo utilizado para generar el analizador lexico
     public static void generarLexer() {
 
         String ruta = "/home/pablo/Escritorio/Lenguajes_Formales/ProyectoNo2LFP/src/main/java/com/pablocompany/proyectono2lfp/jflexpackage/lexer.flex";

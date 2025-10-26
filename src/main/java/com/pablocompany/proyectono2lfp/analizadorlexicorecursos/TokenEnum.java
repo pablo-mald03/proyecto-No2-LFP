@@ -41,19 +41,24 @@ public enum TokenEnum {
     ESCRIBIR("ESCRIBIR", "la funcion Escribir", "Escribir"),
     PARENTESIS_CIERRE("PARENTESIS DE CIERRE", "el parentesis de cierre ", "Parentesis de Cierre"),
     PARENTESIS_APERTURA("PARENTESIS DE APERTURA", "el parentesis de apertura", "Parentesis de Apertura"),
-
     //------------------------FIN DEL APARTADO DE TOKENS QUE TIENEN UN CONTEXTO DE ACCION---------------------------
-    
+
     //--------------------APARTADO DE TOKENS QUE PERMITEN IDENTIFICAR TODO TIPO DE ESPACIOS-----------------------------
     ESPACIO("ESPACIO", "el espacio", "Espcio"),
     TABULACION("TABULACION", "la tabulacion", "Tabulacion"),
-    VACIO("VACIO", "espacio vaico", "Vacio");
+    VACIO("VACIO", "espacio vacio", "Vacio"),
     
     
-
     //--------------------FIN DEL APARTADO DE TOKENS QUE PERMITEN IDENTIFICAR TODO TIPO DE ESPACIOS-----------------------------
-    
-    
+
+    //-------------------------------Apartado de operaciones mateamticas------------------------------------------
+
+    SUMA("SUMA", "Operador Suma", "Suma"),
+    RESTA("VACIO", "Operador Resta", "Resta"),
+    DIVISION("VACIO", "Operador Division", "Division"),
+    MULTIPLICACION("VACIO", "Operador Multiplicacion", "Multiplicacion");
+
+    //-------------------------------Fin del Apartado de operaciones mateamticas------------------------------------------
     //Representa el tipo de token
     private String tipo;
 

@@ -36,6 +36,9 @@ public class Lexema {
     //Atributo que permite saber el problema de error
     private String mensajeError;
 
+    //Atributos que se van a ir llenando de informacion cuando se ejecuta el analizador sintactico
+    private boolean errorSintactico;
+
     //---------------------Fin del Apartado de atributos que permiten manejar el apartado de tokens-------------------------
     //Constructor que sirve para poder generar un token comun sin ningun contexto sintactico
     public Lexema(String lexemaGenerado, int lineaCoordenada, int columnaCoordenada, TokenEnum tipoToken) {
@@ -122,6 +125,16 @@ public class Lexema {
 
     public void setCadenaEsperada(String cadenaEsperada) {
         this.cadenaEsperada = cadenaEsperada;
+    }
+
+    //Metodos que indican si tiene error sintactico
+    //Si tiene error sintactico se pintara de rojo solo el lexema
+    public boolean esErrorSintactico() {
+        return errorSintactico;
+    }
+
+    public void setErrorSintactico(boolean errorSintactico) {
+        this.errorSintactico = errorSintactico;
     }
 
     //Apartado de patron experto que permite calcular el limite superior para pintar el lexema en la busqueda

@@ -150,6 +150,10 @@ ParentesisCierre   = ")"
 ParentesisApertura = "("
 
 
+Suma = "+"
+Resta = "-"
+Multiplicacion = "*"
+Division = "/"
 
 /* Apartado de comentarios */
 
@@ -284,6 +288,24 @@ ErrorInicioDecimal = "\."[0-9]+
 {Puntuacion}            { setNuevaSentencia(yyline);
                           setNuevoLexemaLexico(TokenEnum.PUNTUACION, yytext(), yyline, yycolumn ); 
                         }
+
+
+{Suma}                 { setNuevaSentencia(yyline);
+                          setNuevoLexemaSintactico(TokenEnum.OPERADOR, TokenEnum.SUMA, yytext(), yyline, yycolumn );  
+                       }
+
+{Resta}                { setNuevaSentencia(yyline);
+                          setNuevoLexemaSintactico(TokenEnum.OPERADOR, TokenEnum.RESTA, yytext(), yyline, yycolumn );  
+                       }
+
+{Multiplicacion}       { setNuevaSentencia(yyline);
+                          setNuevoLexemaSintactico(TokenEnum.OPERADOR, TokenEnum.MULTIPLICACION, yytext(), yyline, yycolumn );  
+                       }
+
+
+{Division}             { setNuevaSentencia(yyline);
+                          setNuevoLexemaSintactico(TokenEnum.OPERADOR, TokenEnum.DIVISION, yytext(), yyline, yycolumn );  
+                       }
 
 
 {OperadorAritmetico}    { setNuevaSentencia(yyline);

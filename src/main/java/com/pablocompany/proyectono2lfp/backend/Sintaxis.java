@@ -1,0 +1,43 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.pablocompany.proyectono2lfp.backend;
+
+import java.util.ArrayList;
+
+/**
+ *
+ * @author pablo
+ */
+//Clase especializada para manejar la sintaxis y los respectivos lexemas
+public class Sintaxis {
+    
+    //Listado que maneja los lexemas que se registran
+    private ArrayList<Lexema> listadoLexemas;
+    
+    //Atributos propios que representan el analisis sintactico
+    //true si tiene error
+    private boolean tieneError;
+    
+    //Mensaje de error para especificar el error sintactico que se tuvo
+    private String mensajeError;
+    
+    //Atributos que permtien identificar que tipo de operacion es
+    private TipoOperacionEnum tipoOperacion; 
+    
+    
+    //Atributo SOLAMENTE UTILIZADO CUANDO LA FUNCION ES ESCRIBIR
+    private Expresion expresionEscribir;
+
+    public Sintaxis(ArrayList<Lexema> listadoLexemas, boolean tieneError, String mensajeError, TipoOperacionEnum tipoOperacion) {
+        this.listadoLexemas = listadoLexemas;
+        this.tieneError = tieneError;
+        this.mensajeError = mensajeError;
+        this.tipoOperacion = tipoOperacion;
+    }
+    
+    
+    
+    
+}
