@@ -56,7 +56,7 @@ public class LectorEntradas {
 
             this.lexerActual.pintarLogEdicion();
             
-            this.sintaxisActual = new GestorSintactico(this.lexerActual,this.lexerActual.getLogErrores(), logSintactico);
+            this.sintaxisActual = new GestorSintactico(this.lexerActual,this.lexerActual.getLogErrores(), logSintactico, paneLogEntrada);
 
         } catch (IOException ex) {
             throw new AnalizadorLexicoException("Se ha producido un error al interpretar el texto de entrada");

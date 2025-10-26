@@ -14,6 +14,7 @@ import com.pablocompany.proyectono2lfp.excepciones.AnalizadorLexicoException;
 import com.pablocompany.proyectono2lfp.excepciones.ConfigException;
 import com.pablocompany.proyectono2lfp.excepciones.ErrorEncontradoException;
 import com.pablocompany.proyectono2lfp.excepciones.ErrorPuntualException;
+import com.pablocompany.proyectono2lfp.excepciones.ErrorSintacticoException;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -987,6 +988,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de Carga", JOptionPane.ERROR_MESSAGE);
             } catch (BadLocationException ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de pintado", JOptionPane.ERROR_MESSAGE);
+            } catch (ErrorSintacticoException ex) {
+               JOptionPane.showMessageDialog(this, ex.getMessage(), "Error sintactico", JOptionPane.ERROR_MESSAGE);
             }
 
         } catch (NullPointerException ex) {

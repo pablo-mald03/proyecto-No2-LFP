@@ -7,6 +7,7 @@ package com.pablocompany.proyectono2lfp.backend;
 import com.pablocompany.proyectono2lfp.analizadorlexicorecursos.TokenEnum;
 import com.pablocompany.proyectono2lfp.excepciones.AnalizadorLexicoException;
 import com.pablocompany.proyectono2lfp.excepciones.ConfigException;
+import com.pablocompany.proyectono2lfp.excepciones.ErrorSintacticoException;
 import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.JTextPane;
@@ -27,13 +28,16 @@ public class GestorSintactico {
     private JTextPane logSintactico;
     private JTextPane logErroresSintacticos;
 
+    private JTextPane logEdicion;
+
     //Atributo que permite manejar la instancia compartida del listado de sentencias sintacticas
     private ArrayList<Sintaxis> listadoParser = new ArrayList<>(5000);
 
-    public GestorSintactico(GestorLexer gestionLexer, JTextPane logErrores, JTextPane logSintactico) {
+    public GestorSintactico(GestorLexer gestionLexer, JTextPane logErrores, JTextPane logSintactico, JTextPane logEdicion) {
         this.gestionLexer = gestionLexer;
         this.logSintactico = logSintactico;
         this.logErroresSintacticos = logErrores;
+        this.logEdicion = logEdicion;
     }
 
     //Metodo encargado para poder 
@@ -58,19 +62,22 @@ public class GestorSintactico {
     }
 
     //Metodo que permite iniciar el analisis sitactico
-    public void iniciarAnalisis() throws AnalizadorLexicoException, ConfigException, BadLocationException {
+    public void iniciarAnalisis() throws AnalizadorLexicoException, ConfigException, BadLocationException, ErrorSintacticoException {
 
         //Vallida si hay errores registrados
-        if (hayErrores()) {
+        if (hayErroresLexicos()) {
             throw new AnalizadorLexicoException("No puedes ejecutar el analisis sintactico\nHay errores registrados");
         }
 
         //Metodo delegado para separar todo lo que tiene significado sintactico
         separarSintaxis();
-        
-        
-        
+        pintarLogEdicion();
 
+    }
+
+    //Metodo que sirve para repintar todo el log tras el procesamiento sintactico
+    private void pintarLogEdicion() throws BadLocationException, ErrorSintacticoException {
+        pintarLogSalida(this.logEdicion);
     }
 
     //Metodo encargado de ir listando todos los lexemas que tengan un significado sintactico
@@ -80,11 +87,13 @@ public class GestorSintactico {
             this.listadoParser.clear();
         }
 
+        ArrayList<Lexema> listadoLexemas = new ArrayList<>(1000);
+
+        boolean hayContenido = false;
+
         for (int i = 0; i < getListadoSentencias().size(); i++) {
 
             Sentencia sentenciaUbicada = getListadoSentencias().get(i);
-
-            ArrayList<Lexema> listadoLexemas = new ArrayList<>(1000);
 
             for (int j = 0; j < sentenciaUbicada.obtenerListadoLexemas().size(); j++) {
 
@@ -95,9 +104,24 @@ public class GestorSintactico {
                     if (!listadoLexemas.isEmpty()) {
                         this.listadoParser.add(new Sintaxis(listadoLexemas, false, "", TipoOperacionEnum.NO_SINTACTICO));
                         listadoLexemas = new ArrayList<>(1000);
+                        hayContenido = false;
                     }
 
                     j = hallarDefinicion(j, sentenciaUbicada.obtenerListadoLexemas(), lexemaUbicado);
+                    
+                    j--;
+
+                    if (j < sentenciaUbicada.obtenerListadoLexemas().size()) {
+
+                        if (!hayContenido) {
+                            hayContenido = true;
+                        }
+                    }
+                    
+                    
+
+                    System.out.println("Indice nuevo " + j);
+                    System.out.println("Indice de tope " + sentenciaUbicada.obtenerListadoLexemas().size());
 
                 } else {
 
@@ -106,6 +130,16 @@ public class GestorSintactico {
 
             }
 
+            if (!listadoLexemas.isEmpty() && hayContenido) {
+                this.listadoParser.add(new Sintaxis(listadoLexemas, false, "", TipoOperacionEnum.NO_SINTACTICO));
+                listadoLexemas = new ArrayList<>(1000);
+                hayContenido = false;
+            }
+
+        }
+
+        if (!listadoLexemas.isEmpty()) {
+            this.listadoParser.add(new Sintaxis(listadoLexemas, false, "", TipoOperacionEnum.NO_SINTACTICO));
         }
 
     }
@@ -116,6 +150,8 @@ public class GestorSintactico {
         if (lexemaInicial.getTokenSintactico() != TokenEnum.DEFINIR) {
             return indiceRecorrido;
         }
+
+        boolean hayContenido = false;
 
         ArrayList<TokenEnum> estructura = new ArrayList<>();
         estructura.add(TokenEnum.DEFINIR);
@@ -128,11 +164,15 @@ public class GestorSintactico {
 
         String tipoUbicado = "";
 
+        int indiceRetorno = 0;
+
         for (int i = indiceRecorrido; i < listadoLexemasSintacticos.size(); i++) {
+
+            indiceRetorno = i;
 
             Lexema lexemaUbicado = listadoLexemasSintacticos.get(i);
 
-            if (estructura.isEmpty()) {
+            if (estructura.isEmpty() && hayContenido) {
                 //Significa que la pila ya no tiene nada y por ende es valido
                 this.listadoParser.add(new Sintaxis(listadoAuxiliar, false, "", TipoOperacionEnum.DEFINICION_VARIABLE));
                 return i;
@@ -146,9 +186,20 @@ public class GestorSintactico {
 
                 if (!estructura.contains(TokenEnum.DEFINIR)) {
 
+                    int indice = i - 1;
+
+                    if (indice < 0) {
+                        indice = 0;
+                    }
+
+                    listadoAuxiliar.get(indice).setErrorSintactico(true);
                     String errorEsperado = hallarErrorDefinicion(estructura, tipoUbicado);
                     this.listadoParser.add(new Sintaxis(listadoAuxiliar, true, errorEsperado, TipoOperacionEnum.DEFINICION_VARIABLE));
                     return i;
+                }
+
+                if (!hayContenido) {
+                    hayContenido = true;
                 }
 
                 listadoAuxiliar.add(lexemaUbicado);
@@ -158,9 +209,20 @@ public class GestorSintactico {
 
                 if (!estructura.contains(TokenEnum.IDENTIFICADOR)) {
 
+                    int indice = i - 1;
+
+                    if (indice < 0) {
+                        indice = 0;
+                    }
+
+                    listadoAuxiliar.get(indice).setErrorSintactico(true);
                     String errorEsperado = hallarErrorDefinicion(estructura, tipoUbicado);
                     this.listadoParser.add(new Sintaxis(listadoAuxiliar, true, errorEsperado, TipoOperacionEnum.DEFINICION_VARIABLE));
                     return i;
+                }
+
+                if (!hayContenido) {
+                    hayContenido = true;
                 }
 
                 listadoAuxiliar.add(lexemaUbicado);
@@ -170,35 +232,69 @@ public class GestorSintactico {
 
                 if (!estructura.contains(TokenEnum.COMO)) {
 
+                    int indice = i - 1;
+
+                    if (indice < 0) {
+                        indice = 0;
+                    }
+
+                    listadoAuxiliar.get(indice).setErrorSintactico(true);
                     String errorEsperado = hallarErrorDefinicion(estructura, tipoUbicado);
                     this.listadoParser.add(new Sintaxis(listadoAuxiliar, true, errorEsperado, TipoOperacionEnum.DEFINICION_VARIABLE));
                     return i;
+                }
+
+                if (!hayContenido) {
+                    hayContenido = true;
                 }
 
                 listadoAuxiliar.add(lexemaUbicado);
                 estructura.remove(TokenEnum.COMO);
 
             } else if (lexemaUbicado.getTokenSintactico() == TokenEnum.TIPO_ENTERO
-                    && lexemaUbicado.getTokenSintactico() == TokenEnum.TIPO_CADENA
-                    && lexemaUbicado.getTokenSintactico() == TokenEnum.TIPO_NUMERO) {
+                    || lexemaUbicado.getTokenSintactico() == TokenEnum.TIPO_CADENA
+                    || lexemaUbicado.getTokenSintactico() == TokenEnum.TIPO_NUMERO) {
 
                 if (!estructura.contains(TokenEnum.INDEFINIDO)) {
 
+                    int indice = i - 1;
+
+                    if (indice < 0) {
+                        indice = 0;
+                    }
+
+                    listadoAuxiliar.get(indice).setErrorSintactico(true);
                     String errorEsperado = hallarErrorDefinicion(estructura, tipoUbicado);
                     this.listadoParser.add(new Sintaxis(listadoAuxiliar, true, errorEsperado, TipoOperacionEnum.DEFINICION_VARIABLE));
                     return i;
                 }
 
+                if (!hayContenido) {
+                    hayContenido = true;
+                }
+
                 tipoUbicado = lexemaUbicado.getTokenSintactico().getNombreToken();
                 listadoAuxiliar.add(lexemaUbicado);
                 estructura.remove(TokenEnum.INDEFINIDO);
+
             } else if (lexemaUbicado.getTokenSintactico() == TokenEnum.PUNTO_COMA && lexemaUbicado.getTokenClasificado() == TokenEnum.PUNTUACION) {
 
                 if (!estructura.contains(TokenEnum.PUNTO_COMA)) {
 
+                    int indice = i - 1;
+
+                    if (indice < 0) {
+                        indice = 0;
+                    }
+
+                    listadoAuxiliar.get(indice).setErrorSintactico(true);
                     String errorEsperado = hallarErrorDefinicion(estructura, tipoUbicado);
                     this.listadoParser.add(new Sintaxis(listadoAuxiliar, true, errorEsperado, TipoOperacionEnum.DEFINICION_VARIABLE));
                     return i;
+                }
+
+                if (!hayContenido) {
+                    hayContenido = true;
                 }
 
                 listadoAuxiliar.add(lexemaUbicado);
@@ -208,10 +304,22 @@ public class GestorSintactico {
 
                 if (!estructura.isEmpty()) {
                     //Cuando no es vacia significa que la sintaxis no es valida por ende hay error
+
+                    System.out.println("Entra en empty al guardar");
+                    int indice = i - 1;
+
+                    if (indice < 0) {
+                        indice = 0;
+                    }
+
+                    listadoAuxiliar.add(lexemaUbicado);
+                    listadoAuxiliar.get(indice).setErrorSintactico(true);
                     String errorEsperado = hallarErrorDefinicion(estructura, tipoUbicado);
                     this.listadoParser.add(new Sintaxis(listadoAuxiliar, true, errorEsperado, TipoOperacionEnum.DEFINICION_VARIABLE));
                 } else {
 
+                    System.out.println("Entra en guardar todo");
+                    listadoAuxiliar.add(lexemaUbicado);
                     this.listadoParser.add(new Sintaxis(listadoAuxiliar, false, "", TipoOperacionEnum.DEFINICION_VARIABLE));
                     return i + 1;
                 }
@@ -219,7 +327,15 @@ public class GestorSintactico {
             }
         }
 
-        return listadoLexemasSintacticos.size();
+        if (estructura.isEmpty() && hayContenido) {
+            //Significa que la pila ya no tiene nada y por ende es valido
+            this.listadoParser.add(new Sintaxis(listadoAuxiliar, false, "", TipoOperacionEnum.DEFINICION_VARIABLE));
+            System.out.println("Indice retorno " + listadoLexemasSintacticos.size());
+            return indiceRetorno;
+        }
+
+        System.out.println("Sale hasta el final");
+        return indiceRetorno;
 
     }
 
@@ -304,15 +420,10 @@ public class GestorSintactico {
 
     }
 
-    
-    
-    
     //=============FIN DEL METODO SOLAMENTE UTIL PARA HALLAR EL ERROR SINTACTICO DE DEFINICION DE VARIABLES================
-    
-    
-     //Metodo utilizado para ilustrar el log de edicion
+    //Metodo utilizado para ilustrar el log de edicion
     //METODO UNICO QUE SIRVE PARA COLOREAR LOS LOG A CARGO DEL ANALIZADOR LEXICO
-    public void pintarLogSalida(JTextPane paneAnalisis, boolean enAnalisis) throws BadLocationException {
+    private void pintarLogSalida(JTextPane paneAnalisis) throws BadLocationException, ErrorSintacticoException {
 
         int caretOffset = paneAnalisis.getCaretPosition();
         StyledDocument doc = paneAnalisis.getStyledDocument();
@@ -325,13 +436,11 @@ public class GestorSintactico {
 
         limpiarArea(paneAnalisis);
 
-       
-
         for (int i = 0; i < this.listadoParser.size(); i++) {
 
             Sintaxis sintaxisActiva = this.listadoParser.get(i);
 
-           /* for (Sintaxis sintaxis : sentenciaActiva.obtenerListadoLexemas()) {
+            for (Lexema lexemaDado : sintaxisActiva.getListadoLexemas()) {
 
                 Color colorTexto = obtenerColorPorToken(lexemaDado.getTokenClasificado());
 
@@ -361,11 +470,18 @@ public class GestorSintactico {
                         break;
 
                     default:
-                        insertarTexto(lexemaDado.getLexemaGenerado(), colorTexto, paneAnalisis);
+
+                        if (sintaxisActiva.tieneError()) {
+
+                            insertarTexto(lexemaDado.getLexemaGenerado(), Color.RED, paneAnalisis);
+                        } else {
+
+                            insertarTexto(lexemaDado.getLexemaGenerado(), colorTexto, paneAnalisis);
+                        }
 
                 }
 
-            }*/
+            }
 
         }
 
@@ -382,8 +498,7 @@ public class GestorSintactico {
             paneAnalisis.setCaretPosition(newDoc.getLength());
         }
 
-        mostrarErrores(enAnalisis);
-
+        mostrarErrores();
     }
 
     // Método que mapea el token a su color
@@ -414,10 +529,28 @@ public class GestorSintactico {
                 return new Color(0x9E7A7A);
         }
     }
-    
-    
+
+    //Metodo encargado de imprimir los errores sintacticos en el log de errores
+    private void mostrarErrores() throws BadLocationException, ErrorSintacticoException {
+
+        limpiarArea(this.logErroresSintacticos);
+
+        for (int i = 0; i < this.listadoParser.size(); i++) {
+
+            Sintaxis sintaxisActiva = this.listadoParser.get(i);
+
+            if (!sintaxisActiva.tieneError()) {
+                continue;
+            }
+
+            insertarTexto("Error en la linea " + sintaxisActiva.getLineaInicio()
+                    + " columna " + sintaxisActiva.getColumnaError() + ", " + sintaxisActiva.getMensajeError(), Color.RED, this.logErroresSintacticos);
+
+        }
+    }
+
     //Metodo que ayuda a saber si hay errores
-    private boolean hayErrores() {
+    private boolean hayErroresLexicos() {
 
         //Cuenta los errores para ver si hay 
         for (Sentencia sentencia : getListadoSentencias()) {
