@@ -10,7 +10,7 @@ package com.pablocompany.proyectono2lfp.backend;
  */
 //Enums que representan el tipo de operacion que se realiza
 public enum TipoOperacionEnum {
-    
+    NO_SINTACTICO,
     FUNCION_ESCRIBIR,
     ASIGNACION_VALORES,
     DECLARACION_VARIABLE;

@@ -57,6 +57,7 @@ public class Lexema {
         this.tokenClasificado = tipoToken;
         this.tokenSintactico = contextoSintactico;
         this.mensajeError = "";
+        this.errorSintactico = false;
     }
 
     //Constructor que permite declarar lexemas que tienen un error
@@ -67,6 +68,7 @@ public class Lexema {
         this.tokenClasificado = tipoToken;
         this.mensajeError = mensajeErroneo;
         this.cadenaEsperada = tokenEsperado;
+        this.errorSintactico = false;
     }
 
     //Apartado de getters que sirven para saber informacion sobre el lexema
@@ -133,6 +135,7 @@ public class Lexema {
         return errorSintactico;
     }
 
+    //true. tiene error sintactico
     public void setErrorSintactico(boolean errorSintactico) {
         this.errorSintactico = errorSintactico;
     }

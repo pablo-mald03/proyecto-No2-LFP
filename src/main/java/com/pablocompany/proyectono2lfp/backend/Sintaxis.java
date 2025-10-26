@@ -12,24 +12,24 @@ import java.util.ArrayList;
  */
 //Clase especializada para manejar la sintaxis y los respectivos lexemas
 public class Sintaxis {
-    
+
     //Listado que maneja los lexemas que se registran
     private ArrayList<Lexema> listadoLexemas;
-    
+
     //Atributos propios que representan el analisis sintactico
     //true si tiene error
     private boolean tieneError;
-    
+
     //Mensaje de error para especificar el error sintactico que se tuvo
     private String mensajeError;
-    
+
     //Atributos que permtien identificar que tipo de operacion es
-    private TipoOperacionEnum tipoOperacion; 
-    
-    
+    private TipoOperacionEnum tipoOperacion;
+
     //Atributo SOLAMENTE UTILIZADO CUANDO LA FUNCION ES ESCRIBIR
     private Expresion expresionEscribir;
-
+    
+    //Constructor utilizado simplemente para expresiones que no sean la de escribir
     public Sintaxis(ArrayList<Lexema> listadoLexemas, boolean tieneError, String mensajeError, TipoOperacionEnum tipoOperacion) {
         this.listadoLexemas = listadoLexemas;
         this.tieneError = tieneError;
@@ -37,7 +37,60 @@ public class Sintaxis {
         this.tipoOperacion = tipoOperacion;
     }
     
+    //Constructor utilizado UNICAMENTE para la funcion escribir o LA DECLARACION DE VARIABLES A UNA EXPRESION
+    public Sintaxis(ArrayList<Lexema> listadoLexemas, boolean tieneError, String mensajeError, TipoOperacionEnum tipoOperacion, Expresion expresionEncontrada) {
+        this.listadoLexemas = listadoLexemas;
+        this.tieneError = tieneError;
+        this.mensajeError = mensajeError;
+        this.tipoOperacion = tipoOperacion;
+        this.expresionEscribir = expresionEncontrada;
+    }
     
+    public ArrayList<Lexema> getListadoLexemas() {
+        return listadoLexemas;
+    }
     
+    public void setListadoLexemas(ArrayList<Lexema> listadoLexemas) {
+        this.listadoLexemas = listadoLexemas;
+    }
+    
+    public boolean getTieneError() {
+        return tieneError;
+    }
+    
+    public void setTieneError(boolean tieneError) {
+        this.tieneError = tieneError;
+    }
+    
+    public String getMensajeError() {
+        return mensajeError;
+    }
+    
+    public void setMensajeError(String mensajeError) {
+        this.mensajeError = mensajeError;
+    }
+    
+    public TipoOperacionEnum getTipoOperacion() {
+        return tipoOperacion;
+    }
+    
+    public void setTipoOperacion(TipoOperacionEnum tipoOperacion) {
+        this.tipoOperacion = tipoOperacion;
+    }
+
+    //Metodo que sirve para agregar mas lexemas sintacticos
+    public void agregarLexemaSintactico(Lexema lexemaEntrante, boolean tieneError) {
+        
+        if (tieneError) {
+            lexemaEntrante.setErrorSintactico(true);
+        }
+        
+        this.listadoLexemas.add(lexemaEntrante);
+    }
+    
+    //Metodo utilizado para obtener el lexema
+    public Lexema getLexema(int indice) {
+        return this.listadoLexemas.get(indice);
+    }
     
 }

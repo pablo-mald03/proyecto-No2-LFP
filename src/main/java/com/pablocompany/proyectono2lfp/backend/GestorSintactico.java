@@ -19,12 +19,15 @@ import javax.swing.text.StyledDocument;
  *
  * @author pablo
  */
-//Clase delegada para poder operar con el log sintactico
+//Clase delegada para poder operar con el log sintactico Y CLASIFICAR LAS OPERACIONES QUE ESTA HARA
 public class GestorSintactico {
 
     private GestorLexer gestionLexer;
     private JTextPane logSintactico;
     private JTextPane logErroresSintacticos;
+
+    //Atributo que permite manejar la instancia compartida del listado de sentencias sintacticas
+    private ArrayList<Sintaxis> listadoParser = new ArrayList<>(5000);
 
     public GestorSintactico(GestorLexer gestionLexer, JTextPane logErrores, JTextPane logSintactico) {
         this.gestionLexer = gestionLexer;
@@ -37,27 +40,96 @@ public class GestorSintactico {
         return this.gestionLexer.getListadoSentencia();
     }
 
+    //Metodo que permite calcular el indice en el que va la lista de sentencias
+    private int getIndiceListado() {
+
+        if (this.listadoParser.isEmpty()) {
+            return 0;
+        }
+
+        int indice = this.listadoParser.size() - 1;
+
+        if (indice < 0) {
+            return 0;
+        } else {
+            return indice;
+        }
+    }
+
     //Metodo que permite iniciar el analisis sitactico
-    public void iniciarAnalisis() throws AnalizadorLexicoException, ConfigException, BadLocationException{
-        
+    public void iniciarAnalisis() throws AnalizadorLexicoException, ConfigException, BadLocationException {
+
         //Vallida si hay errores registrados
-        if(hayErrores()){
+        if (hayErrores()) {
             throw new AnalizadorLexicoException("No puedes ejecutar el analisis sintactico\nHay errores registrados");
         }
-        
-        
-        
-        
-        
+
+        separarSintaxis();
 
     }
-    
-    //Metodo encargado de ir listando todas las variables
-    
-    
+
+    //Metodo encargado de ir listando todos los lexemas que tengan un significado sintactico
+    private void separarSintaxis() {
+
+        if (!this.listadoParser.isEmpty()) {
+            this.listadoParser.clear();
+        }
+
+        for (int i = 0; i < getListadoSentencias().size(); i++) {
+
+            Sentencia sentenciaUbicada = getListadoSentencias().get(i);
+
+            ArrayList<Lexema> listadoLexemas = new ArrayList<>(1000);
+
+            for (int j = 0; j < sentenciaUbicada.obtenerListadoLexemas().size(); j++) {
+
+                Lexema lexemaUbicado = sentenciaUbicada.getListaLexema(j);
+
+                if (lexemaUbicado.getTokenSintactico() == TokenEnum.DEFINIR) {
+
+                    if (!listadoLexemas.isEmpty()) {
+                        this.listadoParser.add(new Sintaxis(listadoLexemas, false, "", TipoOperacionEnum.NO_SINTACTICO));
+                        listadoLexemas = new ArrayList<>(1000);
+                    }
+
+                    j = hallarDefinicion(i, sentenciaUbicada.obtenerListadoLexemas());
+
+                } else {
+                    listadoLexemas.add(lexemaUbicado);
+                }
+
+            }
+
+        }
+
+    }
+
+    //Metodo que llama a una serie de metodos para moverse 
+    private int hallarDefinicion(int indiceRecorrido, ArrayList<Lexema> listadoLexemasSintacticos) {
+
+        ArrayList<Lexema> listadoAuxiliar = new ArrayList<>(1000);
+
+        for (int i = indiceRecorrido; i < listadoLexemasSintacticos.size(); i++) {
+
+            Lexema lexemaUbicado = listadoLexemasSintacticos.get(i);
+            
+            if(lexemaUbicado.getTokenClasificado() == TokenEnum.ESPACIO ||lexemaUbicado.getTokenClasificado() == TokenEnum.TABULACION ){
+                
+                listadoAuxiliar.add(lexemaUbicado);
+            }
+            
+            
+            //PENDIENTE TERMINAR ESTA MADRE CUANDO NO TENGA SUENIO LPTM
+
+        }
+
+        return listadoLexemasSintacticos.size();
+
+    }
+
     //Metodo que ayuda a saber si hay errores
-    private boolean hayErrores(){
-        
+    private boolean hayErrores() {
+
         //Cuenta los errores para ver si hay 
         for (Sentencia sentencia : getListadoSentencias()) {
 
@@ -71,12 +143,10 @@ public class GestorSintactico {
             }
 
         }
-        
+
         return false;
-        
-        
+
     }
-    
 
     //Metodo que trabaja en conjunto para poder ir pintando letra a letra
     private void limpiarArea(JTextPane paneAnalisis) throws BadLocationException {
