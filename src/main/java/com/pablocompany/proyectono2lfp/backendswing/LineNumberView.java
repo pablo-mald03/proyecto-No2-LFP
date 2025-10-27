@@ -50,7 +50,7 @@ public class LineNumberView extends JPanel {
             int y = clip.y - (clip.y % fontHeight) + fm.getAscent();
 
             for (int line = startLine; line <= endLine; line++) {
-                g.drawString(String.valueOf(line + 1), 5, y);
+                g.drawString(String.valueOf(line), 5, y);
                 y += fontHeight;
             }
         } catch (Exception e) {

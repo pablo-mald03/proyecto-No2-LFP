@@ -60,6 +60,7 @@ public class GestorSintactico {
 
         //Metodo delegado para separar todo lo que tiene significado sintactico
         separarSintaxis();
+        evaluarAsignaciones();
         pintarLogEdicion();
 
     }
@@ -69,6 +70,61 @@ public class GestorSintactico {
         pintarLogSalida(this.logEdicion);
     }
 
+    //==========================METODOS UNICOS PARA EL RECONOCIMIENTO DE DECLARACION DE VARIABLES================
+    //Metodo utilizado para poder buscar asignaciones de variables
+    private void evaluarAsignaciones() throws ErrorSintacticoException {
+
+        if (this.listadoParser.isEmpty()) {
+            throw new ErrorSintacticoException("O ocurrido un error al evaluar la sintaxis");
+        }
+
+        ArrayList<TokenEnum> estructura = new ArrayList<>();
+        estructura.add(TokenEnum.IDENTIFICADOR);
+        estructura.add(TokenEnum.IGUAL);
+        estructura.add(TokenEnum.INDEFINIDO);
+        estructura.add(TokenEnum.PUNTO_COMA);
+
+        for (int i = 0; i < this.listadoParser.size(); i++) {
+
+            Sintaxis sintaxisEvaluada = this.listadoParser.get(i);
+
+            reconocerVariables(sintaxisEvaluada, estructura);
+        }
+
+    }
+
+    //Metodo delegado para reconocer la sintaxis que se ubica
+    private void reconocerVariables(Sintaxis sintaxisUbicada, ArrayList<TokenEnum> estructura) {
+
+        ArrayList<Sintaxis> referenciaSintaxis = this.listadoParser;
+        
+        
+        ArrayList<Sintaxis> nuevoListadoParser = new ArrayList<>(500);
+        
+        
+        ArrayList<Lexema> referenciaLexemas = new ArrayList<>();
+
+        //Variables que permiten saber si ya se ha reconocido la declaracion de variable
+        boolean identificadorUbicado = false;
+        boolean igualUbicado = false;
+        
+        
+        for (int i = 0; i < sintaxisUbicada.getListadoLexemas().size(); i++) {
+            
+            Lexema lexemaRecorrido = sintaxisUbicada.getLexema(i);
+            
+            
+           // if(lexemaRecorrido.)
+            
+
+        }
+        
+        //Se reconstruye la referencia
+        this.listadoParser = nuevoListadoParser;
+
+    }
+
+    //==========================FIN DE LOS METODOS UNICOS PARA EL RECONOCIMIENTO DE DECLARACION DE VARIABLES================
     //Metodo encargado de ir listando todos los lexemas que tengan un significado sintactico
     private void separarSintaxis() {
 
@@ -185,16 +241,7 @@ public class GestorSintactico {
             } else if (lexemaUbicado.getTokenSintactico() == TokenEnum.DEFINIR && lexemaUbicado.getTokenClasificado() == TokenEnum.PALABRA_RESERVADA) {
 
                 if (!estructura.contains(TokenEnum.DEFINIR)) {
-
-                    int indice = listadoAuxiliar.size() - 1;
-
-                    if (indice < 0) {
-                        indice = 0;
-                    }
-
-                    listadoAuxiliar.get(indice).setErrorSintactico(true);
-                    String errorEsperado = hallarErrorDefinicion(estructura, tipoUbicado);
-                    this.listadoParser.add(new Sintaxis(listadoAuxiliar, true, errorEsperado, TipoOperacionEnum.DEFINICION_VARIABLE));
+                    declararError(listadoAuxiliar.size(), listadoAuxiliar, estructura, tipoUbicado);
                     return i;
                 }
 
@@ -208,17 +255,7 @@ public class GestorSintactico {
             } else if (lexemaUbicado.getTokenClasificado() == TokenEnum.IDENTIFICADOR) {
 
                 if (!estructura.contains(TokenEnum.IDENTIFICADOR)) {
-
-                    int indice = listadoAuxiliar.size() - 1;
-
-                    if (indice < 0) {
-                        indice = 0;
-                    }
-
-                    listadoAuxiliar.get(indice).setErrorSintactico(true);
-
-                    String errorEsperado = hallarErrorDefinicion(estructura, tipoUbicado);
-                    this.listadoParser.add(new Sintaxis(listadoAuxiliar, true, errorEsperado, TipoOperacionEnum.DEFINICION_VARIABLE));
+                    declararError(listadoAuxiliar.size(), listadoAuxiliar, estructura, tipoUbicado);
                     return i;
                 }
 
@@ -233,15 +270,7 @@ public class GestorSintactico {
 
                 if (!estructura.contains(TokenEnum.COMO)) {
 
-                    int indice = listadoAuxiliar.size() - 1;
-
-                    if (indice < 0) {
-                        indice = 0;
-                    }
-
-                    listadoAuxiliar.get(indice).setErrorSintactico(true);
-                    String errorEsperado = hallarErrorDefinicion(estructura, tipoUbicado);
-                    this.listadoParser.add(new Sintaxis(listadoAuxiliar, true, errorEsperado, TipoOperacionEnum.DEFINICION_VARIABLE));
+                    declararError(listadoAuxiliar.size(), listadoAuxiliar, estructura, tipoUbicado);
                     return i;
                 }
 
@@ -258,15 +287,7 @@ public class GestorSintactico {
 
                 if (!estructura.contains(TokenEnum.INDEFINIDO)) {
 
-                    int indice = listadoAuxiliar.size() - 1;
-
-                    if (indice < 0) {
-                        indice = 0;
-                    }
-
-                    listadoAuxiliar.get(indice).setErrorSintactico(true);
-                    String errorEsperado = hallarErrorDefinicion(estructura, tipoUbicado);
-                    this.listadoParser.add(new Sintaxis(listadoAuxiliar, true, errorEsperado, TipoOperacionEnum.DEFINICION_VARIABLE));
+                    declararError(listadoAuxiliar.size(), listadoAuxiliar, estructura, tipoUbicado);
                     return i;
                 }
 
@@ -282,15 +303,7 @@ public class GestorSintactico {
 
                 if (!estructura.contains(TokenEnum.PUNTO_COMA)) {
 
-                    int indice = listadoAuxiliar.size() - 1;
-
-                    if (indice < 0) {
-                        indice = 0;
-                    }
-
-                    listadoAuxiliar.get(indice).setErrorSintactico(true);
-                    String errorEsperado = hallarErrorDefinicion(estructura, tipoUbicado);
-                    this.listadoParser.add(new Sintaxis(listadoAuxiliar, true, errorEsperado, TipoOperacionEnum.DEFINICION_VARIABLE));
+                    declararError(listadoAuxiliar.size(), listadoAuxiliar, estructura, tipoUbicado);
                     return i;
                 }
 
@@ -459,6 +472,21 @@ public class GestorSintactico {
         }
 
         return "";
+
+    }
+
+    //Metodo utilizado para poder declarar los errores de los listados
+    private void declararError(int indiceSize, ArrayList<Lexema> listadoAuxiliar, ArrayList<TokenEnum> estructura, String tipoUbicado) {
+
+        int indice = indiceSize - 1;
+
+        if (indice < 0) {
+            indice = 0;
+        }
+
+        listadoAuxiliar.get(indice).setErrorSintactico(true);
+        String errorEsperado = hallarErrorDefinicion(estructura, tipoUbicado);
+        this.listadoParser.add(new Sintaxis(listadoAuxiliar, true, errorEsperado, TipoOperacionEnum.DEFINICION_VARIABLE));
 
     }
 

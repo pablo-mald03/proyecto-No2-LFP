@@ -28,7 +28,7 @@ public class Sintaxis {
     private TipoOperacionEnum tipoOperacion;
 
     //Atributo SOLAMENTE UTILIZADO CUANDO LA FUNCION ES ESCRIBIR
-    private Expresion expresionEscribir;
+    private ArrayList<Expresion> expresionSintaxis;
 
     //Constructor utilizado simplemente para expresiones que no sean la de escribir
     public Sintaxis(ArrayList<Lexema> listadoLexemas, boolean tieneError, String mensajeError, TipoOperacionEnum tipoOperacion) {
@@ -38,15 +38,19 @@ public class Sintaxis {
         this.tipoOperacion = tipoOperacion;
     }
 
-    //Constructor utilizado UNICAMENTE para la funcion escribir o LA DECLARACION DE VARIABLES A UNA EXPRESION
-    public Sintaxis(ArrayList<Lexema> listadoLexemas, boolean tieneError, String mensajeError, TipoOperacionEnum tipoOperacion, Expresion expresionEncontrada) {
-        this.listadoLexemas = listadoLexemas;
-        this.tieneError = tieneError;
-        this.mensajeError = mensajeError;
-        this.tipoOperacion = tipoOperacion;
-        this.expresionEscribir = expresionEncontrada;
+    //===============Apartado de metodos que son utilizados para generar la instancia de expresiones===============
+    public ArrayList<Expresion> getExpresionSintaxis() {
+        return expresionSintaxis;
     }
 
+    //Metodo que recorre la instancia de expresiones llave valor
+    public void setExpresionSintaxis(ArrayList<Expresion> expresionSintaxis) {
+        this.expresionSintaxis = expresionSintaxis;
+    }
+
+    //===============Fin del Apartado de metodos que son utilizados para generar la instancia de expresiones===============
+    
+    
     public ArrayList<Lexema> getListadoLexemas() {
         return listadoLexemas;
     }

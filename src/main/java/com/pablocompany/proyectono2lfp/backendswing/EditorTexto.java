@@ -56,7 +56,7 @@ public class EditorTexto {
         Element root = textPane.getDocument().getDefaultRootElement();
         int fila = root.getElementIndex(pos);
         int col = pos - root.getElement(fila).getStartOffset();
-        statusBar.setText("Fila: " + (fila + 1) + " | Columna: " + (col + 1));
+        statusBar.setText("Fila: " + (fila) + " | Columna: " + (col));
     }
 
 }

@@ -11,14 +11,19 @@ import java.util.ArrayList;
  * @author pablo
  */
 //Clase utilizada solamente para cuando el tipo de operacion sintactica definida es ESCRIBIR
+//Clase llave-valor
 public class Expresion {
 
     //Listado que maneja los lexemas que se registran
     private ArrayList<Lexema> listadoExpresiones;
+    
+    private Lexema llaveLexema; 
 
-    public Expresion(ArrayList<Lexema> listadoExpresiones) {
+    //Utilizado para variables
+    public Expresion(Lexema llave,ArrayList<Lexema> listadoExpresiones) {
+        this.llaveLexema = llave;
         this.listadoExpresiones = listadoExpresiones;
     }
-
+    
     //Apartado de metodos especializados en calcular los resultados de las respectivas expresiones
 }
