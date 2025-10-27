@@ -109,19 +109,23 @@ public class GestorSintactico {
 
                 Lexema lexemaEvaluado = sintaxisEvaluada.getLexema(j);
 
+                System.out.println("Se pilla aca");
+
                 if (lexemaEvaluado.getTokenClasificado() == TokenEnum.IDENTIFICADOR) {
 
                     if (!lexemasAuxiliares.isEmpty()) {
 
-                        referenciaSintaxis.add(new Sintaxis(lexemasAuxiliares, false, "", TipoOperacionEnum.NO_SINTACTICO));
+                        nuevoListadoParser.add(new Sintaxis(lexemasAuxiliares, false, "", TipoOperacionEnum.NO_SINTACTICO));
                         lexemasAuxiliares = new ArrayList<>(1000);
                         identificadorUbicado = false;
                     }
 
-                    j = hallarAsignacion(j, nuevoListadoParser, sintaxisEvaluada.getListadoLexemas(), lexemaEvaluado);
-
-                    j--;
-
+                    j = hallarAsignacion(j, nuevoListadoParser, sintaxisEvaluada.getListadoLexemas(), lexemaEvaluado) - 1;
+                    
+                    if(j < 0){
+                        j = 0; 
+                    }
+                    
                     if (j < sintaxisEvaluada.getListadoLexemas().size()) {
 
                         if (!identificadorUbicado) {
@@ -137,7 +141,7 @@ public class GestorSintactico {
             }
 
             if (!lexemasAuxiliares.isEmpty() && identificadorUbicado) {
-                referenciaSintaxis.add(new Sintaxis(lexemasAuxiliares, false, "", TipoOperacionEnum.NO_SINTACTICO));
+                nuevoListadoParser.add(new Sintaxis(lexemasAuxiliares, false, "", TipoOperacionEnum.NO_SINTACTICO));
                 lexemasAuxiliares = new ArrayList<>(1000);
                 identificadorUbicado = false;
             }
@@ -146,7 +150,7 @@ public class GestorSintactico {
         }
 
         if (!lexemasAuxiliares.isEmpty()) {
-            referenciaSintaxis.add(new Sintaxis(lexemasAuxiliares, false, "", TipoOperacionEnum.NO_SINTACTICO));
+            nuevoListadoParser.add(new Sintaxis(lexemasAuxiliares, false, "", TipoOperacionEnum.NO_SINTACTICO));
         }
 
         //Se reconstruye la referencia
@@ -155,11 +159,12 @@ public class GestorSintactico {
     }
 
     //Metodo complementario del reconocimiento de variables que va verificando la asignacion de valores
-    private int hallarAsignacion(int indiceRecorrido, ArrayList<Sintaxis> nuevaSintaxis, ArrayList<Lexema> listadoLexemasSintacticos, Lexema lexemaInicial) {
+    private int hallarAsignacion(int indiceRecursion, ArrayList<Sintaxis> nuevaSintaxis, ArrayList<Lexema> listadoLexemasSintacticos, Lexema lexemaInicial) {
 
         if (lexemaInicial.getTokenClasificado() != TokenEnum.IDENTIFICADOR) {
-            return indiceRecorrido + 1;
+            return indiceRecursion + 1;
         }
+        System.out.println("Pasa el auth");
 
         ArrayList<TokenEnum> estructura = new ArrayList<>();
         estructura.add(TokenEnum.IDENTIFICADOR);
@@ -179,55 +184,62 @@ public class GestorSintactico {
         //Flag que marca si ya se tiene un operador matematico antes
         boolean hayOperador = false;
 
+        //Flag que indica que ya hay un identificador reconocido
+        boolean hayIdentificador = false;
+
         int indiceRetorno = 0;
 
-        for (int i = indiceRecorrido; i < listadoLexemasSintacticos.size(); i++) {
+        for (int i = indiceRecursion; i < listadoLexemasSintacticos.size(); i++) {
 
             indiceRetorno = i;
 
             Lexema lexemaUbicado = listadoLexemasSintacticos.get(i);
-            /*
+
             if (i == listadoLexemasSintacticos.size() - 1
                     && !estructura.isEmpty()
                     && estaIncompleta) {
 
                 //Se ejecuta solo cuando se termina la sentencia entera y se marca como error PENDIENTE 
                 lexemaUbicado.setErrorSintactico(true);
-                String errorEsperado = hallarErrorDefinicion(estructura, tipoUbicado);
+                String errorEsperado = hallarErrorAsignacion(estructura);
                 listadoReconstruido.add(lexemaUbicado);
-                nuevolis.add(new Sintaxis(listadoAuxiliar, true, errorEsperado, TipoOperacionEnum.DEFINICION_VARIABLE));
+                nuevaSintaxis.add(new Sintaxis(listadoLexemasSintacticos, true, errorEsperado, TipoOperacionEnum.ASIGNACION_VALORES));
+               
                 return listadoLexemasSintacticos.size();
 
-            }*/
- /*
+            }
+
             if (estructura.isEmpty() && hayContenido) {
                 //Significa que la pila ya no tiene nada y por ende es valido
-                this.listadoParser.add(new Sintaxis(listadoAuxiliar, false, "", TipoOperacionEnum.DEFINICION_VARIABLE));
+                nuevaSintaxis.add(new Sintaxis(listadoLexemasSintacticos, false, "", TipoOperacionEnum.DEFINICION_VARIABLE));
                 return i;
-            }*/
+            }
 
             if (lexemaUbicado.getTokenClasificado() == TokenEnum.ESPACIO || lexemaUbicado.getTokenClasificado() == TokenEnum.TABULACION) {
 
                 listadoReconstruido.add(lexemaUbicado);
 
-            } else if (lexemaUbicado.getTokenClasificado() == TokenEnum.IDENTIFICADOR) {
+            } else if (lexemaUbicado.getTokenClasificado() == TokenEnum.IDENTIFICADOR
+                    || lexemaUbicado.getTokenClasificado() == TokenEnum.NUMERO
+                    || lexemaUbicado.getTokenClasificado() == TokenEnum.DECIMAL
+                    || lexemaUbicado.getTokenClasificado() == TokenEnum.CADENA) {
 
                 //Error de doble identificador
                 if (!estructura.contains(TokenEnum.IDENTIFICADOR) && !igualdadEncontrada) {
 
-                    //declararError(listadoAuxiliar.size(), listadoAuxiliar, estructura, tipoUbicado);
+                    declararErrorAsignacion(listadoLexemasSintacticos.size(), nuevaSintaxis, listadoLexemasSintacticos, estructura);
                     return i;
                 }
 
                 //Error cuando no hay un signo antes del identificador
                 if (!estructura.contains(TokenEnum.IDENTIFICADOR) && !hayOperador) {
-
+                    declararErrorAsignacion(listadoLexemasSintacticos.size(), nuevaSintaxis, listadoLexemasSintacticos, estructura);
                     return i;
                 }
 
                 //Error cuando hay dos operadores juntos antes de una igualdad
                 if (estructura.contains(TokenEnum.IDENTIFICADOR) && !hayOperador && !igualdadEncontrada) {
-
+                    declararErrorAsignacion(listadoLexemasSintacticos.size(), nuevaSintaxis, listadoLexemasSintacticos, estructura);
                     return i;
                 }
 
@@ -235,16 +247,63 @@ public class GestorSintactico {
                     hayContenido = true;
                 }
 
-                listadoReconstruido.add(lexemaUbicado);
+                if (!hayIdentificador) {
+                    hayIdentificador = true;
+                }
+
+                if (hayOperador) {
+                    hayOperador = false;
+                }
 
                 if (estructura.contains(TokenEnum.IDENTIFICADOR)) {
                     estructura.remove(TokenEnum.IDENTIFICADOR);
                 }
 
+                i = hallarAgrupacion(i, nuevaSintaxis, estructura, listadoLexemasSintacticos) - 1;
+
+            } else if (lexemaUbicado.getTokenSintactico() == TokenEnum.PARENTESIS_APERTURA) {
+
+                //Error de doble identificador
+                if (!estructura.contains(TokenEnum.IDENTIFICADOR) && !igualdadEncontrada) {
+
+                    declararErrorAsignacion(listadoLexemasSintacticos.size(), nuevaSintaxis, listadoLexemasSintacticos, estructura);
+                    return i;
+                }
+
+                //Error cuando no hay un signo antes del identificador
+                if (!estructura.contains(TokenEnum.IDENTIFICADOR) && !hayOperador) {
+                    declararErrorAsignacion(listadoLexemasSintacticos.size(), nuevaSintaxis, listadoLexemasSintacticos, estructura);
+                    return i;
+                }
+
+                //Error cuando hay dos operadores juntos antes de una igualdad
+                if (estructura.contains(TokenEnum.IDENTIFICADOR) && !hayOperador && !igualdadEncontrada) {
+                    declararErrorAsignacion(listadoLexemasSintacticos.size(), nuevaSintaxis, listadoLexemasSintacticos, estructura);
+                    return i;
+                }
+
+                if (!hayContenido) {
+                    hayContenido = true;
+                }
+
+                if (!hayIdentificador) {
+                    hayIdentificador = true;
+                }
+
+                if (hayOperador) {
+                    hayOperador = false;
+                }
+
+                if (estructura.contains(TokenEnum.IDENTIFICADOR)) {
+                    estructura.remove(TokenEnum.IDENTIFICADOR);
+                }
+
+                i = hallarAgrupacion(i, nuevaSintaxis, estructura, listadoLexemasSintacticos) - 1;
+
             } else if (lexemaUbicado.getTokenSintactico() == TokenEnum.IGUAL) {
 
                 if (!estructura.contains(TokenEnum.IGUAL) && igualdadEncontrada) {
-                    //declararError(listadoAuxiliar.size(), listadoAuxiliar, estructura, tipoUbicado);
+                    declararErrorAsignacion(listadoLexemasSintacticos.size(), nuevaSintaxis, listadoLexemasSintacticos, estructura);
                     return i;
                 }
 
@@ -267,19 +326,33 @@ public class GestorSintactico {
                 //Error cuando no hay igualdad
                 if (!igualdadEncontrada) {
 
-                    //declararError(listadoAuxiliar.size(), listadoAuxiliar, estructura, tipoUbicado);
+                    declararErrorAsignacion(listadoLexemasSintacticos.size(), nuevaSintaxis, listadoLexemasSintacticos, estructura);
                     return i;
                 }
 
                 //Error cuando ya hay igualdad pero se quiere poner un operador a la par de la otra
                 if (!estructura.contains(TokenEnum.INDEFINIDO) && igualdadEncontrada && hayOperador) {
 
-                    //declararError(listadoAuxiliar.size(), listadoAuxiliar, estructura, tipoUbicado);
+                    declararErrorAsignacion(listadoLexemasSintacticos.size(), nuevaSintaxis, listadoLexemasSintacticos, estructura);
+                    return i;
+                }
+
+                if (!estructura.contains(TokenEnum.INDEFINIDO) && igualdadEncontrada && !hayIdentificador) {
+
+                    declararErrorAsignacion(listadoLexemasSintacticos.size(), nuevaSintaxis, listadoLexemasSintacticos, estructura);
                     return i;
                 }
 
                 if (!hayContenido) {
                     hayContenido = true;
+                }
+
+                if (!hayOperador) {
+                    hayOperador = true;
+                }
+
+                if (hayIdentificador) {
+                    hayIdentificador = false;
                 }
 
                 listadoReconstruido.add(lexemaUbicado);
@@ -293,14 +366,14 @@ public class GestorSintactico {
                 //Error cuando no hay igualdad
                 if (!igualdadEncontrada) {
 
-                    //declararError(listadoAuxiliar.size(), listadoAuxiliar, estructura, tipoUbicado);
+                    declararErrorAsignacion(listadoLexemasSintacticos.size(), nuevaSintaxis, listadoLexemasSintacticos, estructura);
                     return i;
                 }
 
                 //Error cuando ya hubo punto y coma
                 if (!estructura.contains(TokenEnum.PUNTO_COMA)) {
 
-                    //declararError(listadoAuxiliar.size(), listadoAuxiliar, estructura, tipoUbicado);
+                    declararErrorAsignacion(listadoLexemasSintacticos.size(), nuevaSintaxis, listadoLexemasSintacticos, estructura);
                     return i;
                 }
 
@@ -325,12 +398,12 @@ public class GestorSintactico {
                     listadoReconstruido.add(lexemaUbicado);
                     listadoReconstruido.get(indice).setErrorSintactico(true);
 
-                    //String errorEsperado = hallarErrorDefinicion(estructura, tipoUbicado);
-                    // this.listadoParser.add(new Sintaxis(listadoReconstruido, true, errorEsperado, TipoOperacionEnum.ASIGNACION_VALORES));
+                    String errorEsperado = hallarErrorAsignacion(estructura);
+                    nuevaSintaxis.add(new Sintaxis(listadoReconstruido, true, errorEsperado, TipoOperacionEnum.ASIGNACION_VALORES));
                 } else {
 
                     listadoReconstruido.add(lexemaUbicado);
-                    this.listadoParser.add(new Sintaxis(listadoReconstruido, false, "", TipoOperacionEnum.ASIGNACION_VALORES));
+                    nuevaSintaxis.add(new Sintaxis(listadoReconstruido, false, "", TipoOperacionEnum.ASIGNACION_VALORES));
                     return i;
                 }
 
@@ -354,12 +427,13 @@ public class GestorSintactico {
 
         if (estructura.isEmpty() && hayContenido) {
             //Significa que la pila ya no tiene nada y por ende es valido
-            this.listadoParser.add(new Sintaxis(listadoReconstruido, false, "", TipoOperacionEnum.ASIGNACION_VALORES));
+            nuevaSintaxis.add(new Sintaxis(listadoReconstruido, false, "", TipoOperacionEnum.ASIGNACION_VALORES));
 
             return indiceRetorno + 1;
         } else {
 
             //Retorna cuando hay errores registrados busca el indice de error
+            estaIncompleta = true;
             int indice = listadoReconstruido.size() - 1;
 
             if (indice < 0) {
@@ -367,16 +441,149 @@ public class GestorSintactico {
             }
 
             listadoReconstruido.get(indice).setErrorSintactico(true);
-            // String errorEsperado = hallarErrorDefinicion(estructura, tipoUbicado);
 
-            //this.listadoParser.add(new Sintaxis(listadoAuxiliar, true, errorEsperado, TipoOperacionEnum.DEFINICION_VARIABLE));
+            String errorEsperado = hallarErrorAsignacion(estructura);
+            nuevaSintaxis.add(new Sintaxis(listadoReconstruido, true, errorEsperado, TipoOperacionEnum.ASIGNACION_VALORES));
             return indiceRetorno + 1;
 
         }
 
     }
 
-    // private ArrayList<Lexema> analizarLexema(Lexema )
+    //Metodo complementario que permite ingresar agrupaciones 
+    private int hallarAgrupacion(
+            int indiceRecorrido,
+            ArrayList<Sintaxis> nuevaSintaxis,
+            ArrayList<TokenEnum> estructura,
+            ArrayList<Lexema> listadoLexemasSintacticos) {
+
+        ArrayList<Lexema> agrupacionActual = new ArrayList<>();
+        int balanceParentesis = 0;
+        boolean hayContenido = false;
+
+        for (int i = indiceRecorrido; i < listadoLexemasSintacticos.size(); i++) {
+
+            Lexema lexema = listadoLexemasSintacticos.get(i);
+
+            agrupacionActual.add(lexema);
+
+            if (lexema.getTokenSintactico() == TokenEnum.PARENTESIS_APERTURA) {
+                balanceParentesis++;
+            } else if (lexema.getTokenSintactico() == TokenEnum.PARENTESIS_CIERRE) {
+
+                balanceParentesis--;
+                if (balanceParentesis == 0) {
+                    // cierre correcto encontrado
+                    nuevaSintaxis.add(new Sintaxis(
+                            agrupacionActual,
+                            false,
+                            "",
+                            TipoOperacionEnum.ASIGNACION_VALORES
+                    ));
+                    return i + 1;
+                }
+
+            } else if (lexema.getTokenClasificado() == TokenEnum.IDENTIFICADOR
+                    || lexema.getTokenClasificado() == TokenEnum.NUMERO
+                    || lexema.getTokenClasificado() == TokenEnum.DECIMAL
+                    || lexema.getTokenClasificado() == TokenEnum.CADENA) {
+                hayContenido = true;
+            } else if (lexema.getTokenSintactico() == TokenEnum.SUMA
+                    || lexema.getTokenSintactico() == TokenEnum.RESTA
+                    || lexema.getTokenSintactico() == TokenEnum.MULTIPLICACION
+                    || lexema.getTokenSintactico() == TokenEnum.DIVISION) {
+                continue;
+            }
+
+            // si detecta cierre antes de apertura o mal balanceado
+            if (balanceParentesis < 0) {
+                lexema.setErrorSintactico(true);
+
+                String errorEcontrado = hallarErrorAsignacion(estructura);
+                nuevaSintaxis.add(new Sintaxis(
+                        agrupacionActual,
+                        true,
+                        errorEcontrado,
+                        TipoOperacionEnum.ASIGNACION_VALORES
+                ));
+                return i;
+            }
+        }
+
+        // Si termina el for sin cerrar los paréntesis
+        if (balanceParentesis > 0) {
+            agrupacionActual.get(agrupacionActual.size() - 1).setErrorSintactico(true);
+            String errorEcontrado = hallarErrorAsignacion(estructura);
+            nuevaSintaxis.add(new Sintaxis(
+                    agrupacionActual,
+                    true,
+                    errorEcontrado,
+                    TipoOperacionEnum.ASIGNACION_VALORES
+            ));
+        }
+
+        return listadoLexemasSintacticos.size();
+    }
+
+    //Metodo utilizado para declarar los errores 
+    //Metodo utilizado para poder declarar los errores de los listados
+    private void declararErrorAsignacion(int indiceSize, ArrayList<Sintaxis> sintaxisNueva, ArrayList<Lexema> listadoAuxiliar, ArrayList<TokenEnum> estructura) {
+
+        int indice = indiceSize - 1;
+
+        if (indice < 0) {
+            indice = 0;
+        }
+
+        listadoAuxiliar.get(indice).setErrorSintactico(true);
+        String errorEsperado = hallarErrorAsignacion(estructura);
+        sintaxisNueva.add(new Sintaxis(listadoAuxiliar, true, errorEsperado, TipoOperacionEnum.DEFINICION_VARIABLE));
+
+    }
+
+    //Metodo especializado para poder declarar el error de asignacion
+    private String hallarErrorAsignacion(ArrayList<TokenEnum> estructuraActual) {
+
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < estructuraActual.size(); i++) {
+
+            TokenEnum token = estructuraActual.get(i);
+
+            switch (token) {
+                case IDENTIFICADOR:
+                    sb.append(", cerca de inicio: se esperaba un identificador");
+                    return sb.toString();
+
+                case IGUAL:
+                    sb.append(", cerca de ");
+                    sb.append(TokenEnum.IDENTIFICADOR.getNombreToken());
+                    sb.append(": se esperaba el signo ");
+                    sb.append(TokenEnum.IGUAL.getNombreToken());
+                    return sb.toString();
+
+                case INDEFINIDO:
+                    sb.append(", cerca de ");
+                    sb.append(TokenEnum.IGUAL.getNombreToken());
+                    sb.append(": se esperaba una expresión o valor");
+                    return sb.toString();
+
+                case PUNTO_COMA:
+                    sb.append(", cerca de ");
+
+                    sb.append("la expresión o valor");
+
+                    sb.append(": se esperaba ';' al final de la asignación");
+                    return sb.toString();
+
+                default:
+                    return "";
+            }
+        }
+
+        return "";
+    }
+
     //==========================FIN DE LOS METODOS UNICOS PARA EL RECONOCIMIENTO DE DECLARACION DE VARIABLES================
     //Metodo encargado de ir listando todos los lexemas que tengan un significado sintactico
     private void separarSintaxis() {
