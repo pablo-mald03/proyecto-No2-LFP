@@ -4,6 +4,7 @@
  */
 package com.pablocompany.proyectono2lfp.backend;
 
+import com.pablocompany.proyectono2lfp.analizadorlexicorecursos.TokenEnum;
 import com.pablocompany.proyectono2lfp.excepciones.ErrorSintacticoException;
 import java.util.ArrayList;
 
@@ -28,7 +29,7 @@ public class Sintaxis {
     private TipoOperacionEnum tipoOperacion;
 
     //Atributo SOLAMENTE UTILIZADO CUANDO LA FUNCION ES ESCRIBIR
-    private ArrayList<Expresion> expresionSintaxis;
+    private ArrayList<Expresion> expresionSintaxis = new ArrayList<>();
 
     //Constructor utilizado simplemente para expresiones que no sean la de escribir
     public Sintaxis(ArrayList<Lexema> listadoLexemas, boolean tieneError, String mensajeError, TipoOperacionEnum tipoOperacion) {
@@ -42,15 +43,25 @@ public class Sintaxis {
     public ArrayList<Expresion> getExpresionSintaxis() {
         return expresionSintaxis;
     }
+    
+    //Metodo que permite obtener la llave de las expresiones asignadas
+    public Lexema getLlaveExpresion(int indice){
+       return this.expresionSintaxis.get(indice).getLlaveLexema();
+    }
 
     //Metodo que recorre la instancia de expresiones llave valor
-    public void setExpresionSintaxis(ArrayList<Expresion> expresionSintaxis) {
-        this.expresionSintaxis = expresionSintaxis;
+    public void setExpresionSintaxis(ArrayList<Lexema> expresionLexica) throws ErrorSintacticoException {
+
+        Lexema llave = expresionLexica.get(0);
+
+        if (llave.getTokenClasificado() != TokenEnum.IDENTIFICADOR) {
+            throw new ErrorSintacticoException("Ha ocurrido un error en la clasificacion de errores");
+        }
+
+        this.expresionSintaxis.add(new Expresion(llave, expresionLexica));
     }
 
     //===============Fin del Apartado de metodos que son utilizados para generar la instancia de expresiones===============
-    
-    
     public ArrayList<Lexema> getListadoLexemas() {
         return listadoLexemas;
     }

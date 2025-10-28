@@ -26,4 +26,23 @@ public class Expresion {
     }
     
     //Apartado de metodos especializados en calcular los resultados de las respectivas expresiones
+    public ArrayList<Lexema> getListadoExpresiones() {
+        return listadoExpresiones;
+    }
+
+    public void setListadoExpresiones(ArrayList<Lexema> listadoExpresiones) {
+        this.listadoExpresiones = listadoExpresiones;
+    }
+
+    public Lexema getLlaveLexema() {
+        return llaveLexema;
+    }
+
+    public void setLlaveLexema(Lexema llaveLexema) {
+        this.llaveLexema = llaveLexema;
+    }
+    
+    
+    
+    
 }

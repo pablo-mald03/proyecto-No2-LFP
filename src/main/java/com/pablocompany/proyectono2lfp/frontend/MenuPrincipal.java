@@ -993,6 +993,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
 
         } catch (NullPointerException ex) {
+            System.out.println("error" + ex.getMessage());
             JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador\nEscribe algo para poderlo analizar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
 
         }
