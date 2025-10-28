@@ -8,10 +8,14 @@ import com.pablocompany.proyectono2lfp.analizadorlexicorecursos.LectorEntradas;
 import com.pablocompany.proyectono2lfp.backendswing.ColocarFondos;
 import com.pablocompany.proyectono2lfp.backendswing.CrearTableros;
 import com.pablocompany.proyectono2lfp.backendswing.ModificarTabla;
+import com.pablocompany.proyectono2lfp.excepciones.AnalizadorLexicoException;
+import com.pablocompany.proyectono2lfp.excepciones.ErrorPuntualException;
+import com.pablocompany.proyectono2lfp.excepciones.ErrorSintacticoException;
+import com.pablocompany.proyectono2lfp.excepciones.ErroresRegistradosException;
 import java.awt.Color;
 import javax.swing.JOptionPane;
 import javax.swing.JViewport;
-import javax.swing.SwingUtilities;
+import javax.swing.text.BadLocationException;
 
 /**
  *
@@ -24,9 +28,6 @@ public class ReporteSintactico extends javax.swing.JDialog {
      */
     private LectorEntradas gestionLecturas;
 
-    //Gestiona el reporte de conteo lexemas
-    private ModificarTabla mdTablitaConteo;
-    private CrearTableros crearTableroConteo;
 
     //Gestiona el reporte de tokenizacion de lexemas
     private ModificarTabla mdTablitaTokenizacion;
@@ -42,49 +43,21 @@ public class ReporteSintactico extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
 
         ColocarFondos pintarPanel = new ColocarFondos(this, this.panelPrincipal);
-        ((JViewport) tableroConteoLexermas.getParent()).setBackground(new Color(0xF2D7B4));
-        ((JViewport) tableroConteoTokens.getParent()).setBackground(new Color(0xF2D7B4));
+        ((JViewport) tableroVariables.getParent()).setBackground(new Color(0xF2D7B4));
 
         pintarPanel.pintarDialog("/com/pablocompany/proyectono1/recursosapp/images/overlay2.png");
 
         this.gestionLecturas = gestorLecturas;
 
-        //this.lexemaSeleccionado = null;
 
-        this.mdTablitaConteo = new ModificarTabla(this.tableroConteoLexermas);
-        this.crearTableroConteo = new CrearTableros(this.tableroConteoLexermas);
 
-        this.mdTablitaTokenizacion = new ModificarTabla(this.tableroConteoTokens);
-        this.crearTableroTokenizacion = new CrearTableros(this.tableroConteoTokens);
+        this.mdTablitaTokenizacion = new ModificarTabla(this.tableroVariables);
+        this.crearTableroTokenizacion = new CrearTableros(this.tableroVariables);
 
       //  this.gestionLecturas.getGenerarReportes().reiniciarListas();
 
     }
 
-    //Metodo que sirve para mandar a llamar la graficacion de los estados del automata
-    public void ilustrarTransiciones() {
-        //Se despliega la ventana emergente para La generacion de reportes
-        /*DiagramaTransiciones dialog = new DiagramaTransiciones(this, true, lexemaSeleccionado);
-        dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent e) {
-
-            }
-        });
-        dialog.setVisible(true);*/
-
-    }
-
-    //Metodo que permite ilustrar el lexema encontrado
-    private void marcarSeleccionLexemas() {
-        /*if (this.lexemaSeleccionado == null) {
-            return;
-        }
-
-        this.textFieldCadena.setText(this.lexemaSeleccionado.getLexema());
-
-        this.textFieldToken.setText(this.lexemaSeleccionado.getEstadoAnalisis().getTipo());*/
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -98,14 +71,14 @@ public class ReporteSintactico extends javax.swing.JDialog {
         panelPrincipal = new javax.swing.JPanel();
         lblReportes = new javax.swing.JLabel();
         panelErroes2 = new javax.swing.JPanel();
-        jScrollTablero1 = new javax.swing.JScrollPane();
-        tableroConteoLexermas = new javax.swing.JTable();
-        btnReporteConteo = new javax.swing.JButton();
+        btnReporteErrores = new javax.swing.JButton();
         lblConteoLexemas = new javax.swing.JLabel();
         lblConteoLexemas1 = new javax.swing.JLabel();
         jScrollTablero2 = new javax.swing.JScrollPane();
-        tableroConteoTokens = new javax.swing.JTable();
+        tableroVariables = new javax.swing.JTable();
         btnReportarToken = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        textPaneErrores = new javax.swing.JTextPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Visualizacion de Reportes");
@@ -119,41 +92,13 @@ public class ReporteSintactico extends javax.swing.JDialog {
         panelErroes2.setBackground(new java.awt.Color(111, 176, 209));
         panelErroes2.setBorder(javax.swing.BorderFactory.createMatteBorder(5, 5, 5, 5, new java.awt.Color(50, 56, 68)));
 
-        jScrollTablero1.setBackground(new java.awt.Color(242, 215, 180));
-        jScrollTablero1.setBorder(javax.swing.BorderFactory.createMatteBorder(3, 3, 3, 3, new java.awt.Color(0, 0, 0)));
-
-        tableroConteoLexermas.setBackground(new java.awt.Color(242, 215, 180));
-        tableroConteoLexermas.setFont(new java.awt.Font("Liberation Serif", 0, 18)); // NOI18N
-        tableroConteoLexermas.setForeground(new java.awt.Color(0, 0, 0));
-        tableroConteoLexermas.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {},
-                {},
-                {},
-                {}
-            },
-            new String [] {
-
-            }
-        ));
-        tableroConteoLexermas.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
-        tableroConteoLexermas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        tableroConteoLexermas.setGridColor(new java.awt.Color(0, 0, 0));
-        tableroConteoLexermas.setRowSelectionAllowed(false);
-        tableroConteoLexermas.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                tableroConteoLexermasMousePressed(evt);
-            }
-        });
-        jScrollTablero1.setViewportView(tableroConteoLexermas);
-
-        btnReporteConteo.setBackground(new java.awt.Color(0, 118, 0));
-        btnReporteConteo.setFont(new java.awt.Font("Liberation Sans", 1, 20)); // NOI18N
-        btnReporteConteo.setForeground(new java.awt.Color(229, 227, 227));
-        btnReporteConteo.setText("Generar Reporte");
-        btnReporteConteo.addActionListener(new java.awt.event.ActionListener() {
+        btnReporteErrores.setBackground(new java.awt.Color(0, 118, 0));
+        btnReporteErrores.setFont(new java.awt.Font("Liberation Sans", 1, 20)); // NOI18N
+        btnReporteErrores.setForeground(new java.awt.Color(229, 227, 227));
+        btnReporteErrores.setText("Generar Reporte");
+        btnReporteErrores.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnReporteConteoActionPerformed(evt);
+                btnReporteErroresActionPerformed(evt);
             }
         });
 
@@ -170,10 +115,10 @@ public class ReporteSintactico extends javax.swing.JDialog {
         jScrollTablero2.setBackground(new java.awt.Color(242, 215, 180));
         jScrollTablero2.setBorder(javax.swing.BorderFactory.createMatteBorder(3, 3, 3, 3, new java.awt.Color(0, 0, 0)));
 
-        tableroConteoTokens.setBackground(new java.awt.Color(242, 215, 180));
-        tableroConteoTokens.setFont(new java.awt.Font("Liberation Serif", 0, 18)); // NOI18N
-        tableroConteoTokens.setForeground(new java.awt.Color(0, 0, 0));
-        tableroConteoTokens.setModel(new javax.swing.table.DefaultTableModel(
+        tableroVariables.setBackground(new java.awt.Color(242, 215, 180));
+        tableroVariables.setFont(new java.awt.Font("Liberation Serif", 0, 18)); // NOI18N
+        tableroVariables.setForeground(new java.awt.Color(0, 0, 0));
+        tableroVariables.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
                 {},
@@ -184,16 +129,16 @@ public class ReporteSintactico extends javax.swing.JDialog {
 
             }
         ));
-        tableroConteoTokens.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
-        tableroConteoTokens.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        tableroConteoTokens.setGridColor(new java.awt.Color(0, 0, 0));
-        tableroConteoTokens.setRowSelectionAllowed(false);
-        tableroConteoTokens.addMouseListener(new java.awt.event.MouseAdapter() {
+        tableroVariables.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        tableroVariables.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        tableroVariables.setGridColor(new java.awt.Color(0, 0, 0));
+        tableroVariables.setRowSelectionAllowed(false);
+        tableroVariables.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                tableroConteoTokensMousePressed(evt);
+                tableroVariablesMousePressed(evt);
             }
         });
-        jScrollTablero2.setViewportView(tableroConteoTokens);
+        jScrollTablero2.setViewportView(tableroVariables);
 
         btnReportarToken.setBackground(new java.awt.Color(0, 118, 0));
         btnReportarToken.setFont(new java.awt.Font("Liberation Sans", 1, 20)); // NOI18N
@@ -205,6 +150,11 @@ public class ReporteSintactico extends javax.swing.JDialog {
             }
         });
 
+        textPaneErrores.setBackground(new java.awt.Color(243, 216, 184));
+        textPaneErrores.setBorder(javax.swing.BorderFactory.createMatteBorder(4, 4, 4, 4, new java.awt.Color(0, 0, 0)));
+        textPaneErrores.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
+        jScrollPane1.setViewportView(textPaneErrores);
+
         javax.swing.GroupLayout panelErroes2Layout = new javax.swing.GroupLayout(panelErroes2);
         panelErroes2.setLayout(panelErroes2Layout);
         panelErroes2Layout.setHorizontalGroup(
@@ -212,15 +162,15 @@ public class ReporteSintactico extends javax.swing.JDialog {
             .addGroup(panelErroes2Layout.createSequentialGroup()
                 .addGroup(panelErroes2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelErroes2Layout.createSequentialGroup()
-                        .addContainerGap(21, Short.MAX_VALUE)
-                        .addGroup(panelErroes2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lblConteoLexemas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollTablero1, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
-                    .addGroup(panelErroes2Layout.createSequentialGroup()
                         .addGap(193, 193, 193)
-                        .addComponent(btnReporteConteo, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(btnReporteErrores, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelErroes2Layout.createSequentialGroup()
+                        .addContainerGap(13, Short.MAX_VALUE)
+                        .addGroup(panelErroes2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 591, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblConteoLexemas, javax.swing.GroupLayout.PREFERRED_SIZE, 591, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelErroes2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelErroes2Layout.createSequentialGroup()
                         .addComponent(btnReportarToken, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -241,11 +191,11 @@ public class ReporteSintactico extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(panelErroes2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollTablero2, javax.swing.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE)
-                    .addComponent(jScrollTablero1))
+                    .addComponent(jScrollPane1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelErroes2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnReportarToken, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnReporteConteo, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnReporteErrores, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(11, 11, 11))
         );
 
@@ -258,7 +208,7 @@ public class ReporteSintactico extends javax.swing.JDialog {
                 .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 1248, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(panelErroes2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addContainerGap(42, Short.MAX_VALUE))
         );
         panelPrincipalLayout.setVerticalGroup(
             panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -275,76 +225,40 @@ public class ReporteSintactico extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tableroConteoLexermasMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableroConteoLexermasMousePressed
-
-        //Metodo que permite ubicar el lexema en el indice 
-        try {
-
-            int fila = this.tableroConteoLexermas.rowAtPoint(evt.getPoint());
-            int columna = this.tableroConteoLexermas.columnAtPoint(evt.getPoint());
-
-            if (fila > -1 && columna > -1) {
-
-                if (SwingUtilities.isLeftMouseButton(evt)) {
-
-                   /* if (this.gestionLecturas == null) {
-                        JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador\nEscribe algo para poderlo analizar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-
-                    if (this.gestionLecturas.getGenerarReportes().reporteLexemasGenerado()) {
-                        JOptionPane.showMessageDialog(this, "No se ha generado el reporte de lexemas\nPresione el boton en el \"Reporte Tokens Lexemas\"", "Reporte de lexemas no generado aun", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-
-                    if (this.gestionLecturas.getGenerarReportes().esVaciaListaLexemas()) {
-                        JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador\nEscribe algo para poderlo analizar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-
-                    this.lexemaSeleccionado = this.gestionLecturas.getGenerarReportes().getLexemaSeleccionado(fila);
-                    marcarSeleccionLexemas();*/
-
-                }
-            }
-
-        } catch (NullPointerException ex) {
-            JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador\nEscribe algo para poderlo analizar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
-
-        }
-    }//GEN-LAST:event_tableroConteoLexermasMousePressed
-
-    private void btnReporteConteoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteConteoActionPerformed
-        //Muestra el reporte en la tabla de conteo de lexemas
-        try {
+    private void btnReporteErroresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteErroresActionPerformed
+        //Muestra el reporte de listar los errores registrados
+       try {
 
             if (this.gestionLecturas == null) {
                 JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador\nEscribe algo para poderlo analizar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-           /* if (this.gestionLecturas.getGenerarReportes() == null) {
+            if (this.gestionLecturas.getGenerarReportes() == null) {
                 JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             try {
                 //Boton manual que permite generar el reporte de conteo de lexemas
-                this.gestionLecturas.getGenerarReportes().generarReporteConteoLexemas(this.gestionLecturas.getLexerActual().getListadoSentencias(), this.mdTablitaConteo, this.crearTableroConteo);
+                this.gestionLecturas.getGestorSintactico().getReportes().generarReporteErrores(this.textPaneErrores);
 
-            } catch (ErrorPuntualException ex) {
+            } catch (ErrorSintacticoException ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Inconveniente encontrado", JOptionPane.ERROR_MESSAGE);
-            }*/
-
+            } catch (BadLocationException ex) { 
+               JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de escritura", JOptionPane.ERROR_MESSAGE);
+           } catch (ErroresRegistradosException ex) {
+               JOptionPane.showMessageDialog(this, ex.getMessage(), "No hay errores Sintacticos", JOptionPane.ERROR_MESSAGE);
+           } 
         } catch (NullPointerException ex) {
-            JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador\nEscribe algo para poderlo analizar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "No se ha ejecutado el analisis sintactico\nPorfavor presiona el boton de \"Analisis Sintactico\"", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
 
         }
-    }//GEN-LAST:event_btnReporteConteoActionPerformed
+    }//GEN-LAST:event_btnReporteErroresActionPerformed
 
-    private void tableroConteoTokensMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableroConteoTokensMousePressed
+    private void tableroVariablesMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableroVariablesMousePressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tableroConteoTokensMousePressed
+    }//GEN-LAST:event_tableroVariablesMousePressed
 
     private void btnReportarTokenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportarTokenActionPerformed
         //Muestra el reporte en la tabla de conteo de lexemas en cantidad de veces que aparece
@@ -380,15 +294,15 @@ public class ReporteSintactico extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnReportarToken;
-    private javax.swing.JButton btnReporteConteo;
-    private javax.swing.JScrollPane jScrollTablero1;
+    private javax.swing.JButton btnReporteErrores;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollTablero2;
     private javax.swing.JLabel lblConteoLexemas;
     private javax.swing.JLabel lblConteoLexemas1;
     private javax.swing.JLabel lblReportes;
     private javax.swing.JPanel panelErroes2;
     private javax.swing.JPanel panelPrincipal;
-    private javax.swing.JTable tableroConteoLexermas;
-    private javax.swing.JTable tableroConteoTokens;
+    private javax.swing.JTable tableroVariables;
+    private javax.swing.JTextPane textPaneErrores;
     // End of variables declaration//GEN-END:variables
 }

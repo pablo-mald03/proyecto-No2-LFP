@@ -34,7 +34,9 @@ public class GestorSintactico {
     private JTextPane logErroresSintacticos;
     
     private JTextPane logEdicion;
-
+    
+    
+    private  GenerarReportesSintacticos generadorReportes;
     //Atributo que permite manejar la instancia compartida del listado de sentencias sintacticas
     private ArrayList<Sintaxis> listadoParser = new ArrayList<>(5000);
     
@@ -64,6 +66,17 @@ public class GestorSintactico {
         comprobarAsignaciones();
         pintarLogEdicion();
         
+        this.generadorReportes = new GenerarReportesSintacticos(this.listadoParser);
+    }
+    
+    //Metodo utilizado para obtener la referencia del generador de reportes Sintactioc
+    public GenerarReportesSintacticos getReportes() throws ErrorSintacticoException{
+        
+        if(this.generadorReportes == null){
+            throw  new ErrorSintacticoException("Necesitas ejecutar el analisis sintactico antes");
+        }
+        
+        return this.generadorReportes;
     }
 
     //Metodo utilizado para poder verificar las asignaciones de variables
