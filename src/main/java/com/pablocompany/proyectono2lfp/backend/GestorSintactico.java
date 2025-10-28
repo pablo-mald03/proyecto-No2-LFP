@@ -84,6 +84,20 @@ public class GestorSintactico {
 
     }
 
+    //Metodo especializado delegado para poder obtener el listado de lexemas en el indice que se va 
+    private ArrayList<Lexema> obtenerListadoIndexado(ArrayList<Lexema> listadoLexemas, int indice) {
+
+        ArrayList<Lexema> listadoLimpiado = new ArrayList<>();
+        for (int i = indice; i < listadoLexemas.size(); i++) {
+
+            listadoLimpiado.add(listadoLexemas.get(i));
+
+        }
+
+        return listadoLimpiado;
+
+    }
+
     //Metodo delegado para reconocer la sintaxis que se ubica
     private ArrayList<Sintaxis> reconocerVariables() {
 
@@ -131,7 +145,16 @@ public class GestorSintactico {
                         }
                     }
 
-                } else {
+                } 
+                else if (lexemaEvaluado.getTokenClasificado() == TokenEnum.VACIO) {
+
+                    lexemasAuxiliares.add(lexemaEvaluado);
+                    nuevoListadoParser.add(new Sintaxis(lexemasAuxiliares, false, "", TipoOperacionEnum.NO_SINTACTICO));
+                    lexemasAuxiliares = new ArrayList<>(1000);
+                    identificadorUbicado = false;
+
+                }
+                else {
 
                     lexemasAuxiliares.add(lexemaEvaluado);
                 }
@@ -208,7 +231,7 @@ public class GestorSintactico {
                 lexemaUbicado.setErrorSintactico(true);
                 String errorEsperado = hallarErrorAsignacion(estructura);
                 listadoReconstruido.add(lexemaUbicado);
-                
+
                 nuevaSintaxis.add(new Sintaxis(listadoLexemasSintacticos, true, errorEsperado, TipoOperacionEnum.ASIGNACION_VALORES));
 
                 return listadoLexemasSintacticos.size();
@@ -233,14 +256,14 @@ public class GestorSintactico {
                 if (!estaIniciado && lexemaUbicado.getTokenClasificado() != TokenEnum.IDENTIFICADOR) {
 
                     declararErrorAsignacion(listadoLexemasSintacticos.size(), nuevaSintaxis, listadoLexemasSintacticos, estructura);
-                    return i;
+                    return listadoLexemasSintacticos.size();
                 }
 
                 //Error de doble identificador
                 if (!estructura.contains(TokenEnum.IDENTIFICADOR) && !igualdadEncontrada) {
 
                     declararErrorAsignacion(listadoLexemasSintacticos.size(), nuevaSintaxis, listadoLexemasSintacticos, estructura);
-                    return i;
+                    return listadoLexemasSintacticos.size();
                 }
 
                 //Error cuando no hay un signo antes del identificador
@@ -253,7 +276,7 @@ public class GestorSintactico {
                 //Error cuando hay dos operadores juntos antes de una igualdad
                 if (estructura.contains(TokenEnum.IDENTIFICADOR) && estaIniciado && !hayOperador && !igualdadEncontrada) {
                     declararErrorAsignacion(listadoLexemasSintacticos.size(), nuevaSintaxis, listadoLexemasSintacticos, estructura);
-                    return i;
+                    return listadoLexemasSintacticos.size();
                 }
 
                 if (!hayContenido) {
@@ -288,19 +311,19 @@ public class GestorSintactico {
                 if (!estructura.contains(TokenEnum.IDENTIFICADOR) && !igualdadEncontrada) {
 
                     declararErrorAsignacion(listadoLexemasSintacticos.size(), nuevaSintaxis, listadoLexemasSintacticos, estructura);
-                    return i;
+                    return listadoLexemasSintacticos.size();
                 }
 
                 //Error cuando no hay un signo antes del identificador
                 if (!estructura.contains(TokenEnum.IDENTIFICADOR) && !hayOperador && seInicializo == 2) {
                     declararErrorAsignacion(listadoLexemasSintacticos.size(), nuevaSintaxis, listadoLexemasSintacticos, estructura);
-                    return i;
+                    return listadoLexemasSintacticos.size();
                 }
 
                 //Error cuando hay dos operadores juntos antes de una igualdad
                 if (estructura.contains(TokenEnum.IDENTIFICADOR) && !hayOperador && !igualdadEncontrada) {
                     declararErrorAsignacion(listadoLexemasSintacticos.size(), nuevaSintaxis, listadoLexemasSintacticos, estructura);
-                    return i;
+                    return listadoLexemasSintacticos.size();
                 }
 
                 if (!hayContenido) {
@@ -329,7 +352,7 @@ public class GestorSintactico {
 
                 if (!estructura.contains(TokenEnum.IGUAL) && igualdadEncontrada) {
                     declararErrorAsignacion(listadoLexemasSintacticos.size(), nuevaSintaxis, listadoLexemasSintacticos, estructura);
-                    return i;
+                    return listadoLexemasSintacticos.size();
                 }
 
                 if (!hayContenido) {
@@ -353,20 +376,20 @@ public class GestorSintactico {
                 if (!igualdadEncontrada) {
 
                     declararErrorAsignacion(listadoLexemasSintacticos.size(), nuevaSintaxis, listadoLexemasSintacticos, estructura);
-                    return i;
+                    return listadoLexemasSintacticos.size();
                 }
 
                 //Error cuando ya hay igualdad pero se quiere poner un operador a la par de la otra
                 if (!estructura.contains(TokenEnum.INDEFINIDO) && igualdadEncontrada && hayOperador) {
 
                     declararErrorAsignacion(listadoLexemasSintacticos.size(), nuevaSintaxis, listadoLexemasSintacticos, estructura);
-                    return i;
+                    return listadoLexemasSintacticos.size();
                 }
 
                 if (!estructura.contains(TokenEnum.INDEFINIDO) && igualdadEncontrada && !hayIdentificador) {
 
                     declararErrorAsignacion(listadoLexemasSintacticos.size(), nuevaSintaxis, listadoLexemasSintacticos, estructura);
-                    return i;
+                    return listadoLexemasSintacticos.size();
                 }
 
                 if (!hayContenido) {
@@ -393,14 +416,14 @@ public class GestorSintactico {
                 if (!igualdadEncontrada) {
 
                     declararErrorAsignacion(listadoLexemasSintacticos.size(), nuevaSintaxis, listadoLexemasSintacticos, estructura);
-                    return i;
+                    return listadoLexemasSintacticos.size();
                 }
 
                 //Error cuando ya hubo punto y coma
                 if (!estructura.contains(TokenEnum.PUNTO_COMA)) {
 
                     declararErrorAsignacion(listadoLexemasSintacticos.size(), nuevaSintaxis, listadoLexemasSintacticos, estructura);
-                    return i;
+                    return listadoLexemasSintacticos.size();
                 }
 
                 if (!hayContenido) {
@@ -718,6 +741,13 @@ public class GestorSintactico {
                             hayContenido = true;
                         }
                     }
+
+                } else if (lexemaUbicado.getTokenClasificado() == TokenEnum.VACIO) {
+
+                    listadoLexemas.add(lexemaUbicado);
+                    this.listadoParser.add(new Sintaxis(listadoLexemas, false, "", TipoOperacionEnum.NO_SINTACTICO));
+                    listadoLexemas = new ArrayList<>(1000);
+                    hayContenido = false;
 
                 } else {
 
