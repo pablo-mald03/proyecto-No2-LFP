@@ -4,6 +4,7 @@
  */
 package com.pablocompany.proyectono2lfp.backend;
 
+import com.pablocompany.proyectono2lfp.analizadorlexicorecursos.TokenEnum;
 import java.util.ArrayList;
 
 /**
@@ -16,15 +17,15 @@ public class Expresion {
 
     //Listado que maneja los lexemas que se registran
     private ArrayList<Lexema> listadoExpresiones;
-    
-    private Lexema llaveLexema; 
+
+    private Lexema llaveLexema;
 
     //Utilizado para variables
-    public Expresion(Lexema llave,ArrayList<Lexema> listadoExpresiones) {
+    public Expresion(Lexema llave, ArrayList<Lexema> listadoExpresiones) {
         this.llaveLexema = llave;
         this.listadoExpresiones = listadoExpresiones;
     }
-    
+
     //Apartado de metodos especializados en calcular los resultados de las respectivas expresiones
     public ArrayList<Lexema> getListadoExpresiones() {
         return listadoExpresiones;
@@ -41,8 +42,31 @@ public class Expresion {
     public void setLlaveLexema(Lexema llaveLexema) {
         this.llaveLexema = llaveLexema;
     }
-    
-    
-    
-    
+
+    //Metodo que sirve para obtener el listado de texto que posee de asignacion 
+    public String getValor() {
+
+        boolean puedeMostrar = false;
+
+        StringBuilder cadena = new StringBuilder();
+
+        for (Lexema expresion : listadoExpresiones) {
+
+            if (expresion.getTokenSintactico() == TokenEnum.PUNTO_COMA) {
+                break;
+            }
+
+            if (puedeMostrar) {
+                cadena.append(expresion.getLexemaGenerado());
+            }
+
+            if (expresion.getTokenSintactico() == TokenEnum.IGUAL) {
+                puedeMostrar = true;
+            }
+
+        }
+
+        return cadena.toString();
+    }
+
 }

@@ -8,8 +8,6 @@ import com.pablocompany.proyectono2lfp.analizadorlexicorecursos.LectorEntradas;
 import com.pablocompany.proyectono2lfp.backendswing.ColocarFondos;
 import com.pablocompany.proyectono2lfp.backendswing.CrearTableros;
 import com.pablocompany.proyectono2lfp.backendswing.ModificarTabla;
-import com.pablocompany.proyectono2lfp.excepciones.AnalizadorLexicoException;
-import com.pablocompany.proyectono2lfp.excepciones.ErrorPuntualException;
 import com.pablocompany.proyectono2lfp.excepciones.ErrorSintacticoException;
 import com.pablocompany.proyectono2lfp.excepciones.ErroresRegistradosException;
 import java.awt.Color;
@@ -28,14 +26,12 @@ public class ReporteSintactico extends javax.swing.JDialog {
      */
     private LectorEntradas gestionLecturas;
 
-
     //Gestiona el reporte de tokenizacion de lexemas
     private ModificarTabla mdTablitaTokenizacion;
     private CrearTableros crearTableroTokenizacion;
 
     //Atributo que permite pasar por parametro el lexema seleccionado para graficar sus transiciones
 //    private Lexema lexemaSeleccionado;
-
     public ReporteSintactico(java.awt.Frame parent, boolean modal, LectorEntradas gestorLecturas) {
         super(parent, modal);
         initComponents();
@@ -49,15 +45,11 @@ public class ReporteSintactico extends javax.swing.JDialog {
 
         this.gestionLecturas = gestorLecturas;
 
-
-
         this.mdTablitaTokenizacion = new ModificarTabla(this.tableroVariables);
         this.crearTableroTokenizacion = new CrearTableros(this.tableroVariables);
 
-      //  this.gestionLecturas.getGenerarReportes().reiniciarListas();
-
+        //  this.gestionLecturas.getGenerarReportes().reiniciarListas();
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -76,7 +68,7 @@ public class ReporteSintactico extends javax.swing.JDialog {
         lblConteoLexemas1 = new javax.swing.JLabel();
         jScrollTablero2 = new javax.swing.JScrollPane();
         tableroVariables = new javax.swing.JTable();
-        btnReportarToken = new javax.swing.JButton();
+        btnReporteVariables = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         textPaneErrores = new javax.swing.JTextPane();
 
@@ -140,13 +132,13 @@ public class ReporteSintactico extends javax.swing.JDialog {
         });
         jScrollTablero2.setViewportView(tableroVariables);
 
-        btnReportarToken.setBackground(new java.awt.Color(0, 118, 0));
-        btnReportarToken.setFont(new java.awt.Font("Liberation Sans", 1, 20)); // NOI18N
-        btnReportarToken.setForeground(new java.awt.Color(229, 227, 227));
-        btnReportarToken.setText("Generar Reporte");
-        btnReportarToken.addActionListener(new java.awt.event.ActionListener() {
+        btnReporteVariables.setBackground(new java.awt.Color(0, 118, 0));
+        btnReporteVariables.setFont(new java.awt.Font("Liberation Sans", 1, 20)); // NOI18N
+        btnReporteVariables.setForeground(new java.awt.Color(229, 227, 227));
+        btnReporteVariables.setText("Generar Reporte");
+        btnReporteVariables.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnReportarTokenActionPerformed(evt);
+                btnReporteVariablesActionPerformed(evt);
             }
         });
 
@@ -170,10 +162,9 @@ public class ReporteSintactico extends javax.swing.JDialog {
                         .addGroup(panelErroes2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 591, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblConteoLexemas, javax.swing.GroupLayout.PREFERRED_SIZE, 591, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelErroes2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelErroes2Layout.createSequentialGroup()
-                        .addComponent(btnReportarToken, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnReporteVariables, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(227, 227, 227))
                     .addGroup(panelErroes2Layout.createSequentialGroup()
                         .addGroup(panelErroes2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -194,7 +185,7 @@ public class ReporteSintactico extends javax.swing.JDialog {
                     .addComponent(jScrollPane1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelErroes2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnReportarToken, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnReporteVariables, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnReporteErrores, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(11, 11, 11))
         );
@@ -227,7 +218,7 @@ public class ReporteSintactico extends javax.swing.JDialog {
 
     private void btnReporteErroresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteErroresActionPerformed
         //Muestra el reporte de listar los errores registrados
-       try {
+        try {
 
             if (this.gestionLecturas == null) {
                 JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador\nEscribe algo para poderlo analizar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
@@ -245,11 +236,11 @@ public class ReporteSintactico extends javax.swing.JDialog {
 
             } catch (ErrorSintacticoException ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Inconveniente encontrado", JOptionPane.ERROR_MESSAGE);
-            } catch (BadLocationException ex) { 
-               JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de escritura", JOptionPane.ERROR_MESSAGE);
-           } catch (ErroresRegistradosException ex) {
-               JOptionPane.showMessageDialog(this, ex.getMessage(), "No hay errores Sintacticos", JOptionPane.ERROR_MESSAGE);
-           } 
+            } catch (BadLocationException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de escritura", JOptionPane.ERROR_MESSAGE);
+            } catch (ErroresRegistradosException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "No hay errores Sintacticos", JOptionPane.ERROR_MESSAGE);
+            }
         } catch (NullPointerException ex) {
             JOptionPane.showMessageDialog(this, "No se ha ejecutado el analisis sintactico\nPorfavor presiona el boton de \"Analisis Sintactico\"", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
 
@@ -260,8 +251,8 @@ public class ReporteSintactico extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_tableroVariablesMousePressed
 
-    private void btnReportarTokenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportarTokenActionPerformed
-        //Muestra el reporte en la tabla de conteo de lexemas en cantidad de veces que aparece
+    private void btnReporteVariablesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteVariablesActionPerformed
+        //Muestra el reporte de la tabla de variables
         try {
 
             if (this.gestionLecturas == null) {
@@ -269,32 +260,35 @@ public class ReporteSintactico extends javax.swing.JDialog {
                 return;
             }
 
-           /* if (this.gestionLecturas.getGenerarReportes() == null) {
+            if (this.gestionLecturas.getGenerarReportes() == null) {
                 JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             try {
                 //Boton manual que permite generar el reporte de conteo de lexemas
-                this.gestionLecturas.getGenerarReportes().generarReporteTokenizacionLexemas(this.gestionLecturas.getLexerActual().getListadoSentencias(), this.mdTablitaTokenizacion, this.crearTableroTokenizacion);
+                this.gestionLecturas.getGestorSintactico().getReportes().generarReporteVariables(this.mdTablitaTokenizacion, this.crearTableroTokenizacion);
 
-            } catch (ErrorPuntualException ex) {
+            } catch (ErrorSintacticoException ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Inconveniente encontrado", JOptionPane.ERROR_MESSAGE);
-            }*/
-
+            } catch (BadLocationException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de escritura", JOptionPane.ERROR_MESSAGE);
+            } catch (ErroresRegistradosException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "No hay errores Sintacticos", JOptionPane.ERROR_MESSAGE);
+            }
         } catch (NullPointerException ex) {
-            JOptionPane.showMessageDialog(this, "No hay texto registrado en el analizador\nEscribe algo para poderlo analizar", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "No se ha ejecutado el analisis sintactico\nPorfavor presiona el boton de \"Analisis Sintactico\"", "Texto Vacio", JOptionPane.ERROR_MESSAGE);
 
         }
-    }//GEN-LAST:event_btnReportarTokenActionPerformed
+    }//GEN-LAST:event_btnReporteVariablesActionPerformed
 
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnReportarToken;
     private javax.swing.JButton btnReporteErrores;
+    private javax.swing.JButton btnReporteVariables;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollTablero2;
     private javax.swing.JLabel lblConteoLexemas;
